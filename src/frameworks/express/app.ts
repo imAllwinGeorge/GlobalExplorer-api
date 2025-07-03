@@ -2,19 +2,21 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
-import { UserRoutes } from "../routes/user.route";
+import { AuthRoutes } from "../routes/auth.route";
 import session from "express-session";
 import dotenv from "dotenv";
 import { AdminRoutes } from "../routes/admin.route";
 import passport from "passport";
 import "../passport/passport.statergy";
 import path from "path";
+import { UserRoutes } from "frameworks/routes/user.route";
 
 dotenv.config();
 
 const app = express();
-const userRoutes = new UserRoutes();
+const authRoutes = new AuthRoutes();
 const adminRoutes = new AdminRoutes();
+const userRoutes = new UserRoutes();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -43,7 +45,8 @@ app.use("/uploads", express.static("uploads"));
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/api", userRoutes.router);
+app.use("/api", authRoutes.router);
 app.use("/api/admin", adminRoutes.router);
+app.use("/api/user", userRoutes.router);
 
 export default app;

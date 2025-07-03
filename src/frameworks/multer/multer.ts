@@ -10,7 +10,7 @@ const ensureDirectoryExists = (directory: string) => {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const folderPath = "./config/uploads/images";
+    const folderPath = "./uploads/images";
     ensureDirectoryExists(folderPath);
     cb(null, folderPath);
   },

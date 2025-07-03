@@ -4,5 +4,6 @@ export interface IGenerateTokenInterface {
   execute(
     userId: Schema.Types.ObjectId,
     email: string,
+    role: string,
   ): Promise<{ accessToken: string }>;
 }

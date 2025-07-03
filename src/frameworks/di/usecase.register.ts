@@ -29,6 +29,8 @@ import { IGetAllUsersUsecaseInterface } from "../../entities/usecaseInterfaces/u
 import { GetAllUsersUsecase } from "../../usecases/user/get-all-user.usecase";
 import { IUpdateStatusUsecaseInterface } from "../../entities/usecaseInterfaces/user/update-status.usecase.interface";
 import { UpdateStatusUsecase } from "../../usecases/user/update-status.usecase";
+import { IGetUserUsecaseInterface } from "entities/usecaseInterfaces/user/get-user.usecase.interface";
+import { GetUserUsecase } from "usecases/user/get-user.usecase";
 
 export class UsecaseRegistery {
   static registerUsecases(): void {
@@ -95,6 +97,10 @@ export class UsecaseRegistery {
 
     container.register<IUpdateStatusUsecaseInterface>("IUpdateStatusUsecase", {
       useClass: UpdateStatusUsecase,
+    });
+
+    container.register<IGetUserUsecaseInterface>("IGetUserUsecase", {
+      useClass: GetUserUsecase,
     });
   }
 }

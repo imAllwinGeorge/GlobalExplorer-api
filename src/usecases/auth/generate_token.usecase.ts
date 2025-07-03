@@ -12,10 +12,12 @@ export class GenerateToken implements IGenerateTokenInterface {
   async execute(
     userId: Schema.Types.ObjectId,
     email: string,
+    role: string,
   ): Promise<{ accessToken: string }> {
     const payload = {
       userId,
       email,
+      role,
     };
     const accessToken = this._tokenService.generateAccessToken(payload);
     return { accessToken };

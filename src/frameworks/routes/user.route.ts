@@ -1,76 +1,36 @@
-import { NextFunction, Request, Response, Router } from "express";
-import { authController } from "../di/resolver";
-import passport from "passport";
-import upload from "../multer/multer";
+import { Request, Response } from "express";
+import { authController, userController } from "../di/resolver";
+import { verifyToken } from "interfaceAdapters/middleware/auth.middleware";
+import { BaseRoute } from "./base.route";
 
-export class UserRoutes {
-  public router: Router;
+export class UserRoutes extends BaseRoute {
   constructor() {
-    this.router = Router();
-    this.routes();
+    super();
   }
 
-  private routes() {
-    this.router.post(
-      "/send-otp",
-      (req: Request, res: Response, next: NextFunction) => {
-        console.log("sfnslkbnsbnsnkld");
-        next();
-      },
-      upload.any(),
-      (req: Request, res: Response, next: NextFunction) => {
-        console.log("sfnslkbnsbnsnkld");
-        next();
-      },
-      (req: Request, res: Response) => {
-        authController.send_otp(req, res);
-      },
-    );
-
-    this.router.post("/resend-otp", (req: Request, res: Response) => {
-      authController.resend_otp(req, res);
-    });
-
-    this.router.post("/register", (req: Request, res: Response) => {
-      authController.register(req, res);
-    });
-
+  protected initializeRoutes(): void {
     this.router.post("/login", (req: Request, res: Response) => {
       authController.login(req, res);
     });
 
-    this.router.post("/forgot-password", (req: Request, res: Response) => {
-      authController.forgotPassword(req, res);
-    });
-
-    this.router.patch(
-      "/reset-password/:role/:id/:token",
-      (req: Request, res: Response) => {
-        authController.resetPassword(req, res);
-      },
-    );
-
-    this.router.post("/verify-token", (req: Request, res: Response) => {
-      authController.verifyToken(req, res);
-    });
-
-    this.router.get("/auth/google", (req: Request, res: Response, next) => {
-      console.log("google route end hit");
-      const role = req.query.role as string;
-      passport.authenticate("google", {
-        scope: ["profile", "email"],
-        state: role,
-      })(req, res, next);
-      console.log("qwertyuio");
-    });
-
     this.router.get(
-      "/auth/google/callback",
-      passport.authenticate("google", { failureRedirect: "/login" }),
-
-      function (req: Request, res: Response) {
-        authController.googleLogin(req, res);
+      "/get-users/:role",
+      verifyToken,
+      (req: Request, res: Response) => {
+        userController.getAllUsers(req, res);
       },
     );
+
+    this.router.post(
+      "/update-status/:role",
+      verifyToken,
+      (req: Request, res: Response) => {
+        userController.updateStatus(req, res);
+      },
+    );
+
+    this.router.get("/get-user", verifyToken, (req: Request, res: Response) => {
+      userController.getUser(req, res);
+    });
   }
 }

@@ -46,7 +46,7 @@ const hostSchema = new Schema(
       require: true,
     },
     kyc_verified: {
-      type: String,
+      type: Boolean,
       default: false,
     },
     accountHolderName: {
@@ -85,8 +85,9 @@ const hostSchema = new Schema(
       default: false,
     },
     isVerified: {
-      type: Boolean,
-      default: false,
+      type: String,
+      enum: ["pending", "rejected", "verified"],
+      default: "pending",
     },
     reasonForRejection: {
       type: String,

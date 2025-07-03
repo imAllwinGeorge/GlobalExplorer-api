@@ -167,6 +167,7 @@ export class AuthController implements IAuthController {
       const { accessToken } = await this._generateTokenUsecase.execute(
         user._id,
         user.email,
+        user.role,
       );
 
       res.cookie(`${userData.role}AccessToken`, accessToken, {
@@ -209,6 +210,7 @@ export class AuthController implements IAuthController {
       const { accessToken } = await this._generateTokenUsecase.execute(
         userData?._id,
         userData.email,
+        userData.role,
       );
       res.cookie(`${userData.role}AccessToken`, accessToken, {
         httpOnly: true,
@@ -295,7 +297,7 @@ export class AuthController implements IAuthController {
 
       const isVerified = await this._verifyTokenUsecase.execute(token, role);
       console.log(isVerified);
-      if (isVerified === false) {
+      if (!isVerified) {
         throw new Error("verify token error");
       }
 
@@ -325,6 +327,7 @@ export class AuthController implements IAuthController {
       const { accessToken } = await this._generateTokenUsecase.execute(
         googleUser?._id,
         googleUser.email,
+        googleUser.role,
       );
 
       const userData = encodeURIComponent(
@@ -346,6 +349,24 @@ export class AuthController implements IAuthController {
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: error });
+    }
+  }
+
+  async logout(req: Request, res: Response): Promise<void> {
+    try {
+      const { role } = req.params;
+      console.log("logout role", role);
+      res.cookie(`${role}AccessToken`, "", {
+        httpOnly: true,
+        secure: true,
+        expires: new Date(0),
+        sameSite: "strict",
+      });
+
+      res.status(200).json({ message: "logout" });
+    } catch (error) {
+      console.log("logout Error :", error);
+      res.status(500).json({ message: "Internal server error" });
     }
   }
 }

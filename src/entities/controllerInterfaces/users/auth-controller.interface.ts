@@ -9,4 +9,5 @@ export interface IAuthController {
   resetPassword(req: Request, res: Response): Promise<void>;
   verifyToken(req: Request, res: Response): Promise<void>;
   googleLogin(req: Request, res: Response): Promise<void>;
+  logout(req: Request, res: Response): Promise<void>;
 }

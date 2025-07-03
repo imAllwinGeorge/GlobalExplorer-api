@@ -18,8 +18,8 @@ export interface IHostEntity {
   insurance: string;
   license: string;
   isBlocked: boolean;
-  isApproved: boolean;
-  reasonForRejection: string;
+  isVerified: string;
+  reasonForRejection?: string;
   createdAt: Date;
   updatedAt: Date;
 }
