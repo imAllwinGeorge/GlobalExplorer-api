@@ -61,7 +61,7 @@ export const verifyToken = async (
   } catch (error) {
     console.log("verify token error :", error);
     if (error instanceof Error) {
-      res.status(401).json({ message: error.message });
+      res.status(403).json({ message: error.message });
     }
   }
 };

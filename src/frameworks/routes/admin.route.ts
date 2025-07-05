@@ -1,5 +1,9 @@
 import { Request, Response, Router } from "express";
-import { authController, userController } from "../di/resolver";
+import {
+  authController,
+  categoryController,
+  userController,
+} from "../di/resolver";
 import { verifyToken } from "interfaceAdapters/middleware/auth.middleware";
 
 export class AdminRoutes {
@@ -33,5 +37,30 @@ export class AdminRoutes {
     this.router.get("/get-user", verifyToken, (req: Request, res: Response) => {
       userController.getUser(req, res);
     });
+
+    this.router.get(
+      "/get-category",
+      verifyToken,
+      (req: Request, res: Response) => {
+        categoryController.getCategories(req, res);
+      },
+    );
+
+    this.router.post(
+      "/add-category",
+      verifyToken,
+      (req: Request, res: Response) => {
+        categoryController.addCategory(req, res);
+      },
+    );
+
+    this.router
+      .route("/edit-category")
+      .put(verifyToken, (req: Request, res: Response) => {
+        categoryController.editCategory(req, res);
+      })
+      .patch(verifyToken, (req: Request, res: Response) => {
+        categoryController.updateCategoryStatus(req, res);
+      });
   }
 }

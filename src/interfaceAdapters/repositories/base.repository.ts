@@ -20,6 +20,7 @@ export class BaseRepository<T> implements IBaseRepositoryInterface<T> {
   async save(data: Partial<T>): Promise<T> {
     return this.model.create(data);
   }
+
   async findOneAndUpdate(
     filter: FilterQuery<object>,
     value: object,

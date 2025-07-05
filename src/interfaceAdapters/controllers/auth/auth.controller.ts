@@ -298,7 +298,7 @@ export class AuthController implements IAuthController {
       const isVerified = await this._verifyTokenUsecase.execute(token, role);
       console.log(isVerified);
       if (!isVerified) {
-        throw new Error("verify token error");
+        res.status(403).json({ message: "session Expired!" });
       }
 
       res.status(200).json({ message: "token verified" });

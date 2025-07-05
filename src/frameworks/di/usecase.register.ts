@@ -31,6 +31,14 @@ import { IUpdateStatusUsecaseInterface } from "../../entities/usecaseInterfaces/
 import { UpdateStatusUsecase } from "../../usecases/user/update-status.usecase";
 import { IGetUserUsecaseInterface } from "entities/usecaseInterfaces/user/get-user.usecase.interface";
 import { GetUserUsecase } from "usecases/user/get-user.usecase";
+import { IGetAllCategoryUsecaseInterface } from "entities/usecaseInterfaces/category/get-all-category.usecase.interface";
+import { GetAllCategoryUsecase } from "usecases/category/get-all-category.usecase";
+import { IAddCategoryUsecaseInterface } from "entities/usecaseInterfaces/category/add-category.usecase.interface";
+import { AddCategoryUseCase } from "usecases/category/add-category.usecase";
+import { IEditCategoryUsecaseInterface } from "entities/usecaseInterfaces/category/edit-category.usecase.interface";
+import { EditCategoryUsecase } from "usecases/category/edit-category.usecase";
+import { IUpdateCategoryUsecaseInterface } from "entities/usecaseInterfaces/category/update-category.usecase.interface";
+import { UpdateStatusCategoryUsecase } from "usecases/category/update-status.category.usecase";
 
 export class UsecaseRegistery {
   static registerUsecases(): void {
@@ -102,5 +110,27 @@ export class UsecaseRegistery {
     container.register<IGetUserUsecaseInterface>("IGetUserUsecase", {
       useClass: GetUserUsecase,
     });
+
+    container.register<IGetAllCategoryUsecaseInterface>(
+      "IGetAllCategoryUsecase",
+      {
+        useClass: GetAllCategoryUsecase,
+      },
+    );
+
+    container.register<IAddCategoryUsecaseInterface>("IAddCategoryUsecase", {
+      useClass: AddCategoryUseCase,
+    });
+
+    container.register<IEditCategoryUsecaseInterface>("IEditCategoryUsecase", {
+      useClass: EditCategoryUsecase,
+    });
+
+    container.register<IUpdateCategoryUsecaseInterface>(
+      "IUpdateCategoryUsecase",
+      {
+        useClass: UpdateStatusCategoryUsecase,
+      },
+    );
   }
 }

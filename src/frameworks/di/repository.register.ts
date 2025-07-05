@@ -5,6 +5,8 @@ import { IAdminRepositoryInterface } from "../../entities/repositoryInterfaces/u
 import { AdminRepository } from "../../interfaceAdapters/repositories/users/admin.repository";
 import { IHostRepositoryInterface } from "entities/repositoryInterfaces/users/host-repository.interface";
 import { HostRepository } from "interfaceAdapters/repositories/users/host.repository";
+import { ICategoryRepositoryInterface } from "entities/repositoryInterfaces/category/categoryRepository.interface";
+import { CategoryRepository } from "interfaceAdapters/repositories/category.repository/category.repository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
@@ -18,6 +20,10 @@ export class RepositoryRegistry {
 
     container.register<IHostRepositoryInterface>("IHostRepository", {
       useClass: HostRepository,
+    });
+
+    container.register<ICategoryRepositoryInterface>("ICategoryRepository", {
+      useClass: CategoryRepository,
     });
   }
 }
