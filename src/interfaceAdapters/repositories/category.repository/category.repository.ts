@@ -21,4 +21,10 @@ export class CategoryRepository
   ): Promise<ICategoryModel | null> {
     return this.model.findOne({ _id: { $ne: excludeId }, CategoryName: value });
   }
+
+  async findAllCategoryNames(): Promise<
+    { _id: string; categoryName: string }[]
+  > {
+    return this.model.find({}, { _id: 1, categoryName: 1 });
+  }
 }

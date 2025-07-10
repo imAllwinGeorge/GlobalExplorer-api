@@ -8,6 +8,16 @@ export class BaseRepository<T> implements IBaseRepositoryInterface<T> {
     return this.model.find(filter);
   }
 
+  async findAll(limit: number, skip: number, filter: FilterQuery<object>) {
+    const [items, total] = await Promise.all([
+      this.model.find(filter).skip(skip).limit(limit).lean() as Promise<
+        object[]
+      >,
+      this.model.countDocuments(filter),
+    ]);
+    return { items, total };
+  }
+
   async findOne(filter: FilterQuery<object>): Promise<T | null> {
     console.log(4);
     return this.model.findOne(filter);
@@ -26,5 +36,11 @@ export class BaseRepository<T> implements IBaseRepositoryInterface<T> {
     value: object,
   ): Promise<T | null> {
     return this.model.findOneAndUpdate(filter, { $set: value }, { new: true });
+  }
+
+  async countDocuments(filter: FilterQuery<T>) {
+    {
+      return this.model.countDocuments(filter);
+    }
   }
 }

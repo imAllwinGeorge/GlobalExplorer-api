@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
 import {
+  activityController,
   authController,
   categoryController,
   userController,
@@ -62,5 +63,21 @@ export class AdminRoutes {
       .patch(verifyToken, (req: Request, res: Response) => {
         categoryController.updateCategoryStatus(req, res);
       });
+
+    this.router.get(
+      "/get-activities",
+      verifyToken,
+      (req: Request, res: Response) => {
+        activityController.getAllActivities(req, res);
+      },
+    );
+
+    this.router.patch(
+      `/activity/status/:id`,
+      verifyToken,
+      (req: Request, res: Response) => {
+        activityController.updateActivity(req, res);
+      },
+    );
   }
 }

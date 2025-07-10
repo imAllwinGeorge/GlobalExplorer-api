@@ -2,6 +2,11 @@ import { FilterQuery } from "mongoose";
 
 export interface IBaseRepositoryInterface<T> {
   find(filter: FilterQuery<object>): Promise<T[]>;
+  findAll(
+    limit: number,
+    skip: number,
+    filter: FilterQuery<object>,
+  ): Promise<{ items: object[]; total: number }>;
   findOne(filter: FilterQuery<object>): Promise<T | null>;
   findById(filter: FilterQuery<object>): Promise<T | null>;
   save(data: Partial<T>): Promise<T>;
@@ -9,4 +14,5 @@ export interface IBaseRepositoryInterface<T> {
     filte: FilterQuery<object>,
     value: object,
   ): Promise<T | null>;
+  countDocuments(filter: FilterQuery<object>): Promise<number>;
 }

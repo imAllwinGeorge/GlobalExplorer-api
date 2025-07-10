@@ -1,6 +1,5 @@
 import { ICategoryRepositoryInterface } from "entities/repositoryInterfaces/category/categoryRepository.interface";
 import { IGetAllCategoryUsecaseInterface } from "entities/usecaseInterfaces/category/get-all-category.usecase.interface";
-import { ICategoryModel } from "frameworks/database/mongo/models/category.model";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
@@ -10,9 +9,13 @@ export class GetAllCategoryUsecase implements IGetAllCategoryUsecaseInterface {
     private _categoryRepository: ICategoryRepositoryInterface,
   ) {}
 
-  async execute(): Promise<ICategoryModel[]> {
-    const category = await this._categoryRepository.find({});
-    console.log("finiding categories....", category);
-    return category;
+  async execute(
+    limit: number,
+    skip: number,
+  ): Promise<{ items: object[]; total: number }> {
+    const result = await this._categoryRepository.findAll(limit, skip, {});
+    if (!result)
+      throw new Error("We can not process the request... Please try again.");
+    return result;
   }
 }

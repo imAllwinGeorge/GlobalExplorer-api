@@ -1,9 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { IGetAllUsersUsecaseInterface } from "../../entities/usecaseInterfaces/user/get-all-user.usecase.interface";
 import { IUserRepositoryInterface } from "../../entities/repositoryInterfaces/users/user-repository.interface";
-import { IUserModel } from "../../frameworks/database/mongo/models/user.model";
 import { IHostRepositoryInterface } from "entities/repositoryInterfaces/users/host-repository.interface";
-import { IHostModel } from "frameworks/database/mongo/models/host.model";
 
 @injectable()
 export class GetAllUsersUsecase implements IGetAllUsersUsecaseInterface {
@@ -15,17 +13,21 @@ export class GetAllUsersUsecase implements IGetAllUsersUsecaseInterface {
     private _hostRepository: IHostRepositoryInterface,
   ) {}
 
-  async execute(role: string): Promise<IUserModel[] | IHostModel[]> {
+  async execute(
+    limit: number,
+    skip: number,
+    role: string,
+  ): Promise<{ items: object[]; total: number }> {
     let repository;
     if (role === "user") {
       repository = this._userRepository;
     } else if (role === "host") {
       repository = this._hostRepository;
     }
-    const users = await repository?.find({ role });
-    if (!users) {
+    const result = await repository?.findAll(limit, skip, { role });
+    if (!result) {
       throw new Error("failed to fetch users");
     }
-    return users;
+    return result;
   }
 }

@@ -7,6 +7,10 @@ import { IHostRepositoryInterface } from "entities/repositoryInterfaces/users/ho
 import { HostRepository } from "interfaceAdapters/repositories/users/host.repository";
 import { ICategoryRepositoryInterface } from "entities/repositoryInterfaces/category/categoryRepository.interface";
 import { CategoryRepository } from "interfaceAdapters/repositories/category.repository/category.repository";
+import { IActivityRepositoryInterface } from "entities/repositoryInterfaces/activity/activityRepository.interface";
+import { ActivityRepository } from "interfaceAdapters/repositories/activity.Repository/activity.repository";
+import { IBlogRepositoryInterface } from "entities/repositoryInterfaces/Blog/blog-repository.interface";
+import { BlogRepository } from "interfaceAdapters/repositories/blog.repository/blog.repositor";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
@@ -24,6 +28,14 @@ export class RepositoryRegistry {
 
     container.register<ICategoryRepositoryInterface>("ICategoryRepository", {
       useClass: CategoryRepository,
+    });
+
+    container.register<IActivityRepositoryInterface>("IActivityRepository", {
+      useClass: ActivityRepository,
+    });
+
+    container.register<IBlogRepositoryInterface>("IBlogRepository", {
+      useClass: BlogRepository,
     });
   }
 }

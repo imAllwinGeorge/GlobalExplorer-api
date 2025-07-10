@@ -15,6 +15,7 @@ import { IGoogleLoginUsecaseInterface } from "../../../entities/usecaseInterface
 import jwt from "jsonwebtoken";
 import { hostSchema } from "./validations/host-signup.validation.schema";
 import { z, ZodError } from "zod";
+import { HttpStatusCode } from "shared/constants/statusCodes";
 const { JsonWebTokenError } = jwt;
 
 type UserData = z.infer<typeof userSchema>;
@@ -101,7 +102,9 @@ export class AuthController implements IAuthController {
       }
       console.log(userData);
       if (!userData) {
-        res.status(400).json({ message: "Invalid Role" });
+        res
+          .status(HttpStatusCode.BAD_REQUEST)
+          .json({ message: "Invalid Role" });
         return;
       }
       const otp = await this._sendOtpUsecase.execute(
@@ -112,17 +115,23 @@ export class AuthController implements IAuthController {
         ...userData,
         otp,
       };
-      res.status(200).json({ message: "otp sented successful" });
+      res.status(HttpStatusCode.OK).json({ message: "otp sented successful" });
       return;
     } catch (error) {
       console.log("check this error: ", error);
       if (error instanceof Error && error.message === "Email already exist") {
         console.log("qwertyu");
-        res.status(400).json({ message: "Email already exists" });
+        res
+          .status(HttpStatusCode.BAD_REQUEST)
+          .json({ message: "Email already exists" });
       } else if (error instanceof ZodError) {
-        res.status(400).json({ message: error.errors[0].message });
+        res
+          .status(HttpStatusCode.BAD_REQUEST)
+          .json({ message: error.errors[0].message });
       } else {
-        res.status(500).json({ message: "Internal server Error." });
+        res
+          .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+          .json({ message: "Internal server Error." });
       }
     }
   }
@@ -131,7 +140,9 @@ export class AuthController implements IAuthController {
     try {
       const { userData } = req.session;
       if (!userData) {
-        res.status(410).json({ message: "token expired" });
+        res
+          .status(HttpStatusCode.UNAUTHORIZED)
+          .json({ message: "token expired" });
         return;
       }
       const otp = await this._sendOtpUsecase.execute(
@@ -142,11 +153,11 @@ export class AuthController implements IAuthController {
         ...userData,
         otp,
       };
-      res.status(200).json({ message: "otp sented successful" });
+      res.status(HttpStatusCode.OK).json({ message: "otp sented successful" });
       return;
     } catch (error) {
       console.log(error);
-      res.status(500).json(error);
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json(error);
     }
   }
 
@@ -155,11 +166,13 @@ export class AuthController implements IAuthController {
       const { otp } = req.body;
       const { userData } = req.session;
       if (!userData) {
-        res.status(410).json({ message: "session expired, please try again" });
+        res
+          .status(HttpStatusCode.UNAUTHORIZED)
+          .json({ message: "session expired, please try again" });
         return;
       }
       if (otp.toString() !== userData.otp) {
-        res.status(401).json({ message: "invalid otp" });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ message: "invalid otp" });
         return;
       }
 
@@ -177,11 +190,13 @@ export class AuthController implements IAuthController {
         maxAge: 24 * 60 * 60 * 1000,
       });
 
-      res.status(201).json({ message: "user saved successfully", user });
+      res
+        .status(HttpStatusCode.CREATED)
+        .json({ message: "user saved successfully", user });
       return;
     } catch (error) {
       console.log("user signup error: ", error);
-      res.status(500).json({ message: error });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
     }
   }
 
@@ -191,18 +206,22 @@ export class AuthController implements IAuthController {
       console.log("login data: ", data);
       const validateData = loginShcema.parse(data);
       if (!validateData) {
-        res.status(400).json({ message: "Invalid email or password" });
+        res
+          .status(HttpStatusCode.BAD_REQUEST)
+          .json({ message: "Invalid email or password" });
         return;
       }
       const userData = await this._loginUserUsecase.execute(data);
       if (!userData) {
-        res.status(401).json({ message: "Invalid email or password!" });
+        res
+          .status(HttpStatusCode.UNAUTHORIZED)
+          .json({ message: "Invalid email or password!" });
         return;
       }
 
       if (userData.isBlocked) {
         res
-          .status(403)
+          .status(HttpStatusCode.FORBIDDEN)
           .json({ message: "Account access restricted by admin." });
         return;
       }
@@ -220,12 +239,14 @@ export class AuthController implements IAuthController {
       });
       console.log(userData, accessToken);
       res
-        .status(200)
+        .status(HttpStatusCode.OK)
         .json({ message: "user login successful", user: userData });
     } catch (error) {
       console.log(error);
 
-      res.status(500).json({ message: "server error" });
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: "server error" });
     }
   }
 
@@ -236,19 +257,21 @@ export class AuthController implements IAuthController {
       const validateEmail = forgotPasswordSchema.parse({ email });
       if (!validateEmail) {
         res
-          .status(400)
+          .status(HttpStatusCode.BAD_REQUEST)
           .json({ message: "emailvalidation error, please enter valid email" });
         return;
       }
       const url = await this._forgotPasswordUsecase.execute(email, role);
       res
-        .status(200)
+        .status(HttpStatusCode.OK)
         .json({ message: "Recovery link sented to your email", url });
       return;
     } catch (error) {
       console.log(error);
       if (error instanceof Error) {
-        res.status(500).json({ message: error.message });
+        res
+          .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+          .json({ message: error.message });
       }
     }
   }
@@ -264,18 +287,20 @@ export class AuthController implements IAuthController {
         password,
       );
       if (!user) {
-        res.status(400).json({ message: "Bad request" });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ message: "Bad request" });
         return;
       }
-      res.status(200).json({ message: "password updated" });
+      res.status(HttpStatusCode.OK).json({ message: "password updated" });
       return;
     } catch (error) {
       console.log("error:", error);
       if (error instanceof JsonWebTokenError) {
-        res.status(403).json({ message: "Token expired. Please try again " });
+        res
+          .status(HttpStatusCode.FORBIDDEN)
+          .json({ message: "Token expired. Please try again " });
         return;
       }
-      res.status(500).json({ message: error });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
     }
   }
 
@@ -298,13 +323,15 @@ export class AuthController implements IAuthController {
       const isVerified = await this._verifyTokenUsecase.execute(token, role);
       console.log(isVerified);
       if (!isVerified) {
-        res.status(403).json({ message: "session Expired!" });
+        res
+          .status(HttpStatusCode.FORBIDDEN)
+          .json({ message: "session Expired!" });
       }
 
-      res.status(200).json({ message: "token verified" });
+      res.status(HttpStatusCode.OK).json({ message: "token verified" });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: error });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
     }
   }
 
@@ -348,7 +375,7 @@ export class AuthController implements IAuthController {
       res.redirect(`http://localhost:5173/login?user=${userData}`);
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: error });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
     }
   }
 
@@ -363,10 +390,12 @@ export class AuthController implements IAuthController {
         sameSite: "strict",
       });
 
-      res.status(200).json({ message: "logout" });
+      res.status(HttpStatusCode.OK).json({ message: "logout" });
     } catch (error) {
       console.log("logout Error :", error);
-      res.status(500).json({ message: "Internal server error" });
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: "Internal server error" });
     }
   }
 }

@@ -50,3 +50,35 @@ export interface HostSignupDTO {
   insurance: string;
   license: string;
 }
+
+export interface ActivityDTO {
+  activityName: string;
+  itenary: string;
+  maxCapacity: number;
+  categoryId: string;
+  pricePerHead: number;
+  userId: string;
+  street: string;
+  city: string;
+  district: string;
+  state: string;
+  postalCode: string;
+  country: string;
+  location: [number, number];
+  images: string[];
+  reportingPlace: string;
+  reportingTime: string;
+}
+
+export interface BlogDTO {
+  userId: string;
+  title: string;
+  author: string;
+  introduction: string;
+  sections: {
+    sectionTitle: string;
+    content: string;
+    image: string;
+  }[];
+  image: string;
+}

@@ -7,4 +7,6 @@ export interface ICategoryRepositoryInterface
     excludeId: string,
     value: string,
   ): Promise<ICategoryModel | null>;
+
+  findAllCategoryNames(): Promise<{ _id: string; categoryName: string }[]>;
 }

@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import { IGetAllUsersUsecaseInterface } from "../../../entities/usecaseInterfaces/user/get-all-user.usecase.interface";
 import { IUpdateStatusUsecaseInterface } from "../../../entities/usecaseInterfaces/user/update-status.usecase.interface";
 import { IGetUserUsecaseInterface } from "entities/usecaseInterfaces/user/get-user.usecase.interface";
+import { HttpStatusCode } from "shared/constants/statusCodes";
 
 @injectable()
 export class IUserController implements IUserControllerInterface {
@@ -21,11 +22,15 @@ export class IUserController implements IUserControllerInterface {
   async getAllUsers(req: Request, res: Response): Promise<void> {
     try {
       const { role } = req.params;
-      const users = await this._getAllUsersUsecase.execute(role);
-      res.status(200).json({ users });
+      const page = parseInt(req.query.page as string);
+      const limit = parseInt(req.query.limit as string);
+      const skip = (page - 1) * limit;
+      const result = await this._getAllUsersUsecase.execute(limit, skip, role);
+      const totalPages = Math.ceil(result.total / limit);
+      res.status(HttpStatusCode.OK).json({ users: result.items, totalPages });
       return;
     } catch (error) {
-      res.status(500).json({ message: error });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
     }
   }
 
@@ -35,12 +40,12 @@ export class IUserController implements IUserControllerInterface {
       const { role } = req.params;
       console.log("update status controller ", _id, value, role);
       const user = await this._updateStatusUsecase.execute(_id, value, role);
-      res.status(200).json({
+      res.status(HttpStatusCode.OK).json({
         user,
         message: `${user.firstName} is ${user.isBlocked ? "Blocked" : "UnBlocked"}`,
       });
     } catch (error) {
-      res.status(500).json({ message: error });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
     }
   }
 
@@ -52,10 +57,10 @@ export class IUserController implements IUserControllerInterface {
         _id as string,
         role as string,
       );
-      res.status(200).json({ user });
+      res.status(HttpStatusCode.OK).json({ user });
     } catch (error) {
       console.log("get user details", error);
-      res.status(500).json({ messge: error });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ messge: error });
     }
   }
 }

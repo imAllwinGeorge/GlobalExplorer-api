@@ -14,7 +14,7 @@ const extractToken = (req: Request): { token: string; role: string } | null => {
     token = req.cookies.adminAccessToken;
     role = "admin";
   } else if (infferedRole === "host") {
-    token = req.cookies.hostAccesstoken;
+    token = req.cookies.hostAccessToken;
     role = "host";
   } else if (infferedRole === "user") {
     token = req.cookies.userAccessToken;

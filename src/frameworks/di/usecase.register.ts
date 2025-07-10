@@ -39,6 +39,20 @@ import { IEditCategoryUsecaseInterface } from "entities/usecaseInterfaces/catego
 import { EditCategoryUsecase } from "usecases/category/edit-category.usecase";
 import { IUpdateCategoryUsecaseInterface } from "entities/usecaseInterfaces/category/update-category.usecase.interface";
 import { UpdateStatusCategoryUsecase } from "usecases/category/update-status.category.usecase";
+import { IGetActivityUsecaseInterface } from "entities/usecaseInterfaces/activity/get-activity.usecase.interface";
+import { GetActivityUsecase } from "usecases/activity/get-actvitiy.usecase";
+import { IAddActivityUsecaseInterface } from "entities/usecaseInterfaces/activity/add-activity.usecase.interface";
+import { AddActivityUsecase } from "usecases/activity/add-activity.usecase";
+import { IEditActivityUsecaseInterface } from "entities/usecaseInterfaces/activity/edit-activity.usecase.interface";
+import { EditActivityUsecase } from "usecases/activity/edit-activity.usecase";
+import { ICreateBlogUsecaseInterface } from "entities/usecaseInterfaces/blog/create-blog.usecase.interface";
+import { CreateBlogUsecase } from "usecases/blog/create-blog.usecase";
+import { IGetAllBlogUsecaseInterface } from "entities/usecaseInterfaces/blog/get-all-blog.usecase.interface";
+import { GetAllBlogUsecase } from "usecases/blog/get-all-blog.usecase";
+import { IEditBlogUsecaseInterface } from "entities/usecaseInterfaces/blog/edit-blog.usecase.interface";
+import { EditBlogUsecase } from "usecases/blog/edit-blog.usecase";
+import { GetAllCategoryNameUsecase } from "usecases/category/get-all-category-name.usecase";
+import { IGetAllCategoryNameUsecaseInterface } from "entities/usecaseInterfaces/category/get-all-category-names.usecase.interface";
 
 export class UsecaseRegistery {
   static registerUsecases(): void {
@@ -132,5 +146,36 @@ export class UsecaseRegistery {
         useClass: UpdateStatusCategoryUsecase,
       },
     );
+
+    container.register<IGetAllCategoryNameUsecaseInterface>(
+      "IGetAllCategoryNameUsecase",
+      {
+        useClass: GetAllCategoryNameUsecase,
+      },
+    );
+
+    container.register<IGetActivityUsecaseInterface>("IGetActivityUsecase", {
+      useClass: GetActivityUsecase,
+    });
+
+    container.register<IAddActivityUsecaseInterface>("IAddActivityUsecase", {
+      useClass: AddActivityUsecase,
+    });
+
+    container.register<IEditActivityUsecaseInterface>("IEditActivityUsecase", {
+      useClass: EditActivityUsecase,
+    });
+
+    container.register<ICreateBlogUsecaseInterface>("ICreateBlogUsecase", {
+      useClass: CreateBlogUsecase,
+    });
+
+    container.register<IGetAllBlogUsecaseInterface>("IGetAllBlogUsecase", {
+      useClass: GetAllBlogUsecase,
+    });
+
+    container.register<IEditBlogUsecaseInterface>("IEditBlogUsecase", {
+      useClass: EditBlogUsecase,
+    });
   }
 }

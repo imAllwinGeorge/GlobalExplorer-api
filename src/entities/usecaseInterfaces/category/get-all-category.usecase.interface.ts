@@ -1,5 +1,6 @@
-import { ICategoryModel } from "frameworks/database/mongo/models/category.model";
-
 export interface IGetAllCategoryUsecaseInterface {
-  execute(): Promise<ICategoryModel[]>;
+  execute(
+    limit: number,
+    skip: number,
+  ): Promise<{ items: object[]; total: number }>;
 }

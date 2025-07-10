@@ -6,6 +6,7 @@ import { inject, injectable } from "tsyringe";
 import { categorySchema } from "./auth/validations/category.validation.schema";
 import { IEditCategoryUsecaseInterface } from "entities/usecaseInterfaces/category/edit-category.usecase.interface";
 import { IUpdateCategoryUsecaseInterface } from "entities/usecaseInterfaces/category/update-category.usecase.interface";
+import { HttpStatusCode } from "shared/constants/statusCodes";
 
 @injectable()
 export class ICategoryController implements ICategoryControllerInterface {
@@ -25,13 +26,21 @@ export class ICategoryController implements ICategoryControllerInterface {
 
   async getCategories(req: Request, res: Response): Promise<void> {
     try {
-      const category = await this._getAllCategoryUsecase.execute();
+      const page = parseInt(req.query.page as string);
+      const limit = parseInt(req.query.limit as string);
+      const skip = (page - 1) * limit;
+      const result = await this._getAllCategoryUsecase.execute(limit, skip);
+      const totalPages = Math.ceil(result.total / limit);
 
-      res.status(200).json({ category });
+      res
+        .status(HttpStatusCode.OK)
+        .json({ categories: result.items, totalPages });
       return;
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: "pwgwjg" });
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: "Internal Server Error" });
     }
   }
 
@@ -41,18 +50,24 @@ export class ICategoryController implements ICategoryControllerInterface {
 
       const validateData = categorySchema.parse(data);
       if (!validateData) {
-        res.status(400).json({ message: "Invalid input data!" });
+        res
+          .status(HttpStatusCode.BAD_REQUEST)
+          .json({ message: "Invalid input data!" });
         return;
       }
       const category = await this._addCategoryUsecase.execute(validateData);
       if (category) {
-        res.status(201).json({ category });
+        res.status(HttpStatusCode.CREATED).json({ category });
         return;
       }
-      res.status(400).json({ message: "Ivalid Request" });
+      res
+        .status(HttpStatusCode.BAD_REQUEST)
+        .json({ message: "Ivalid Request" });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: "Internal sever error" });
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: "Internal sever error" });
     }
   }
 
@@ -61,14 +76,16 @@ export class ICategoryController implements ICategoryControllerInterface {
       const { _id, value } = req.body;
       const validateData = categorySchema.parse(value);
       if (!_id || !validateData) {
-        res.status(400).json({ message: "Bad request, Missing data" });
+        res
+          .status(HttpStatusCode.BAD_REQUEST)
+          .json({ message: "Bad request, Missing data" });
         return;
       }
       const category = await this._editCategoryUsecase.execute(
         _id,
         validateData,
       );
-      res.status(200).json({ category });
+      res.status(HttpStatusCode.OK).json({ category });
     } catch (error) {
       console.log(error);
     }
@@ -78,14 +95,16 @@ export class ICategoryController implements ICategoryControllerInterface {
     try {
       const { _id, value } = req.body;
       const category = await this._updateStatusCategory.execute(_id, value);
-      res.status(200).json({ category });
+      res.status(HttpStatusCode.OK).json({ category });
       return;
     } catch (error) {
       console.log(error);
       if (error instanceof Error) {
-        res.status(400).json({ message: error.message });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
       }
-      res.status(500).json({ message: "Internal server Error!" });
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: "Internal server Error!" });
     }
   }
 }
