@@ -66,16 +66,19 @@ export class HostController implements IHostControllerInterface {
         state,
         postalCode,
         country,
+        recurrenceDays,
         reportingPlace,
         reportingTime,
         location,
       } = req.body;
+      console.log("jasgsdgvbo;asdgvo;nasd;gvn;sd           :", recurrenceDays);
       let images = [];
       const files = req.files as Express.Multer.File[];
 
       images = files.map((images) => images.filename);
 
       const parsedLocation = JSON.parse(location); // [75.1, 10.2]
+      const paresedRecurrenceDays = JSON.parse(recurrenceDays);
       const activity = await this._addActvityUsecase.execute({
         activityName,
         itenary,
@@ -89,6 +92,7 @@ export class HostController implements IHostControllerInterface {
         state,
         postalCode,
         country,
+        recurrenceDays: paresedRecurrenceDays,
         reportingPlace,
         reportingTime,
         location: parsedLocation,

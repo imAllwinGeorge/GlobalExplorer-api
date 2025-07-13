@@ -1,16 +1,22 @@
 import { injectable } from "tsyringe";
 import { IJwtserviceInterface } from "../../entities/serviceInterfaces/jwt-services.interface";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 @injectable()
 export class JwtService implements IJwtserviceInterface {
   constructor() {}
   generateAccessToken(payload: object): string {
-    console.log("access token", process.env.ACCESS_TOKEN);
     const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET!, {
       expiresIn: "1h",
     });
     return accessToken;
+  }
+
+  generateRefreshToken(payload: object): string {
+    const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET!, {
+      expiresIn: "7d",
+    });
+    return refreshToken;
   }
 
   resetToken(payload: object): string {
@@ -25,5 +31,12 @@ export class JwtService implements IJwtserviceInterface {
     if (!payload) throw new Error("session Expired!");
     console.log("jsonwebtoken verify token:  ", payload);
     return payload as { email: string; userId: string };
+  }
+
+  verifyRefreshToken(token: string): JwtPayload {
+    const payload = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET!);
+
+    if (!payload) throw new Error("Sesstion Expired");
+    return payload as JwtPayload;
   }
 }

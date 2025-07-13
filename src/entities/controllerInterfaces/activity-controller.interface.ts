@@ -5,4 +5,5 @@ export interface IActivityControllerInterface {
   editActivity(req: Request, res: Response): Promise<void>;
   updateActivity(req: Request, res: Response): Promise<void>;
   getAllActivities(req: Request, res: Response): Promise<void>;
+  getActivityDetails(req: Request, res: Response): Promise<void>;
 }

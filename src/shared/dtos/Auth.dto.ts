@@ -64,6 +64,7 @@ export interface ActivityDTO {
   state: string;
   postalCode: string;
   country: string;
+  recurrenceDays: string[];
   location: [number, number];
   images: string[];
   reportingPlace: string;

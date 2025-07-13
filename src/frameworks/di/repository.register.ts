@@ -11,6 +11,10 @@ import { IActivityRepositoryInterface } from "entities/repositoryInterfaces/acti
 import { ActivityRepository } from "interfaceAdapters/repositories/activity.Repository/activity.repository";
 import { IBlogRepositoryInterface } from "entities/repositoryInterfaces/Blog/blog-repository.interface";
 import { BlogRepository } from "interfaceAdapters/repositories/blog.repository/blog.repositor";
+import { IRefreshTokenRepositoryInterface } from "entities/repositoryInterfaces/refreshToken/refresh-token.repository.interface";
+import { RefreshTokenRepository } from "interfaceAdapters/repositories/refresh-token.repository/refresh-token.repository";
+import { IBookingRepositoryInterface } from "entities/repositoryInterfaces/booking/booking-repository.interface";
+import { BookingRepository } from "interfaceAdapters/repositories/Booking-repository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
@@ -36,6 +40,17 @@ export class RepositoryRegistry {
 
     container.register<IBlogRepositoryInterface>("IBlogRepository", {
       useClass: BlogRepository,
+    });
+
+    container.register<IRefreshTokenRepositoryInterface>(
+      "IRefreshTokenRepository",
+      {
+        useClass: RefreshTokenRepository,
+      },
+    );
+
+    container.register<IBookingRepositoryInterface>("IBookingRepository", {
+      useClass: BookingRepository,
     });
   }
 }

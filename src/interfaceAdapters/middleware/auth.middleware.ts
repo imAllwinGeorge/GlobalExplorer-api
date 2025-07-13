@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { HttpStatusCode } from "shared/constants/statusCodes";
 // import { JwtService } from "interfaceAdapters/services/jwt-service";
 import { container } from "tsyringe";
 import { VerifyTokenUsecase } from "usecases/auth/verfiy-token.usecase";
@@ -40,7 +41,9 @@ export const verifyToken = async (
 
     console.log("tokenDetails: ", tokenDetails, req.path);
     if (!tokenDetails) {
-      res.status(401).json({ message: "Ivalid Token" });
+      res
+        .status(HttpStatusCode.UNAUTHORIZED)
+        .json({ message: "Token Expired." });
       return;
     }
     const verifyTokenUseCase = container.resolve(VerifyTokenUsecase);
@@ -61,7 +64,7 @@ export const verifyToken = async (
   } catch (error) {
     console.log("verify token error :", error);
     if (error instanceof Error) {
-      res.status(403).json({ message: error.message });
+      res.status(HttpStatusCode.FORBIDDEN).json({ message: error.message });
     }
   }
 };

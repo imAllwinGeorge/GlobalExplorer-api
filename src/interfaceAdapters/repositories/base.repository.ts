@@ -38,6 +38,9 @@ export class BaseRepository<T> implements IBaseRepositoryInterface<T> {
     return this.model.findOneAndUpdate(filter, { $set: value }, { new: true });
   }
 
+  async delete(filter: FilterQuery<object>): Promise<void> {
+    await this.model.findOneAndDelete(filter).lean();
+  }
   async countDocuments(filter: FilterQuery<T>) {
     {
       return this.model.countDocuments(filter);

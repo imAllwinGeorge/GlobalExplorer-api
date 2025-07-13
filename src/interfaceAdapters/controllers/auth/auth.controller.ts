@@ -16,6 +16,9 @@ import jwt from "jsonwebtoken";
 import { hostSchema } from "./validations/host-signup.validation.schema";
 import { z, ZodError } from "zod";
 import { HttpStatusCode } from "shared/constants/statusCodes";
+import { clearAuthCookies, setAuthCookies } from "shared/utils/cookie.helper";
+import { IRefreshTokenUsecaseInterface } from "entities/usecaseInterfaces/auth/refresh-token.usecase.interface";
+import { IRevokeRefreshTokenUsecaseInterface } from "entities/usecaseInterfaces/auth/revok-refresh-token.usecase.interface";
 const { JsonWebTokenError } = jwt;
 
 type UserData = z.infer<typeof userSchema>;
@@ -46,6 +49,12 @@ export class AuthController implements IAuthController {
 
     @inject("IGoogleLoginUsecase")
     private _googleLoginUsecase: IGoogleLoginUsecaseInterface,
+
+    @inject("IRefreshTokenUsecase")
+    private _refreshTokenUsecase: IRefreshTokenUsecaseInterface,
+
+    @inject("IRevokeRefreshTokenUsecase")
+    private _revokeRefreshTokenUsecase: IRevokeRefreshTokenUsecaseInterface,
   ) {}
 
   async send_otp(req: Request, res: Response): Promise<void> {
@@ -142,7 +151,7 @@ export class AuthController implements IAuthController {
       if (!userData) {
         res
           .status(HttpStatusCode.UNAUTHORIZED)
-          .json({ message: "token expired" });
+          .json({ message: "session expired. Please try again" });
         return;
       }
       const otp = await this._sendOtpUsecase.execute(
@@ -177,18 +186,22 @@ export class AuthController implements IAuthController {
       }
 
       const user = await this._registerUseCase.execute(userData);
-      const { accessToken } = await this._generateTokenUsecase.execute(
+      const tokens = await this._generateTokenUsecase.execute(
         user._id,
         user.email,
         user.role,
       );
 
-      res.cookie(`${userData.role}AccessToken`, accessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        maxAge: 24 * 60 * 60 * 1000,
-      });
+      const accessTokenName = `${user.role}AccessToken`;
+      const refreshTokenName = `${user.role}RefreshToken`;
+
+      setAuthCookies(
+        res,
+        tokens.accessToken,
+        tokens.refreshToken,
+        accessTokenName,
+        refreshTokenName,
+      );
 
       res
         .status(HttpStatusCode.CREATED)
@@ -221,23 +234,25 @@ export class AuthController implements IAuthController {
 
       if (userData.isBlocked) {
         res
-          .status(HttpStatusCode.FORBIDDEN)
+          .status(HttpStatusCode.UNAUTHORIZED)
           .json({ message: "Account access restricted by admin." });
         return;
       }
 
-      const { accessToken } = await this._generateTokenUsecase.execute(
+      const tokens = await this._generateTokenUsecase.execute(
         userData?._id,
         userData.email,
         userData.role,
       );
-      res.cookie(`${userData.role}AccessToken`, accessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "productiion",
-        sameSite: "strict",
-        maxAge: 24 * 60 * 60 * 1000,
-      });
-      console.log(userData, accessToken);
+      const accessTokenName = `${userData.role}AccessToken`;
+      const refreshTokenName = `${userData.role}RefreshToken`;
+      setAuthCookies(
+        res,
+        tokens.accessToken,
+        tokens.refreshToken,
+        accessTokenName,
+        refreshTokenName,
+      );
       res
         .status(HttpStatusCode.OK)
         .json({ message: "user login successful", user: userData });
@@ -297,7 +312,7 @@ export class AuthController implements IAuthController {
       if (error instanceof JsonWebTokenError) {
         res
           .status(HttpStatusCode.FORBIDDEN)
-          .json({ message: "Token expired. Please try again " });
+          .json({ message: "Token Expired." });
         return;
       }
       res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
@@ -324,14 +339,51 @@ export class AuthController implements IAuthController {
       console.log(isVerified);
       if (!isVerified) {
         res
-          .status(HttpStatusCode.FORBIDDEN)
-          .json({ message: "session Expired!" });
+          .status(HttpStatusCode.UNAUTHORIZED)
+          .json({ message: "Token Expired." });
       }
 
       res.status(HttpStatusCode.OK).json({ message: "token verified" });
     } catch (error) {
       console.log(error);
       res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
+    }
+  }
+
+  async refreshToken(req: Request, res: Response): Promise<void> {
+    try {
+      const { role } = req.body;
+      let token;
+      if (role === "user") {
+        token = req.cookies.userRefreshToken;
+      } else if (role === "host") {
+        token = req.cookies.hostRefreshToken;
+      } else if (role === "admin") {
+        token = req.cookies.adminRefreshToken;
+      }
+
+      const payload = await this._refreshTokenUsecase.execute(token);
+      const tokens = await this._generateTokenUsecase.execute(
+        payload.userId,
+        payload.email,
+        payload.role,
+      );
+      const accessTokenName = `${role}AccessToken`;
+      const refreshTokenName = `${role}RefreshToken`;
+      setAuthCookies(
+        res,
+        tokens.accessToken,
+        tokens.refreshToken,
+        accessTokenName,
+        refreshTokenName,
+      );
+      res.status(HttpStatusCode.OK).json({ message: "Token validated" });
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(HttpStatusCode.FORBIDDEN).json({ message: error.message });
+        return;
+      }
+      res.status(500).json({ message: "Internal Server Error" });
     }
   }
 
@@ -351,7 +403,7 @@ export class AuthController implements IAuthController {
         throw new Error("google signup failed");
       }
 
-      const { accessToken } = await this._generateTokenUsecase.execute(
+      const tokens = await this._generateTokenUsecase.execute(
         googleUser?._id,
         googleUser.email,
         googleUser.role,
@@ -366,12 +418,15 @@ export class AuthController implements IAuthController {
           _id: googleUser._id,
         }),
       );
-      res.cookie(`${googleUser.role}AccessToken`, accessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "productiion",
-        sameSite: "strict",
-        maxAge: 24 * 60 * 60 * 1000,
-      });
+      const accessTokenName = `${googleUser.role}AccessToken`;
+      const refreshTokenName = `${googleUser.role}RefreshToken`;
+      setAuthCookies(
+        res,
+        tokens.accessToken,
+        tokens.refreshToken,
+        accessTokenName,
+        refreshTokenName,
+      );
       res.redirect(`http://localhost:5173/login?user=${userData}`);
     } catch (error) {
       console.log(error);
@@ -382,13 +437,19 @@ export class AuthController implements IAuthController {
   async logout(req: Request, res: Response): Promise<void> {
     try {
       const { role } = req.params;
+      let refreshToken;
+      if (role === "admin") {
+        refreshToken = req.cookies.adminRefreshToken;
+      } else if (role === "host") {
+        refreshToken = req.cookies.hostRefreshToken;
+      } else if (role === "user") {
+        refreshToken = req.cookies.userRefreshToken;
+      }
       console.log("logout role", role);
-      res.cookie(`${role}AccessToken`, "", {
-        httpOnly: true,
-        secure: true,
-        expires: new Date(0),
-        sameSite: "strict",
-      });
+      const accessTokenName = `${role}AccessToken`;
+      const refreshTokenName = `${role}RefreshToken`;
+      await this._revokeRefreshTokenUsecase.execute(refreshToken);
+      clearAuthCookies(res, accessTokenName, refreshTokenName);
 
       res.status(HttpStatusCode.OK).json({ message: "logout" });
     } catch (error) {

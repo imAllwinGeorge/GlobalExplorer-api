@@ -63,5 +63,13 @@ export class UserRoutes extends BaseRoute {
         blogController.getBlogs(req, res);
       },
     );
+
+    this.router.get(
+      "/activity/get-details/:id",
+      verifyToken,
+      (req: Request, res: Response) => {
+        activityController.getActivityDetails(req, res);
+      },
+    );
   }
 }

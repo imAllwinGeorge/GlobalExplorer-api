@@ -5,5 +5,5 @@ export interface IGenerateTokenInterface {
     userId: Schema.Types.ObjectId,
     email: string,
     role: string,
-  ): Promise<{ accessToken: string }>;
+  ): Promise<{ accessToken: string; refreshToken: string }>;
 }

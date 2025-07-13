@@ -53,6 +53,12 @@ import { IEditBlogUsecaseInterface } from "entities/usecaseInterfaces/blog/edit-
 import { EditBlogUsecase } from "usecases/blog/edit-blog.usecase";
 import { GetAllCategoryNameUsecase } from "usecases/category/get-all-category-name.usecase";
 import { IGetAllCategoryNameUsecaseInterface } from "entities/usecaseInterfaces/category/get-all-category-names.usecase.interface";
+import { IRefreshTokenUsecaseInterface } from "entities/usecaseInterfaces/auth/refresh-token.usecase.interface";
+import { RefreshTokenUsecase } from "usecases/auth/refresh-token.usecase";
+import { IRevokeRefreshTokenUsecaseInterface } from "entities/usecaseInterfaces/auth/revok-refresh-token.usecase.interface";
+import { RevokeRefreshTokenUsecase } from "usecases/auth/revoke-refresh-token.usecase";
+import { IGetActivityDetailsUsecaseInterface } from "entities/usecaseInterfaces/activity/get-activity-details.usecase.interface";
+import { GetActivityDetailsUsecase } from "usecases/activity/get-activity-details.usecase";
 
 export class UsecaseRegistery {
   static registerUsecases(): void {
@@ -177,5 +183,23 @@ export class UsecaseRegistery {
     container.register<IEditBlogUsecaseInterface>("IEditBlogUsecase", {
       useClass: EditBlogUsecase,
     });
+
+    container.register<IRefreshTokenUsecaseInterface>("IRefreshTokenUsecase", {
+      useClass: RefreshTokenUsecase,
+    });
+
+    container.register<IRevokeRefreshTokenUsecaseInterface>(
+      "IRevokeRefreshTokenUsecase",
+      {
+        useClass: RevokeRefreshTokenUsecase,
+      },
+    );
+
+    container.register<IGetActivityDetailsUsecaseInterface>(
+      "IGetActivityDetailsUsecase",
+      {
+        useClass: GetActivityDetailsUsecase,
+      },
+    );
   }
 }

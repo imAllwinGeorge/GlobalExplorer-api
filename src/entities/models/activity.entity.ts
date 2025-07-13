@@ -13,6 +13,7 @@ export interface IActivityEntity {
   country: string;
   location: [number, number];
   images: string[];
+  recurrenceDays: string[];
   reportingPlace: string;
   reportingTime: string;
   isActive: boolean;

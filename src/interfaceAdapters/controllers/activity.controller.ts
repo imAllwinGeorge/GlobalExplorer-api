@@ -1,5 +1,6 @@
 import { IActivityControllerInterface } from "entities/controllerInterfaces/activity-controller.interface";
 import { IEditActivityUsecaseInterface } from "entities/usecaseInterfaces/activity/edit-activity.usecase.interface";
+import { IGetActivityDetailsUsecaseInterface } from "entities/usecaseInterfaces/activity/get-activity-details.usecase.interface";
 import { IGetActivityUsecaseInterface } from "entities/usecaseInterfaces/activity/get-activity.usecase.interface";
 import { Request, Response } from "express";
 import { HttpStatusCode } from "shared/constants/statusCodes";
@@ -13,6 +14,9 @@ export class ActivityController implements IActivityControllerInterface {
 
     @inject("IGetActivityUsecase")
     private _getActivityUsecase: IGetActivityUsecaseInterface,
+
+    @inject("IGetActivityDetailsUsecase")
+    private _getActivityDetailsUsecase: IGetActivityDetailsUsecaseInterface,
   ) {}
   async addActivity(req: Request, res: Response): Promise<void> {
     try {
@@ -38,6 +42,7 @@ export class ActivityController implements IActivityControllerInterface {
         state,
         postalCode,
         country,
+        recurrenceDays,
         reportingPlace,
         reportingTime,
         location,
@@ -58,6 +63,7 @@ export class ActivityController implements IActivityControllerInterface {
       const images = [...existingImage, ...uploadedImages];
 
       const parsedLocation = JSON.parse(location); // [75.1, 10.2]
+      const paresedRecurrenceDays = JSON.parse(recurrenceDays);
       const activity = await this._editActivityUsecase.execute(id, {
         activityName,
         itenary,
@@ -71,6 +77,7 @@ export class ActivityController implements IActivityControllerInterface {
         state,
         postalCode,
         country,
+        recurrenceDays: paresedRecurrenceDays,
         reportingPlace,
         reportingTime,
         location: parsedLocation,
@@ -106,6 +113,25 @@ export class ActivityController implements IActivityControllerInterface {
       );
       const totalPages = Math.ceil(total / limit);
       res.status(HttpStatusCode.OK).json({ activities: items, totalPages });
+    } catch (error) {
+      console.log(error);
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: "Internal Server Error" });
+    }
+  }
+
+  async getActivityDetails(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      if (!id) {
+        res
+          .status(HttpStatusCode.BAD_REQUEST)
+          .json({ message: "Activity id is missing." });
+        return;
+      }
+      const activity = await this._getActivityDetailsUsecase.execute(id);
+      res.status(HttpStatusCode.OK).json({ activity });
     } catch (error) {
       console.log(error);
       res

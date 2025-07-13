@@ -61,6 +61,10 @@ const ActivitySchema = new Schema(
       type: [Number, Number],
       require: true,
     },
+    recurrenceDays: {
+      type: [String],
+      required: true,
+    },
     images: {
       type: [String],
       require: true,

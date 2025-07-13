@@ -53,6 +53,10 @@ export class AuthRoutes extends BaseRoute {
       authController.verifyToken(req, res);
     });
 
+    this.router.post("/auth/refresh-token", (req: Request, res: Response) => {
+      authController.refreshToken(req, res);
+    });
+
     this.router.get("/auth/google", (req: Request, res: Response, next) => {
       console.log("google route end hit");
       const role = req.query.role as string;
