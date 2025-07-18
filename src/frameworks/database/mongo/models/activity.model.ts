@@ -9,57 +9,64 @@ const ActivitySchema = new Schema(
   {
     activityName: {
       type: String,
-      require: true,
+      required: true,
     },
     maxCapacity: {
       type: Number,
-      require: true,
+      required: true,
     },
     itenary: {
       type: String,
-      require: true,
+      required: true,
     },
     categoryId: {
       type: Schema.Types.ObjectId,
-      require: true,
+      required: true,
       ref: "Category",
     },
     pricePerHead: {
       type: Number,
-      require: true,
+      required: true,
     },
     userId: {
       type: Schema.Types.ObjectId,
-      require: true,
+      required: true,
       ref: "Host",
     },
     street: {
       type: String,
-      require: true,
+      required: true,
     },
     city: {
       type: String,
-      require: true,
+      required: true,
     },
     district: {
       type: String,
-      require: true,
+      required: true,
     },
     state: {
       type: String,
-      require: true,
+      required: true,
     },
     postalCode: {
       type: String,
-      require: true,
+      required: true,
     },
     country: {
       type: String,
-      require: true,
+      required: true,
     },
     location: {
-      type: [Number, Number],
-      require: true,
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number], //[longitude, latitude]
+        required: true,
+      },
     },
     recurrenceDays: {
       type: [String],
@@ -67,15 +74,15 @@ const ActivitySchema = new Schema(
     },
     images: {
       type: [String],
-      require: true,
+      required: true,
     },
     reportingPlace: {
       type: String,
-      require: true,
+      required: true,
     },
     reportingTime: {
       type: String,
-      require: true,
+      required: true,
     },
     isActive: {
       type: Boolean,
@@ -87,4 +94,6 @@ const ActivitySchema = new Schema(
   },
 );
 
+ActivitySchema.index({ location: "2dsphere" });
+ActivitySchema.index({ activityName: "text", itenary: "text" });
 export const ActivityModel = model<IActivityModel>("Activity", ActivitySchema);

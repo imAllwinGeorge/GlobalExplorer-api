@@ -2,6 +2,7 @@ import { IActivityControllerInterface } from "entities/controllerInterfaces/acti
 import { IEditActivityUsecaseInterface } from "entities/usecaseInterfaces/activity/edit-activity.usecase.interface";
 import { IGetActivityDetailsUsecaseInterface } from "entities/usecaseInterfaces/activity/get-activity-details.usecase.interface";
 import { IGetActivityUsecaseInterface } from "entities/usecaseInterfaces/activity/get-activity.usecase.interface";
+import { IGetFilteredAcitivityUsecaseInterface } from "entities/usecaseInterfaces/activity/get-filtered-activity.usecase.interface";
 import { Request, Response } from "express";
 import { HttpStatusCode } from "shared/constants/statusCodes";
 import { inject, injectable } from "tsyringe";
@@ -17,6 +18,9 @@ export class ActivityController implements IActivityControllerInterface {
 
     @inject("IGetActivityDetailsUsecase")
     private _getActivityDetailsUsecase: IGetActivityDetailsUsecaseInterface,
+
+    @inject("IGetFilteredActivityUsecase")
+    private _getFilteredActivityUsecase: IGetFilteredAcitivityUsecaseInterface,
   ) {}
   async addActivity(req: Request, res: Response): Promise<void> {
     try {
@@ -47,6 +51,25 @@ export class ActivityController implements IActivityControllerInterface {
         reportingTime,
         location,
       } = req.body;
+      console.log(
+        activityName,
+        itenary,
+        maxCapacity,
+        categoryId,
+        pricePerHead,
+        userId,
+        street,
+        city,
+        district,
+        state,
+        postalCode,
+        country,
+        recurrenceDays,
+        reportingPlace,
+        reportingTime,
+        location,
+      );
+      console.log(id);
       let existingImage = req.body.existingImage;
       if (typeof existingImage === "string") {
         try {
@@ -102,7 +125,8 @@ export class ActivityController implements IActivityControllerInterface {
 
   async getAllActivities(req: Request, res: Response): Promise<void> {
     try {
-      const data = {};
+      // const data = {};
+      const { data } = req.body || {};
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
       const skip = (page - 1) * limit;
@@ -130,10 +154,54 @@ export class ActivityController implements IActivityControllerInterface {
           .json({ message: "Activity id is missing." });
         return;
       }
-      const activity = await this._getActivityDetailsUsecase.execute(id);
-      res.status(HttpStatusCode.OK).json({ activity });
+      const result = await this._getActivityDetailsUsecase.execute(id);
+      console.log("actvity details     ", result);
+      res.status(HttpStatusCode.OK).json(result);
     } catch (error) {
       console.log(error);
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: "Internal Server Error" });
+    }
+  }
+
+  async getFilteredActivity(req: Request, res: Response): Promise<void> {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+
+      const lat = parseFloat(req.query.lat as string); // ❗ Prefer parseFloat for coordinates
+      const lng = parseFloat(req.query.lng as string); // ❗ Same here
+      const distance = parseInt(req.query.distance as string); // ✅ parseInt is fine for meters
+
+      const priceRangeMax = parseInt(req.query.priceRangeMax as string);
+      const priceRangeMin = parseInt(req.query.priceRangeMin as string);
+
+      const { search, category } = req.query;
+
+      const skip = (page - 1) * limit;
+
+      const filter = {
+        search: search ? String(search) : undefined,
+        category: category ? String(category) : undefined,
+        lat: isNaN(lat) ? undefined : lat,
+        lng: isNaN(lng) ? undefined : lng,
+        distance: isNaN(distance) ? undefined : distance,
+        priceRangeMax: isNaN(priceRangeMax) ? undefined : priceRangeMax,
+        priceRangeMin: isNaN(priceRangeMin) ? undefined : priceRangeMin,
+      };
+
+      const result = await this._getFilteredActivityUsecase.execute(
+        limit,
+        skip,
+        filter,
+      );
+      res.status(HttpStatusCode.OK).json(result);
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
+        return;
+      }
       res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
         .json({ message: "Internal Server Error" });

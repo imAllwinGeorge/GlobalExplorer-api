@@ -8,4 +8,10 @@ export const config = {
     REDIS_HOST: process.env.REDIS_HOST,
     REDIS_PORT: process.env.REDIS_PORT || "16807",
   },
+
+  razorpay: {
+    RAZORPAY_ID: process.env.RAZORPAY_KEY_ID,
+    RAZORPAY_SECRET: process.env.RAZORPAY_KEY_SECRET,
+    RAZORPAY_KEY: process.env.RAZORPAY_KEY,
+  },
 };

@@ -74,7 +74,7 @@ export class BlogController implements IBlogControllerInterface {
 
       const newBlog = await this._createBlogUsecase.execute(blog);
       console.log(newBlog);
-      res.status(HttpStatusCode.OK).json({ blog: newBlog });
+      res.status(HttpStatusCode.CREATED).json({ blog: newBlog });
     } catch (error) {
       console.log(error);
       if (error instanceof Error) {

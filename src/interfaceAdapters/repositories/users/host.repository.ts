@@ -14,4 +14,10 @@ export class HostRepository
   constructor() {
     super(HostModel);
   }
+
+  async getRazorpayAccountId(id: string): Promise<string> {
+    const host = await this.model.findById(id).select("razorpayAccountId");
+    console.log(" host result   :", host?.razorpayAccountId ?? "");
+    return host?.razorpayAccountId ?? "";
+  }
 }

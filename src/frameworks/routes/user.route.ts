@@ -3,6 +3,8 @@ import {
   activityController,
   authController,
   blogController,
+  bookingController,
+  categoryController,
   userController,
 } from "../di/resolver";
 import { verifyToken } from "interfaceAdapters/middleware/auth.middleware";
@@ -69,6 +71,30 @@ export class UserRoutes extends BaseRoute {
       verifyToken,
       (req: Request, res: Response) => {
         activityController.getActivityDetails(req, res);
+      },
+    );
+
+    this.router.post("/activity/booking", (req: Request, res: Response) => {
+      bookingController.createRazorpayOrder(req, res);
+    });
+
+    this.router.post("/payment/verify", (req: Request, res: Response) => {
+      bookingController.verifyPayment(req, res);
+    });
+
+    this.router.get(
+      "/get-categories",
+      verifyToken,
+      (req: Request, res: Response) => {
+        categoryController.getCategoryNames(req, res);
+      },
+    );
+
+    this.router.get(
+      "/activity/filter",
+      verifyToken,
+      (req: Request, res: Response) => {
+        activityController.getFilteredActivity(req, res);
       },
     );
   }

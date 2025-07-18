@@ -11,7 +11,10 @@ export interface IActivityEntity {
   state: string;
   postalCode: string;
   country: string;
-  location: [number, number];
+  location: {
+    type?: string;
+    coordinates: [number, number];
+  };
   images: string[];
   recurrenceDays: string[];
   reportingPlace: string;

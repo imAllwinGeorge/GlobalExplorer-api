@@ -5,11 +5,10 @@ export interface IBookingEntitiy {
   date: Date;
   participantCount: number;
   pricePerParticipant: number;
-  paymentId: string;
   paymentStatus: "pending" | "paid" | "failed" | "refunded";
   razorpayPaymentId?: string;
   razporpayOrderId?: string;
-  rezorpaySignatue?: string;
+  razorpaySignatue?: string;
   bookingStatus: "pending" | "cancelled" | "completed";
   hostId: string;
   isCancelled: boolean;
@@ -18,6 +17,9 @@ export interface IBookingEntitiy {
   refundId?: string;
   refundAmount?: number;
   refundStatus?: "initialized" | "completed" | "failed";
+  razorpayTransferId?: string;
+  isReleasedId: boolean;
+  holdUntilDate: Date;
   updatedAt: Date;
   createdAt: Date;
 }

@@ -92,6 +92,9 @@ const hostSchema = new Schema(
     reasonForRejection: {
       type: String,
     },
+    razorpayAccountId: {
+      type: String,
+    },
   },
   {
     timestamps: true,

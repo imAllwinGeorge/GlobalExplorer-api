@@ -33,11 +33,6 @@ const BookingSchema = new Schema(
       type: Number,
       required: true,
     },
-    paymentId: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "Payment",
-    },
     paymentStatus: {
       type: String,
       enum: ["pending", "paid", "failed", "refunded"],
@@ -46,10 +41,10 @@ const BookingSchema = new Schema(
     razorpayPaymentId: {
       type: String,
     },
-    razpayOrderId: {
+    razorpayOrderId: {
       type: String,
     },
-    rezorpaySignature: {
+    razorpaySignature: {
       type: String,
     },
     bookingStatus: {
@@ -83,10 +78,21 @@ const BookingSchema = new Schema(
       type: String,
       enum: ["initialized", "completed", "failed"],
     },
+    razorpayTransferId: {
+      type: String,
+    },
+    isReleased: {
+      type: Boolean,
+      default: false,
+    },
+    holdUntilDate: {
+      type: Date,
+    },
   },
   {
     timestamps: true,
   },
 );
 
+BookingSchema.index({ userId: 1, activity: 1, date: 1 });
 export const BookingModel = model<IBookingModal>("Booking", BookingSchema);

@@ -20,6 +20,7 @@ export interface IHostEntity {
   isBlocked: boolean;
   isVerified: string;
   reasonForRejection?: string;
+  razorpayAccountId?: string;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -59,6 +59,16 @@ import { IRevokeRefreshTokenUsecaseInterface } from "entities/usecaseInterfaces/
 import { RevokeRefreshTokenUsecase } from "usecases/auth/revoke-refresh-token.usecase";
 import { IGetActivityDetailsUsecaseInterface } from "entities/usecaseInterfaces/activity/get-activity-details.usecase.interface";
 import { GetActivityDetailsUsecase } from "usecases/activity/get-activity-details.usecase";
+import { IBookActivityUsecaseInterface } from "entities/usecaseInterfaces/booking/book.activity.usecase.interface";
+import { BookActivityUsecase } from "usecases/booking/book.activity.usecase";
+import { IpaymentService } from "entities/serviceInterfaces/razorpay-service.interface";
+import { RazorpayService } from "interfaceAdapters/services/razorpay-services";
+import { IGetFilteredAcitivityUsecaseInterface } from "entities/usecaseInterfaces/activity/get-filtered-activity.usecase.interface";
+import { GetFilteredActivityUsecase } from "usecases/activity/get-filtered-activity.usecase";
+import { ICheckBookingAvailabiltyUsecase } from "entities/usecaseInterfaces/booking/check-availabilty.usecase.interface";
+import { CheckBookingAvailabilityUsecase } from "usecases/booking/check-availability.usecase";
+import { ICreateOrderUsecase } from "entities/usecaseInterfaces/booking/create-order.usecase.interface";
+import { CreateOrderUsecase } from "usecases/booking/create-order.usecase";
 
 export class UsecaseRegistery {
   static registerUsecases(): void {
@@ -113,6 +123,10 @@ export class UsecaseRegistery {
 
     container.register<IJwtserviceInterface>("IJwtService", {
       useClass: JwtService,
+    });
+
+    container.register<IpaymentService>("IPaymentService", {
+      useClass: RazorpayService,
     });
 
     container.register<IGoogleLoginUsecaseInterface>("IGoogleLoginUsecase", {
@@ -201,5 +215,27 @@ export class UsecaseRegistery {
         useClass: GetActivityDetailsUsecase,
       },
     );
+
+    container.register<IBookActivityUsecaseInterface>("IBookActivityUsecase", {
+      useClass: BookActivityUsecase,
+    });
+
+    container.register<IGetFilteredAcitivityUsecaseInterface>(
+      "IGetFilteredActivityUsecase",
+      {
+        useClass: GetFilteredActivityUsecase,
+      },
+    );
+
+    container.register<ICheckBookingAvailabiltyUsecase>(
+      "ICheckAvailabilityUsecase",
+      {
+        useClass: CheckBookingAvailabilityUsecase,
+      },
+    );
+
+    container.register<ICreateOrderUsecase>("ICreateOrderUsecase", {
+      useClass: CreateOrderUsecase,
+    });
   }
 }

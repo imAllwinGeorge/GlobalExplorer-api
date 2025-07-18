@@ -65,7 +65,10 @@ export interface ActivityDTO {
   postalCode: string;
   country: string;
   recurrenceDays: string[];
-  location: [number, number];
+  location: {
+    type?: string;
+    coordinates: [number, number];
+  };
   images: string[];
   reportingPlace: string;
   reportingTime: string;
@@ -82,4 +85,20 @@ export interface BlogDTO {
     image: string;
   }[];
   image: string;
+}
+
+export interface BookingDTO {
+  userId: string;
+  activityId: string;
+  activityTitle: string;
+  date: Date;
+  participantCount: number;
+  pricePerParticipant: number;
+  razorpayPaymentId?: string;
+  razporpayOrderId?: string;
+  rezorpaySignatue?: string;
+  hostId: string;
+  razorpayTransferId?: string;
+  holdUntilDate: Date;
+  paymentStatus?: "pending" | "paid" | "failed" | "refunded";
 }

@@ -7,6 +7,7 @@ import { categorySchema } from "./auth/validations/category.validation.schema";
 import { IEditCategoryUsecaseInterface } from "entities/usecaseInterfaces/category/edit-category.usecase.interface";
 import { IUpdateCategoryUsecaseInterface } from "entities/usecaseInterfaces/category/update-category.usecase.interface";
 import { HttpStatusCode } from "shared/constants/statusCodes";
+import { IGetAllCategoryNameUsecaseInterface } from "entities/usecaseInterfaces/category/get-all-category-names.usecase.interface";
 
 @injectable()
 export class ICategoryController implements ICategoryControllerInterface {
@@ -22,6 +23,9 @@ export class ICategoryController implements ICategoryControllerInterface {
 
     @inject("IUpdateCategoryUsecase")
     private _updateStatusCategory: IUpdateCategoryUsecaseInterface,
+
+    @inject("IGetAllCategoryNameUsecase")
+    private _getAllCategoryNameUsecase: IGetAllCategoryNameUsecaseInterface,
   ) {}
 
   async getCategories(req: Request, res: Response): Promise<void> {
@@ -101,10 +105,26 @@ export class ICategoryController implements ICategoryControllerInterface {
       console.log(error);
       if (error instanceof Error) {
         res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
+        return;
       }
       res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
         .json({ message: "Internal server Error!" });
+    }
+  }
+
+  async getCategoryNames(req: Request, res: Response): Promise<void> {
+    try {
+      const categories = await this._getAllCategoryNameUsecase.execute();
+      res.status(HttpStatusCode.OK).json({ categories });
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
+        return;
+      }
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: "Internal Server Error" });
     }
   }
 }

@@ -5,4 +5,5 @@ export interface ICategoryControllerInterface {
   addCategory(req: Request, res: Response): Promise<void>;
   editCategory(req: Request, res: Response): Promise<void>;
   updateCategoryStatus(req: Request, res: Response): Promise<void>;
+  getCategoryNames(req: Request, res: Response): Promise<void>;
 }

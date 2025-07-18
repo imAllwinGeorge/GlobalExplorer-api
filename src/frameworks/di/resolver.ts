@@ -12,6 +12,8 @@ import { IHostControllerInterface } from "entities/controllerInterfaces/users/ho
 import { HostController } from "interfaceAdapters/controllers/user/host.controller";
 import { IBlogControllerInterface } from "entities/controllerInterfaces/blog-controller.interface";
 import { BlogController } from "interfaceAdapters/controllers/blog.controller";
+import { IBookingControllerInterface } from "entities/controllerInterfaces/Booking-controller.interface";
+import { BookingController } from "interfaceAdapters/controllers/booking.controller";
 
 DependancyInjection.registerAll();
 
@@ -32,3 +34,6 @@ export const hostController =
 
 export const blogController =
   container.resolve<IBlogControllerInterface>(BlogController);
+
+export const bookingController =
+  container.resolve<IBookingControllerInterface>(BookingController);
