@@ -10,4 +10,5 @@ export interface IpaymentService {
   releaseTransfer(transferId: string): Promise<void>;
 
   getMyAccountId(): Promise<string>;
+  refundPayment(razorpayPaymentId: string, amount: number): Promise<string>;
 }

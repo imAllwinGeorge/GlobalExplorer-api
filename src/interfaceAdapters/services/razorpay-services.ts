@@ -123,4 +123,40 @@ export class RazorpayService implements IpaymentService {
     console.log("Your account ID is:", response);
     return response.data.id;
   }
+
+  async refundPayment(
+    razorpayPaymentId: string,
+    amount: number,
+  ): Promise<string> {
+    try {
+      const payload: Record<string, number> = {};
+      if (amount) payload.amount = amount * 100; // Razorpay expects paise
+
+      const response = await axios.post(
+        `https://api.razorpay.com/v1/payments/${razorpayPaymentId}/refund`,
+        payload,
+        {
+          auth: {
+            username: config.razorpay.RAZORPAY_ID!,
+            password: config.razorpay.RAZORPAY_SECRET!,
+          },
+        },
+      );
+
+      return response.data.id; // Razorpay refund ID
+    } catch (error: unknown) {
+      let message = "Unknown error";
+
+      if (
+        axios.isAxiosError(error) &&
+        error.response?.data?.error?.description
+      ) {
+        message = error.response.data.error.description;
+      } else if (error instanceof Error) {
+        message = error.message;
+      }
+
+      throw new Error(`Razorpay release failed: ${message}`);
+    }
+  }
 }
