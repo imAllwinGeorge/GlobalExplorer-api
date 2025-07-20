@@ -19,6 +19,7 @@ import { HttpStatusCode } from "shared/constants/statusCodes";
 import { clearAuthCookies, setAuthCookies } from "shared/utils/cookie.helper";
 import { IRefreshTokenUsecaseInterface } from "entities/usecaseInterfaces/auth/refresh-token.usecase.interface";
 import { IRevokeRefreshTokenUsecaseInterface } from "entities/usecaseInterfaces/auth/revok-refresh-token.usecase.interface";
+import { IGetProfileUsecase } from "entities/usecaseInterfaces/auth/get-profile.usecase.interface";
 const { JsonWebTokenError } = jwt;
 
 type UserData = z.infer<typeof userSchema>;
@@ -55,6 +56,9 @@ export class AuthController implements IAuthController {
 
     @inject("IRevokeRefreshTokenUsecase")
     private _revokeRefreshTokenUsecase: IRevokeRefreshTokenUsecaseInterface,
+
+    @inject("IGetProfileUsecase")
+    private _getProfileUsecase: IGetProfileUsecase,
   ) {}
 
   async send_otp(req: Request, res: Response): Promise<void> {
@@ -457,6 +461,23 @@ export class AuthController implements IAuthController {
       res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
         .json({ message: "Internal server error" });
+    }
+  }
+
+  async getProfile(req: Request, res: Response): Promise<void> {
+    try {
+      const id = req.query.id as string;
+      const role = req.query.role as string;
+      const profile = await this._getProfileUsecase.execute(id, role);
+      res.status(HttpStatusCode.OK).json({ user: profile });
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
+        return;
+      }
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: "Internal Server Error" });
     }
   }
 }

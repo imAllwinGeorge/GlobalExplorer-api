@@ -20,11 +20,13 @@ export class CheckBookingAvailabilityUsecase
     const bookings = await this._bookingRepository.find({
       activityId: data.activityId,
       date: data.date,
+      isCancelled: false,
     });
     const totalBookingCount = bookings.reduce(
       (acc, curr) => (acc += curr.participantCount),
       0,
     );
+
     const activity = await this._activityRepository.findOne({
       _id: data.activityId,
     });

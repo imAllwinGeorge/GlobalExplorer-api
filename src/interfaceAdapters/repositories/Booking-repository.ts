@@ -28,6 +28,7 @@ export class BookingRepository
       {
         $match: {
           activityId: new mongoose.Types.ObjectId(activityId.toString()),
+          isCancelled: false,
           $expr: {
             $eq: [
               {

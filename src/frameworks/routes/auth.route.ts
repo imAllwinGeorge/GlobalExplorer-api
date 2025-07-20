@@ -79,5 +79,9 @@ export class AuthRoutes extends BaseRoute {
     this.router.post("/logout/:role", (req: Request, res: Response) => {
       authController.logout(req, res);
     });
+
+    this.router.get("/get-profile", (req: Request, res: Response) => {
+      authController.getProfile(req, res);
+    });
   }
 }

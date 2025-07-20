@@ -69,6 +69,14 @@ import { ICheckBookingAvailabiltyUsecase } from "entities/usecaseInterfaces/book
 import { CheckBookingAvailabilityUsecase } from "usecases/booking/check-availability.usecase";
 import { ICreateOrderUsecase } from "entities/usecaseInterfaces/booking/create-order.usecase.interface";
 import { CreateOrderUsecase } from "usecases/booking/create-order.usecase";
+import { IGetProfileUsecase } from "entities/usecaseInterfaces/auth/get-profile.usecase.interface";
+import { GetProfileUsecase } from "usecases/auth/get-profile.usecase";
+import { IGetBookedActivityUsecase } from "entities/usecaseInterfaces/booking/get-bookings.usecase.interface";
+import { GetBookedActivityUsecase } from "usecases/booking/get-bookings.usecase";
+import { ICancelBookingUsecase } from "entities/usecaseInterfaces/booking/cancel.booking.usecase.interface";
+import { CancelBookingUsecase } from "usecases/booking/cancel.booking.usecase";
+import { IGetMyBlogsUsecase } from "entities/usecaseInterfaces/blog/get-my-blog.usecase.interface";
+import { GetMyBlogsUsecase } from "usecases/blog/get-my-blog.usecase";
 
 export class UsecaseRegistery {
   static registerUsecases(): void {
@@ -236,6 +244,22 @@ export class UsecaseRegistery {
 
     container.register<ICreateOrderUsecase>("ICreateOrderUsecase", {
       useClass: CreateOrderUsecase,
+    });
+
+    container.register<IGetProfileUsecase>("IGetProfileUsecase", {
+      useClass: GetProfileUsecase,
+    });
+
+    container.register<IGetBookedActivityUsecase>("IGetBookedActivityUsecase", {
+      useClass: GetBookedActivityUsecase,
+    });
+
+    container.register<ICancelBookingUsecase>("ICancelBookingUsecase", {
+      useClass: CancelBookingUsecase,
+    });
+
+    container.register<IGetMyBlogsUsecase>("IGetMyBlogUsecase", {
+      useClass: GetMyBlogsUsecase,
     });
   }
 }

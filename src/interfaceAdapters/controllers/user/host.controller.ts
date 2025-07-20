@@ -7,7 +7,11 @@ import { Request, Response } from "express";
 import { Types } from "mongoose";
 import { HttpStatusCode } from "shared/constants/statusCodes";
 import { inject, injectable } from "tsyringe";
+import { hostSchema } from "../auth/validations/host-signup.validation.schema";
+import { z } from "zod";
+import { IUpdateStatusUsecaseInterface } from "entities/usecaseInterfaces/user/update-status.usecase.interface";
 
+type HostData = z.infer<typeof hostSchema>;
 @injectable()
 export class HostController implements IHostControllerInterface {
   constructor(
@@ -22,6 +26,9 @@ export class HostController implements IHostControllerInterface {
 
     @inject("IGetAllCategoryNameUsecase")
     private _getAllCategoryNameUsecase: IGetAllCategoryNameUsecaseInterface,
+
+    @inject("IUpdateStatusUsecase")
+    private _updateUserUsecase: IUpdateStatusUsecaseInterface,
   ) {}
 
   async getActivity(req: Request, res: Response): Promise<void> {
@@ -105,6 +112,56 @@ export class HostController implements IHostControllerInterface {
       }
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async editProfile(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      const parsedData = hostSchema.parse(req.body);
+      const files = req.files as Express.Multer.File[];
+      console.log(parsedData, files);
+      type HostFileFields =
+        | "kyc_idProof"
+        | "kyc_addressProof"
+        | "kyc_panCard"
+        | "registrationCertificate"
+        | "safetyCertificate"
+        | "license"
+        | "insurance";
+
+      files?.forEach((file) => {
+        const key = file.fieldname;
+
+        if (
+          [
+            "kyc_idProof",
+            "kyc_addressProof",
+            "kyc_panCard",
+            "registrationCertificate",
+            "safetyCertificate",
+            "license",
+            "insurance",
+          ].includes(key)
+        ) {
+          (parsedData as HostData)[key as HostFileFields] = file.filename;
+        }
+      });
+      const updatedProfile = await this._updateUserUsecase.execute(
+        id,
+        parsedData,
+        parsedData.role,
+      );
+      res.status(HttpStatusCode.OK).json({ user: updatedProfile });
+    } catch (error) {
+      console.log(error);
+      if (error instanceof Error) {
+        res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
+        return;
+      }
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: "Internal server error" });
     }
   }
 }

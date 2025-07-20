@@ -67,6 +67,14 @@ export class UserRoutes extends BaseRoute {
     );
 
     this.router.get(
+      "/blog/get-myblogs",
+      verifyToken,
+      (req: Request, res: Response) => {
+        blogController.getMyBlogs(req, res);
+      },
+    );
+
+    this.router.get(
       "/activity/get-details/:id",
       verifyToken,
       (req: Request, res: Response) => {
@@ -95,6 +103,22 @@ export class UserRoutes extends BaseRoute {
       verifyToken,
       (req: Request, res: Response) => {
         activityController.getFilteredActivity(req, res);
+      },
+    );
+
+    this.router.get(
+      "/get-bookings",
+      verifyToken,
+      (req: Request, res: Response) => {
+        bookingController.getBookings(req, res);
+      },
+    );
+
+    this.router.patch(
+      "/cancel-booking",
+      verifyToken,
+      (req: Request, res: Response) => {
+        bookingController.cancelBooking(req, res);
       },
     );
   }

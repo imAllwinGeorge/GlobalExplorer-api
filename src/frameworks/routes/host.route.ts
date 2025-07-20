@@ -14,6 +14,15 @@ export class HostRoute extends BaseRoute {
   }
 
   protected initializeRoutes(): void {
+    this.router.post(
+      "/update-profile/:id",
+      verifyToken,
+      upload.any(),
+      (req: Request, res: Response) => {
+        hostController.editProfile(req, res);
+      },
+    );
+
     this.router.get(
       "/get-activity/:id",
       verifyToken,
