@@ -1,28 +1,28 @@
 import { inject, injectable } from "tsyringe";
-import { IResetPasswordUseCaseInterface } from "../../entities/usecaseInterfaces/auth/reset-password.usecase.interface";
-import { IUserRepositoryInterface } from "../../entities/repositoryInterfaces/users/user-repository.interface";
-import { IJwtserviceInterface } from "../../entities/serviceInterfaces/jwt-services.interface";
+import { IResetPasswordUseCase } from "../../entities/usecaseInterfaces/auth/reset-password.usecase.interface";
+import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
+import { IJwtservice } from "../../entities/serviceInterfaces/jwt-services.interface";
 import { IBcrypt } from "../../entities/security/bcrypt.interface";
 import { IUserModel } from "../../frameworks/database/mongo/models/user.model";
-import { IAdminRepositoryInterface } from "entities/repositoryInterfaces/users/admin-repository.inteface";
-import { IHostRepositoryInterface } from "entities/repositoryInterfaces/users/host-repository.interface";
+import { IAdminRepository } from "entities/repositoryInterfaces/users/admin-repository.inteface";
+import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
 import { IHostModel } from "frameworks/database/mongo/models/host.model";
 import { IAdminModel } from "frameworks/database/mongo/models/admin.model";
 
 @injectable()
-export class ResetPasswordUsecase implements IResetPasswordUseCaseInterface {
+export class ResetPasswordUsecase implements IResetPasswordUseCase {
   constructor(
     @inject("IUserRepository")
-    private _userRepository: IUserRepositoryInterface,
+    private _userRepository: IUserRepository,
 
     @inject("IAdminRepository")
-    private _adminRepository: IAdminRepositoryInterface,
+    private _adminRepository: IAdminRepository,
 
     @inject("IHostRepository")
-    private _hostRepository: IHostRepositoryInterface,
+    private _hostRepository: IHostRepository,
 
     @inject("IJwtService")
-    private _jwtService: IJwtserviceInterface,
+    private _jwtService: IJwtservice,
 
     @inject("IPasswordBcrypt")
     private _bcryptService: IBcrypt,

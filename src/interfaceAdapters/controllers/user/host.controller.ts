@@ -1,34 +1,34 @@
-import { IHostControllerInterface } from "entities/controllerInterfaces/users/host-controller.interface";
-import { IAddActivityUsecaseInterface } from "entities/usecaseInterfaces/activity/add-activity.usecase.interface";
-import { IGetActivityUsecaseInterface } from "entities/usecaseInterfaces/activity/get-activity.usecase.interface";
-import { IGetAllCategoryNameUsecaseInterface } from "entities/usecaseInterfaces/category/get-all-category-names.usecase.interface";
-import { IGetAllCategoryUsecaseInterface } from "entities/usecaseInterfaces/category/get-all-category.usecase.interface";
+import { IHostController } from "entities/controllerInterfaces/users/host-controller.interface";
+import { IAddActivityUsecase } from "entities/usecaseInterfaces/activity/add-activity.usecase.interface";
+import { IGetActivityUsecase } from "entities/usecaseInterfaces/activity/get-activity.usecase.interface";
+import { IGetAllCategoryNameUsecase } from "entities/usecaseInterfaces/category/get-all-category-names.usecase.interface";
+import { IGetAllCategoryUsecase } from "entities/usecaseInterfaces/category/get-all-category.usecase.interface";
 import { Request, Response } from "express";
 import { Types } from "mongoose";
 import { HttpStatusCode } from "shared/constants/statusCodes";
 import { inject, injectable } from "tsyringe";
 import { hostSchema } from "../auth/validations/host-signup.validation.schema";
 import { z } from "zod";
-import { IUpdateStatusUsecaseInterface } from "entities/usecaseInterfaces/user/update-status.usecase.interface";
+import { IUpdateStatusUsecase } from "entities/usecaseInterfaces/user/update-status.usecase.interface";
 
 type HostData = z.infer<typeof hostSchema>;
 @injectable()
-export class HostController implements IHostControllerInterface {
+export class HostController implements IHostController {
   constructor(
     @inject("IGetAllCategoryUsecase")
-    private _getAllCategoryUsecase: IGetAllCategoryUsecaseInterface,
+    private _getAllCategoryUsecase: IGetAllCategoryUsecase,
 
     @inject("IGetActivityUsecase")
-    private _getActivityUsecase: IGetActivityUsecaseInterface,
+    private _getActivityUsecase: IGetActivityUsecase,
 
     @inject("IAddActivityUsecase")
-    private _addActvityUsecase: IAddActivityUsecaseInterface,
+    private _addActvityUsecase: IAddActivityUsecase,
 
     @inject("IGetAllCategoryNameUsecase")
-    private _getAllCategoryNameUsecase: IGetAllCategoryNameUsecaseInterface,
+    private _getAllCategoryNameUsecase: IGetAllCategoryNameUsecase,
 
     @inject("IUpdateStatusUsecase")
-    private _updateUserUsecase: IUpdateStatusUsecaseInterface,
+    private _updateUserUsecase: IUpdateStatusUsecase,
   ) {}
 
   async getActivity(req: Request, res: Response): Promise<void> {

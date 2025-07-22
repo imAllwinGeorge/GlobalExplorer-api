@@ -1,26 +1,26 @@
-import { IActivityControllerInterface } from "entities/controllerInterfaces/activity-controller.interface";
-import { IEditActivityUsecaseInterface } from "entities/usecaseInterfaces/activity/edit-activity.usecase.interface";
-import { IGetActivityDetailsUsecaseInterface } from "entities/usecaseInterfaces/activity/get-activity-details.usecase.interface";
-import { IGetActivityUsecaseInterface } from "entities/usecaseInterfaces/activity/get-activity.usecase.interface";
-import { IGetFilteredAcitivityUsecaseInterface } from "entities/usecaseInterfaces/activity/get-filtered-activity.usecase.interface";
+import { IActivityController } from "entities/controllerInterfaces/activity-controller.interface";
+import { IEditActivityUsecase } from "entities/usecaseInterfaces/activity/edit-activity.usecase.interface";
+import { IGetActivityDetailsUsecase } from "entities/usecaseInterfaces/activity/get-activity-details.usecase.interface";
+import { IGetActivityUsecase } from "entities/usecaseInterfaces/activity/get-activity.usecase.interface";
+import { IGetFilteredAcitivityUsecase } from "entities/usecaseInterfaces/activity/get-filtered-activity.usecase.interface";
 import { Request, Response } from "express";
 import { HttpStatusCode } from "shared/constants/statusCodes";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
-export class ActivityController implements IActivityControllerInterface {
+export class ActivityController implements IActivityController {
   constructor(
     @inject("IEditActivityUsecase")
-    private _editActivityUsecase: IEditActivityUsecaseInterface,
+    private _editActivityUsecase: IEditActivityUsecase,
 
     @inject("IGetActivityUsecase")
-    private _getActivityUsecase: IGetActivityUsecaseInterface,
+    private _getActivityUsecase: IGetActivityUsecase,
 
     @inject("IGetActivityDetailsUsecase")
-    private _getActivityDetailsUsecase: IGetActivityDetailsUsecaseInterface,
+    private _getActivityDetailsUsecase: IGetActivityDetailsUsecase,
 
     @inject("IGetFilteredActivityUsecase")
-    private _getFilteredActivityUsecase: IGetFilteredAcitivityUsecaseInterface,
+    private _getFilteredActivityUsecase: IGetFilteredAcitivityUsecase,
   ) {}
   async addActivity(req: Request, res: Response): Promise<void> {
     try {

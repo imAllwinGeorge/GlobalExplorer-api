@@ -1,13 +1,13 @@
-import { ICategoryRepositoryInterface } from "entities/repositoryInterfaces/category/categoryRepository.interface";
-import { IEditCategoryUsecaseInterface } from "entities/usecaseInterfaces/category/edit-category.usecase.interface";
+import { ICategoryRepository } from "entities/repositoryInterfaces/category/categoryRepository.interface";
+import { IEditCategoryUsecase } from "entities/usecaseInterfaces/category/edit-category.usecase.interface";
 import { ICategoryModel } from "frameworks/database/mongo/models/category.model";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
-export class EditCategoryUsecase implements IEditCategoryUsecaseInterface {
+export class EditCategoryUsecase implements IEditCategoryUsecase {
   constructor(
     @inject("ICategoryRepository")
-    private _categoryRepository: ICategoryRepositoryInterface,
+    private _categoryRepository: ICategoryRepository,
   ) {}
 
   async execute(

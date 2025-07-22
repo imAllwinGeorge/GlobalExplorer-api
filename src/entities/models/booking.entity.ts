@@ -18,7 +18,7 @@ export interface IBookingEntitiy {
   refundAmount?: number;
   refundStatus?: "initialized" | "completed" | "failed";
   razorpayTransferId?: string;
-  isReleasedId: boolean;
+  isReleased: boolean;
   holdUntilDate: Date;
   updatedAt: Date;
   createdAt: Date;

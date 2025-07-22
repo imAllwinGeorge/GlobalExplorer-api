@@ -1,16 +1,16 @@
 import { inject, injectable } from "tsyringe";
-import { IGetAllUsersUsecaseInterface } from "../../entities/usecaseInterfaces/user/get-all-user.usecase.interface";
-import { IUserRepositoryInterface } from "../../entities/repositoryInterfaces/users/user-repository.interface";
-import { IHostRepositoryInterface } from "entities/repositoryInterfaces/users/host-repository.interface";
+import { IGetAllUsersUsecase } from "../../entities/usecaseInterfaces/user/get-all-user.usecase.interface";
+import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
+import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
 
 @injectable()
-export class GetAllUsersUsecase implements IGetAllUsersUsecaseInterface {
+export class GetAllUsersUsecase implements IGetAllUsersUsecase {
   constructor(
     @inject("IUserRepository")
-    private _userRepository: IUserRepositoryInterface,
+    private _userRepository: IUserRepository,
 
     @inject("IHostRepository")
-    private _hostRepository: IHostRepositoryInterface,
+    private _hostRepository: IHostRepository,
   ) {}
 
   async execute(

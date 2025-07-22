@@ -1,6 +1,6 @@
 import { BaseRepository } from "../base.repository";
 import { injectable } from "tsyringe";
-import { ICategoryRepositoryInterface } from "entities/repositoryInterfaces/category/categoryRepository.interface";
+import { ICategoryRepository } from "entities/repositoryInterfaces/category/categoryRepository.interface";
 import {
   CategoryModel,
   ICategoryModel,
@@ -9,7 +9,7 @@ import {
 @injectable()
 export class CategoryRepository
   extends BaseRepository<ICategoryModel>
-  implements ICategoryRepositoryInterface
+  implements ICategoryRepository
 {
   constructor() {
     super(CategoryModel);

@@ -3,13 +3,13 @@ import {
   RefreshTokenModel,
 } from "frameworks/database/mongo/models/refresh-token.model";
 import { BaseRepository } from "../base.repository";
-import { IRefreshTokenRepositoryInterface } from "entities/repositoryInterfaces/refreshToken/refresh-token.repository.interface";
+import { IRefreshTokenRepository } from "entities/repositoryInterfaces/refreshToken/refresh-token.repository.interface";
 import { injectable } from "tsyringe";
 
 @injectable()
 export class RefreshTokenRepository
   extends BaseRepository<IRefreshTokenModel>
-  implements IRefreshTokenRepositoryInterface
+  implements IRefreshTokenRepository
 {
   constructor() {
     super(RefreshTokenModel);

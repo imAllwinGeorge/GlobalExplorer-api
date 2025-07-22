@@ -3,22 +3,22 @@ import { IAuthController } from "../../../entities/controllerInterfaces/users/au
 import { IRegisterUsecase } from "../../../entities/usecaseInterfaces/auth/register-usecase.interface";
 import { inject, injectable } from "tsyringe";
 import { userSchema } from "./validations/user-signup.validatiion.schema";
-import { ISendOtpUsecaseInterface } from "../../../entities/usecaseInterfaces/auth/send-otp.usecase.interface";
-import { IGenerateTokenInterface } from "../../../entities/usecaseInterfaces/auth/generate_token-usecase.interface";
+import { ISendOtpUsecase } from "../../../entities/usecaseInterfaces/auth/send-otp.usecase.interface";
+import { IGenerateToken } from "../../../entities/usecaseInterfaces/auth/generate_token-usecase.interface";
 import { loginShcema } from "./validations/user-login.validation.scema";
-import { ILoginUserInterface } from "../../../entities/usecaseInterfaces/auth/login-user.usecase.interface";
+import { ILoginUser } from "../../../entities/usecaseInterfaces/auth/login-user.usecase.interface";
 import { forgotPasswordSchema } from "./validations/forgot-password.validation.schema";
-import { IForgotPasswordUsecaseInterface } from "../../../entities/usecaseInterfaces/auth/forgot-password.usecase.interface";
-import { IResetPasswordUseCaseInterface } from "../../../entities/usecaseInterfaces/auth/reset-password.usecase.interface";
-import { IVerifyTokenUsecaseInterface } from "../../../entities/usecaseInterfaces/auth/verify-token.usecase.interface";
-import { IGoogleLoginUsecaseInterface } from "../../../entities/usecaseInterfaces/auth/google_login.usecase.interface";
+import { IForgotPasswordUsecase } from "../../../entities/usecaseInterfaces/auth/forgot-password.usecase.interface";
+import { IResetPasswordUseCase } from "../../../entities/usecaseInterfaces/auth/reset-password.usecase.interface";
+import { IVerifyTokenUsecase } from "../../../entities/usecaseInterfaces/auth/verify-token.usecase.interface";
+import { IGoogleLoginUsecase } from "../../../entities/usecaseInterfaces/auth/google_login.usecase.interface";
 import jwt from "jsonwebtoken";
 import { hostSchema } from "./validations/host-signup.validation.schema";
 import { z, ZodError } from "zod";
 import { HttpStatusCode } from "shared/constants/statusCodes";
 import { clearAuthCookies, setAuthCookies } from "shared/utils/cookie.helper";
-import { IRefreshTokenUsecaseInterface } from "entities/usecaseInterfaces/auth/refresh-token.usecase.interface";
-import { IRevokeRefreshTokenUsecaseInterface } from "entities/usecaseInterfaces/auth/revok-refresh-token.usecase.interface";
+import { IRefreshTokenUsecase } from "entities/usecaseInterfaces/auth/refresh-token.usecase.interface";
+import { IRevokeRefreshTokenUsecase } from "entities/usecaseInterfaces/auth/revok-refresh-token.usecase.interface";
 import { IGetProfileUsecase } from "entities/usecaseInterfaces/auth/get-profile.usecase.interface";
 const { JsonWebTokenError } = jwt;
 
@@ -28,34 +28,34 @@ type HostData = z.infer<typeof hostSchema>;
 export class AuthController implements IAuthController {
   constructor(
     @inject("ISendOtpUsecase")
-    private _sendOtpUsecase: ISendOtpUsecaseInterface,
+    private _sendOtpUsecase: ISendOtpUsecase,
 
     @inject("IRegisterUseCase")
     private _registerUseCase: IRegisterUsecase,
 
     @inject("IGeneratorUsecase")
-    private _generateTokenUsecase: IGenerateTokenInterface,
+    private _generateTokenUsecase: IGenerateToken,
 
     @inject("ILoginUserUsecase")
-    private _loginUserUsecase: ILoginUserInterface,
+    private _loginUserUsecase: ILoginUser,
 
     @inject("IForgotPasswordUsecase")
-    private _forgotPasswordUsecase: IForgotPasswordUsecaseInterface,
+    private _forgotPasswordUsecase: IForgotPasswordUsecase,
 
     @inject("IResetPasswordUsecase")
-    private _resetPasswordUsecase: IResetPasswordUseCaseInterface,
+    private _resetPasswordUsecase: IResetPasswordUseCase,
 
     @inject("IVerifyTokenUsecase")
-    private _verifyTokenUsecase: IVerifyTokenUsecaseInterface,
+    private _verifyTokenUsecase: IVerifyTokenUsecase,
 
     @inject("IGoogleLoginUsecase")
-    private _googleLoginUsecase: IGoogleLoginUsecaseInterface,
+    private _googleLoginUsecase: IGoogleLoginUsecase,
 
     @inject("IRefreshTokenUsecase")
-    private _refreshTokenUsecase: IRefreshTokenUsecaseInterface,
+    private _refreshTokenUsecase: IRefreshTokenUsecase,
 
     @inject("IRevokeRefreshTokenUsecase")
-    private _revokeRefreshTokenUsecase: IRevokeRefreshTokenUsecaseInterface,
+    private _revokeRefreshTokenUsecase: IRevokeRefreshTokenUsecase,
 
     @inject("IGetProfileUsecase")
     private _getProfileUsecase: IGetProfileUsecase,

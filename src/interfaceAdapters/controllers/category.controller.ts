@@ -1,31 +1,31 @@
-import { ICategoryControllerInterface } from "entities/controllerInterfaces/category-controller.interface";
-import { IAddCategoryUsecaseInterface } from "entities/usecaseInterfaces/category/add-category.usecase.interface";
-import { IGetAllCategoryUsecaseInterface } from "entities/usecaseInterfaces/category/get-all-category.usecase.interface";
+import { ICategoryController } from "entities/controllerInterfaces/category-controller.interface";
+import { IAddCategoryUsecase } from "entities/usecaseInterfaces/category/add-category.usecase.interface";
+import { IGetAllCategoryUsecase } from "entities/usecaseInterfaces/category/get-all-category.usecase.interface";
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 import { categorySchema } from "./auth/validations/category.validation.schema";
-import { IEditCategoryUsecaseInterface } from "entities/usecaseInterfaces/category/edit-category.usecase.interface";
-import { IUpdateCategoryUsecaseInterface } from "entities/usecaseInterfaces/category/update-category.usecase.interface";
+import { IEditCategoryUsecase } from "entities/usecaseInterfaces/category/edit-category.usecase.interface";
+import { IUpdateCategoryUsecase } from "entities/usecaseInterfaces/category/update-category.usecase.interface";
 import { HttpStatusCode } from "shared/constants/statusCodes";
-import { IGetAllCategoryNameUsecaseInterface } from "entities/usecaseInterfaces/category/get-all-category-names.usecase.interface";
+import { IGetAllCategoryNameUsecase } from "entities/usecaseInterfaces/category/get-all-category-names.usecase.interface";
 
 @injectable()
-export class ICategoryController implements ICategoryControllerInterface {
+export class CategoryController implements ICategoryController {
   constructor(
     @inject("IGetAllCategoryUsecase")
-    private _getAllCategoryUsecase: IGetAllCategoryUsecaseInterface,
+    private _getAllCategoryUsecase: IGetAllCategoryUsecase,
 
     @inject("IAddCategoryUsecase")
-    private _addCategoryUsecase: IAddCategoryUsecaseInterface,
+    private _addCategoryUsecase: IAddCategoryUsecase,
 
     @inject("IEditCategoryUsecase")
-    private _editCategoryUsecase: IEditCategoryUsecaseInterface,
+    private _editCategoryUsecase: IEditCategoryUsecase,
 
     @inject("IUpdateCategoryUsecase")
-    private _updateStatusCategory: IUpdateCategoryUsecaseInterface,
+    private _updateStatusCategory: IUpdateCategoryUsecase,
 
     @inject("IGetAllCategoryNameUsecase")
-    private _getAllCategoryNameUsecase: IGetAllCategoryNameUsecaseInterface,
+    private _getAllCategoryNameUsecase: IGetAllCategoryNameUsecase,
   ) {}
 
   async getCategories(req: Request, res: Response): Promise<void> {

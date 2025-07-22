@@ -1,6 +1,6 @@
-import { IAdminRepositoryInterface } from "entities/repositoryInterfaces/users/admin-repository.inteface";
-import { IHostRepositoryInterface } from "entities/repositoryInterfaces/users/host-repository.interface";
-import { IUserRepositoryInterface } from "entities/repositoryInterfaces/users/user-repository.interface";
+import { IAdminRepository } from "entities/repositoryInterfaces/users/admin-repository.inteface";
+import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
+import { IUserRepository } from "entities/repositoryInterfaces/users/user-repository.interface";
 import { IGetProfileUsecase } from "entities/usecaseInterfaces/auth/get-profile.usecase.interface";
 import { IAdminModel } from "frameworks/database/mongo/models/admin.model";
 import { IHostModel } from "frameworks/database/mongo/models/host.model";
@@ -11,13 +11,13 @@ import { inject, injectable } from "tsyringe";
 export class GetProfileUsecase implements IGetProfileUsecase {
   constructor(
     @inject("IUserRepository")
-    private _userRepository: IUserRepositoryInterface,
+    private _userRepository: IUserRepository,
 
     @inject("IHostRepository")
-    private _hostRepository: IHostRepositoryInterface,
+    private _hostRepository: IHostRepository,
 
     @inject("IAdminRepository")
-    private _adminRepository: IAdminRepositoryInterface,
+    private _adminRepository: IAdminRepository,
   ) {}
 
   async execute(

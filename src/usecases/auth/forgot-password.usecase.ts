@@ -1,28 +1,28 @@
 import { inject, injectable } from "tsyringe";
-import { IForgotPasswordUsecaseInterface } from "../../entities/usecaseInterfaces/auth/forgot-password.usecase.interface";
-import { IUserRepositoryInterface } from "../../entities/repositoryInterfaces/users/user-repository.interface";
-import { IEmailSevicesInterface } from "../../entities/serviceInterfaces/email-services.interface";
-import { IJwtserviceInterface } from "../../entities/serviceInterfaces/jwt-services.interface";
-import { IHostRepositoryInterface } from "entities/repositoryInterfaces/users/host-repository.interface";
-import { IAdminRepositoryInterface } from "entities/repositoryInterfaces/users/admin-repository.inteface";
+import { IForgotPasswordUsecase } from "../../entities/usecaseInterfaces/auth/forgot-password.usecase.interface";
+import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
+import { IEmailSevices } from "../../entities/serviceInterfaces/email-services.interface";
+import { IJwtservice } from "../../entities/serviceInterfaces/jwt-services.interface";
+import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
+import { IAdminRepository } from "entities/repositoryInterfaces/users/admin-repository.inteface";
 
 @injectable()
-export class ForgotPasswordUsecase implements IForgotPasswordUsecaseInterface {
+export class ForgotPasswordUsecase implements IForgotPasswordUsecase {
   constructor(
     @inject("IUserRepository")
-    private _userRepository: IUserRepositoryInterface,
+    private _userRepository: IUserRepository,
 
     @inject("IHostRepository")
-    private _hostRepository: IHostRepositoryInterface,
+    private _hostRepository: IHostRepository,
 
     @inject("IAdminRepository")
-    private _adminRepository: IAdminRepositoryInterface,
+    private _adminRepository: IAdminRepository,
 
     @inject("IEmailServices")
-    private _emailService: IEmailSevicesInterface,
+    private _emailService: IEmailSevices,
 
     @inject("IJwtService")
-    private _jwtService: IJwtserviceInterface,
+    private _jwtService: IJwtservice,
   ) {}
   async execute(email: string, role: string): Promise<string> {
     let repository;

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-export interface IActivityControllerInterface {
+export interface IActivityController {
   addActivity(req: Request, res: Response): Promise<void>;
   editActivity(req: Request, res: Response): Promise<void>;
   updateActivity(req: Request, res: Response): Promise<void>;

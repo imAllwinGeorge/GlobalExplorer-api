@@ -1,12 +1,12 @@
-import { IBlogRepositoryInterface } from "entities/repositoryInterfaces/Blog/blog-repository.interface";
-import { IGetAllBlogUsecaseInterface } from "entities/usecaseInterfaces/blog/get-all-blog.usecase.interface";
+import { IBlogRepository } from "entities/repositoryInterfaces/Blog/blog-repository.interface";
+import { IGetAllBlogUsecase } from "entities/usecaseInterfaces/blog/get-all-blog.usecase.interface";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
-export class GetAllBlogUsecase implements IGetAllBlogUsecaseInterface {
+export class GetAllBlogUsecase implements IGetAllBlogUsecase {
   constructor(
     @inject("IBlogRepository")
-    private _blogRepository: IBlogRepositoryInterface,
+    private _blogRepository: IBlogRepository,
   ) {}
 
   async execute(

@@ -1,6 +1,6 @@
 import { JwtPayload } from "jsonwebtoken";
 
-export interface IJwtserviceInterface {
+export interface IJwtservice {
   generateAccessToken(payload: object): string;
   generateRefreshToken(payload: object): string;
   resetToken(payload: object): string;

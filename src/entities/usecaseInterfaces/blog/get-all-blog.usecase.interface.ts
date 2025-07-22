@@ -1,4 +1,4 @@
-export interface IGetAllBlogUsecaseInterface {
+export interface IGetAllBlogUsecase {
   execute(
     limit: number,
     skip: number,

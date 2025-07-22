@@ -1,8 +1,7 @@
-import { IBaseRepositoryInterface } from "../IBaseRepository.interface";
+import { IBaseRepository } from "../IBaseRepository.interface";
 import { IActivityModel } from "frameworks/database/mongo/models/activity.model";
 
-export interface IActivityRepositoryInterface
-  extends IBaseRepositoryInterface<IActivityModel> {
+export interface IActivityRepository extends IBaseRepository<IActivityModel> {
   FilterActivity(
     limit: number,
     skip: number,

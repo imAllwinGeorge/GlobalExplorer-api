@@ -1,25 +1,25 @@
 import { inject, injectable } from "tsyringe";
-import { ILoginUserInterface } from "../../entities/usecaseInterfaces/auth/login-user.usecase.interface";
+import { ILoginUser } from "../../entities/usecaseInterfaces/auth/login-user.usecase.interface";
 import { LoginUserDTO } from "../../shared/dtos/Auth.dto";
-import { IUserRepositoryInterface } from "../../entities/repositoryInterfaces/users/user-repository.interface";
+import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
 import { IBcrypt } from "../../entities/security/bcrypt.interface";
 import { IUserModel } from "../../frameworks/database/mongo/models/user.model";
-import { IAdminRepositoryInterface } from "../../entities/repositoryInterfaces/users/admin-repository.inteface";
+import { IAdminRepository } from "../../entities/repositoryInterfaces/users/admin-repository.inteface";
 import { IAdminModel } from "../../frameworks/database/mongo/models/admin.model";
-import { IHostRepositoryInterface } from "entities/repositoryInterfaces/users/host-repository.interface";
+import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
 import { IHostModel } from "frameworks/database/mongo/models/host.model";
 
 @injectable()
-export class LoginUsecase implements ILoginUserInterface {
+export class LoginUsecase implements ILoginUser {
   constructor(
     @inject("IUserRepository")
-    private _userRepository: IUserRepositoryInterface,
+    private _userRepository: IUserRepository,
 
     @inject("IAdminRepository")
-    private _adminRepository: IAdminRepositoryInterface,
+    private _adminRepository: IAdminRepository,
 
     @inject("IHostRepository")
-    private _hostRepository: IHostRepositoryInterface,
+    private _hostRepository: IHostRepository,
 
     @inject("IPasswordBcrypt")
     private _passwordBcrypt: IBcrypt,

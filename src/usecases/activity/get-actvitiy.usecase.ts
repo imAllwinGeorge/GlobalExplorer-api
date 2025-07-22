@@ -1,12 +1,12 @@
-import { IActivityRepositoryInterface } from "entities/repositoryInterfaces/activity/activityRepository.interface";
-import { IGetActivityUsecaseInterface } from "entities/usecaseInterfaces/activity/get-activity.usecase.interface";
+import { IActivityRepository } from "entities/repositoryInterfaces/activity/activityRepository.interface";
+import { IGetActivityUsecase } from "entities/usecaseInterfaces/activity/get-activity.usecase.interface";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
-export class GetActivityUsecase implements IGetActivityUsecaseInterface {
+export class GetActivityUsecase implements IGetActivityUsecase {
   constructor(
     @inject("IActivityRepository")
-    private _activityRepository: IActivityRepositoryInterface,
+    private _activityRepository: IActivityRepository,
   ) {}
 
   async execute(

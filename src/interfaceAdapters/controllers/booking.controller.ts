@@ -1,5 +1,5 @@
-import { IBookingControllerInterface } from "entities/controllerInterfaces/Booking-controller.interface";
-import { IBookActivityUsecaseInterface } from "entities/usecaseInterfaces/booking/book.activity.usecase.interface";
+import { IBookingController } from "entities/controllerInterfaces/Booking-controller.interface";
+import { IBookActivityUsecase } from "entities/usecaseInterfaces/booking/book.activity.usecase.interface";
 import { Request, Response } from "express";
 import { HttpStatusCode } from "shared/constants/statusCodes";
 // import { razorpay } from "shared/utils/razorpay";
@@ -12,10 +12,10 @@ import { IGetBookedActivityUsecase } from "entities/usecaseInterfaces/booking/ge
 import { ICancelBookingUsecase } from "entities/usecaseInterfaces/booking/cancel.booking.usecase.interface";
 
 @injectable()
-export class BookingController implements IBookingControllerInterface {
+export class BookingController implements IBookingController {
   constructor(
     @inject("IBookActivityUsecase")
-    private _bookActivityUsecase: IBookActivityUsecaseInterface,
+    private _bookActivityUsecase: IBookActivityUsecase,
 
     @inject("ICheckAvailabilityUsecase")
     private _checkAvailabilityUsecase: ICheckBookingAvailabiltyUsecase,
@@ -178,6 +178,33 @@ export class BookingController implements IBookingControllerInterface {
       res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
         .json({ message: "Internal server error" });
+    }
+  }
+  async getActivityBookings(req: Request, res: Response): Promise<void> {
+    try {
+      const id = req.query.id;
+      const page = parseInt(req.query.page as string);
+      const limit = parseInt(req.query.limit as string);
+      const skip = (page - 1) * limit;
+      console.log(id, page, limit, skip);
+      const result = await this._getBookedActivityUsecase.execute(
+        { hostId: id },
+        limit,
+        skip,
+      );
+      const totalPages = Math.ceil(result.total / limit);
+      res
+        .status(HttpStatusCode.OK)
+        .json({ bookings: result.items, totalPages });
+    } catch (error) {
+      console.log(error);
+      if (error instanceof Error) {
+        res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
+        return;
+      }
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: "Error fetching booking details" });
     }
   }
 }

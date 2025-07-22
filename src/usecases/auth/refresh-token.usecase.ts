@@ -1,17 +1,17 @@
-import { IRefreshTokenRepositoryInterface } from "entities/repositoryInterfaces/refreshToken/refresh-token.repository.interface";
-import { IJwtserviceInterface } from "entities/serviceInterfaces/jwt-services.interface";
-import { IRefreshTokenUsecaseInterface } from "entities/usecaseInterfaces/auth/refresh-token.usecase.interface";
+import { IRefreshTokenRepository } from "entities/repositoryInterfaces/refreshToken/refresh-token.repository.interface";
+import { IJwtservice } from "entities/serviceInterfaces/jwt-services.interface";
+import { IRefreshTokenUsecase } from "entities/usecaseInterfaces/auth/refresh-token.usecase.interface";
 import { JwtPayload } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
-export class RefreshTokenUsecase implements IRefreshTokenUsecaseInterface {
+export class RefreshTokenUsecase implements IRefreshTokenUsecase {
   constructor(
     @inject("IRefreshTokenRepository")
-    private _refreshTokenRepository: IRefreshTokenRepositoryInterface,
+    private _refreshTokenRepository: IRefreshTokenRepository,
 
     @inject("IJwtService")
-    private _jwtService: IJwtserviceInterface,
+    private _jwtService: IJwtservice,
   ) {}
 
   async execute(refreshToken: string): Promise<JwtPayload> {

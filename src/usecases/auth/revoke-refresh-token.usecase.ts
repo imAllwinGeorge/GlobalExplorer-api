@@ -1,14 +1,12 @@
-import { IRefreshTokenRepositoryInterface } from "entities/repositoryInterfaces/refreshToken/refresh-token.repository.interface";
-import { IRevokeRefreshTokenUsecaseInterface } from "entities/usecaseInterfaces/auth/revok-refresh-token.usecase.interface";
+import { IRefreshTokenRepository } from "entities/repositoryInterfaces/refreshToken/refresh-token.repository.interface";
+import { IRevokeRefreshTokenUsecase } from "entities/usecaseInterfaces/auth/revok-refresh-token.usecase.interface";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
-export class RevokeRefreshTokenUsecase
-  implements IRevokeRefreshTokenUsecaseInterface
-{
+export class RevokeRefreshTokenUsecase implements IRevokeRefreshTokenUsecase {
   constructor(
     @inject("IRefreshTokenRepository")
-    private _refreshTokenRepository: IRefreshTokenRepositoryInterface,
+    private _refreshTokenRepository: IRefreshTokenRepository,
   ) {}
 
   async execute(refreshToken: string): Promise<void> {

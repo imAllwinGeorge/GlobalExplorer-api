@@ -1,4 +1,4 @@
-import { IHostRepositoryInterface } from "entities/repositoryInterfaces/users/host-repository.interface";
+import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
 import {
   HostModel,
   IHostModel,
@@ -9,7 +9,7 @@ import { BaseRepository } from "../base.repository";
 @injectable()
 export class HostRepository
   extends BaseRepository<IHostModel>
-  implements IHostRepositoryInterface
+  implements IHostRepository
 {
   constructor() {
     super(HostModel);

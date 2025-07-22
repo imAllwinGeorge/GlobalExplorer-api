@@ -1,16 +1,16 @@
-import { IActivityRepositoryInterface } from "entities/repositoryInterfaces/activity/activityRepository.interface";
-import { IGetFilteredAcitivityUsecaseInterface } from "entities/usecaseInterfaces/activity/get-filtered-activity.usecase.interface";
+import { IActivityRepository } from "entities/repositoryInterfaces/activity/activityRepository.interface";
+import { IGetFilteredAcitivityUsecase } from "entities/usecaseInterfaces/activity/get-filtered-activity.usecase.interface";
 import { IActivityModel } from "frameworks/database/mongo/models/activity.model";
 import { Filter } from "shared/types/types";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
 export class GetFilteredActivityUsecase
-  implements IGetFilteredAcitivityUsecaseInterface
+  implements IGetFilteredAcitivityUsecase
 {
   constructor(
     @inject("IActivityRepository")
-    private _activityRepository: IActivityRepositoryInterface,
+    private _activityRepository: IActivityRepository,
   ) {}
 
   async execute(

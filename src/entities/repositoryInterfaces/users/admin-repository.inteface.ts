@@ -1,4 +1,4 @@
 import { IAdminModel } from "../../../frameworks/database/mongo/models/admin.model";
-import { IBaseRepositoryInterface } from "../IBaseRepository.interface";
+import { IBaseRepository } from "../IBaseRepository.interface";
 
-export type IAdminRepositoryInterface = IBaseRepositoryInterface<IAdminModel>;
+export type IAdminRepository = IBaseRepository<IAdminModel>;

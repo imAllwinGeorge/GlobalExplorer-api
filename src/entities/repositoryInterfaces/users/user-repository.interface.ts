@@ -1,4 +1,4 @@
 import { IUserModel } from "../../../frameworks/database/mongo/models/user.model";
-import { IBaseRepositoryInterface } from "../IBaseRepository.interface";
+import { IBaseRepository } from "../IBaseRepository.interface";
 
-export type IUserRepositoryInterface = IBaseRepositoryInterface<IUserModel>;
+export type IUserRepository = IBaseRepository<IUserModel>;

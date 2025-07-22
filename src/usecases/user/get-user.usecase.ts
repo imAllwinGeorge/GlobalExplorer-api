@@ -1,18 +1,18 @@
-import { IHostRepositoryInterface } from "entities/repositoryInterfaces/users/host-repository.interface";
-import { IUserRepositoryInterface } from "entities/repositoryInterfaces/users/user-repository.interface";
-import { IGetUserUsecaseInterface } from "entities/usecaseInterfaces/user/get-user.usecase.interface";
+import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
+import { IUserRepository } from "entities/repositoryInterfaces/users/user-repository.interface";
+import { IGetUserUsecase } from "entities/usecaseInterfaces/user/get-user.usecase.interface";
 import { IHostModel } from "frameworks/database/mongo/models/host.model";
 import { IUserModel } from "frameworks/database/mongo/models/user.model";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
-export class GetUserUsecase implements IGetUserUsecaseInterface {
+export class GetUserUsecase implements IGetUserUsecase {
   constructor(
     @inject("IUserRepository")
-    private _userRepository: IUserRepositoryInterface,
+    private _userRepository: IUserRepository,
 
     @inject("IHostRepository")
-    private _hostRepository: IHostRepositoryInterface,
+    private _hostRepository: IHostRepository,
   ) {}
   async execute(_id: string, role: string): Promise<IHostModel | IUserModel> {
     let repository;

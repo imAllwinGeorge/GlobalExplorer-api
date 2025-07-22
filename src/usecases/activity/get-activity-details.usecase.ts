@@ -1,24 +1,22 @@
-import { IActivityRepositoryInterface } from "entities/repositoryInterfaces/activity/activityRepository.interface";
-import { IBookingRepositoryInterface } from "entities/repositoryInterfaces/booking/booking-repository.interface";
-import { IHostRepositoryInterface } from "entities/repositoryInterfaces/users/host-repository.interface";
-import { IGetActivityDetailsUsecaseInterface } from "entities/usecaseInterfaces/activity/get-activity-details.usecase.interface";
+import { IActivityRepository } from "entities/repositoryInterfaces/activity/activityRepository.interface";
+import { IBookingRepository } from "entities/repositoryInterfaces/booking/booking-repository.interface";
+import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
+import { IGetActivityDetailsUsecase } from "entities/usecaseInterfaces/activity/get-activity-details.usecase.interface";
 import { IActivityModel } from "frameworks/database/mongo/models/activity.model";
 import { inject, injectable } from "tsyringe";
 import { formatInTimeZone, toZonedTime } from "date-fns-tz";
 
 @injectable()
-export class GetActivityDetailsUsecase
-  implements IGetActivityDetailsUsecaseInterface
-{
+export class GetActivityDetailsUsecase implements IGetActivityDetailsUsecase {
   constructor(
     @inject("IActivityRepository")
-    private _activityRepository: IActivityRepositoryInterface,
+    private _activityRepository: IActivityRepository,
 
     @inject("IHostRepository")
-    private _hostRepository: IHostRepositoryInterface,
+    private _hostRepository: IHostRepository,
 
     @inject("IBookingRepository")
-    private _bookingRepository: IBookingRepositoryInterface,
+    private _bookingRepository: IBookingRepository,
   ) {}
 
   async execute(id: string): Promise<{

@@ -1,3 +1,3 @@
-export interface IRevokeRefreshTokenUsecaseInterface {
+export interface IRevokeRefreshTokenUsecase {
   execute(refreshToken: string): Promise<void>;
 }

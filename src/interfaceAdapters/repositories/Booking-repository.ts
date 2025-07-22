@@ -3,12 +3,12 @@ import {
   IBookingModal,
 } from "frameworks/database/mongo/models/booking.model";
 import { BaseRepository } from "./base.repository";
-import { IBookingRepositoryInterface } from "entities/repositoryInterfaces/booking/booking-repository.interface";
+import { IBookingRepository } from "entities/repositoryInterfaces/booking/booking-repository.interface";
 import mongoose, { ObjectId } from "mongoose";
 
 export class BookingRepository
   extends BaseRepository<IBookingModal>
-  implements IBookingRepositoryInterface
+  implements IBookingRepository
 {
   constructor() {
     super(BookingModel);

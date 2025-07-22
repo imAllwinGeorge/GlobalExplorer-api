@@ -1,55 +1,52 @@
 import { container } from "tsyringe";
 import { UserRepository } from "../../interfaceAdapters/repositories/users/user.repository";
-import { IUserRepositoryInterface } from "../../entities/repositoryInterfaces/users/user-repository.interface";
-import { IAdminRepositoryInterface } from "../../entities/repositoryInterfaces/users/admin-repository.inteface";
+import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
+import { IAdminRepository } from "../../entities/repositoryInterfaces/users/admin-repository.inteface";
 import { AdminRepository } from "../../interfaceAdapters/repositories/users/admin.repository";
-import { IHostRepositoryInterface } from "entities/repositoryInterfaces/users/host-repository.interface";
+import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
 import { HostRepository } from "interfaceAdapters/repositories/users/host.repository";
-import { ICategoryRepositoryInterface } from "entities/repositoryInterfaces/category/categoryRepository.interface";
+import { ICategoryRepository } from "entities/repositoryInterfaces/category/categoryRepository.interface";
 import { CategoryRepository } from "interfaceAdapters/repositories/category.repository/category.repository";
-import { IActivityRepositoryInterface } from "entities/repositoryInterfaces/activity/activityRepository.interface";
+import { IActivityRepository } from "entities/repositoryInterfaces/activity/activityRepository.interface";
 import { ActivityRepository } from "interfaceAdapters/repositories/activity.Repository/activity.repository";
-import { IBlogRepositoryInterface } from "entities/repositoryInterfaces/Blog/blog-repository.interface";
+import { IBlogRepository } from "entities/repositoryInterfaces/Blog/blog-repository.interface";
 import { BlogRepository } from "interfaceAdapters/repositories/blog.repository/blog.repositor";
-import { IRefreshTokenRepositoryInterface } from "entities/repositoryInterfaces/refreshToken/refresh-token.repository.interface";
+import { IRefreshTokenRepository } from "entities/repositoryInterfaces/refreshToken/refresh-token.repository.interface";
 import { RefreshTokenRepository } from "interfaceAdapters/repositories/refresh-token.repository/refresh-token.repository";
-import { IBookingRepositoryInterface } from "entities/repositoryInterfaces/booking/booking-repository.interface";
+import { IBookingRepository } from "entities/repositoryInterfaces/booking/booking-repository.interface";
 import { BookingRepository } from "interfaceAdapters/repositories/Booking-repository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
-    container.register<IUserRepositoryInterface>("IUserRepository", {
+    container.register<IUserRepository>("IUserRepository", {
       useClass: UserRepository,
     });
 
-    container.register<IAdminRepositoryInterface>("IAdminRepository", {
+    container.register<IAdminRepository>("IAdminRepository", {
       useClass: AdminRepository,
     });
 
-    container.register<IHostRepositoryInterface>("IHostRepository", {
+    container.register<IHostRepository>("IHostRepository", {
       useClass: HostRepository,
     });
 
-    container.register<ICategoryRepositoryInterface>("ICategoryRepository", {
+    container.register<ICategoryRepository>("ICategoryRepository", {
       useClass: CategoryRepository,
     });
 
-    container.register<IActivityRepositoryInterface>("IActivityRepository", {
+    container.register<IActivityRepository>("IActivityRepository", {
       useClass: ActivityRepository,
     });
 
-    container.register<IBlogRepositoryInterface>("IBlogRepository", {
+    container.register<IBlogRepository>("IBlogRepository", {
       useClass: BlogRepository,
     });
 
-    container.register<IRefreshTokenRepositoryInterface>(
-      "IRefreshTokenRepository",
-      {
-        useClass: RefreshTokenRepository,
-      },
-    );
+    container.register<IRefreshTokenRepository>("IRefreshTokenRepository", {
+      useClass: RefreshTokenRepository,
+    });
 
-    container.register<IBookingRepositoryInterface>("IBookingRepository", {
+    container.register<IBookingRepository>("IBookingRepository", {
       useClass: BookingRepository,
     });
   }

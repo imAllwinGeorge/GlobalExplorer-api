@@ -1,8 +1,7 @@
 import { ICategoryModel } from "frameworks/database/mongo/models/category.model";
-import { IBaseRepositoryInterface } from "../IBaseRepository.interface";
+import { IBaseRepository } from "../IBaseRepository.interface";
 
-export interface ICategoryRepositoryInterface
-  extends IBaseRepositoryInterface<ICategoryModel> {
+export interface ICategoryRepository extends IBaseRepository<ICategoryModel> {
   findExcludingId(
     excludeId: string,
     value: string,

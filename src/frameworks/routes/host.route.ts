@@ -3,6 +3,7 @@ import { BaseRoute } from "./base.route";
 import { Request, Response } from "express";
 import {
   activityController,
+  bookingController,
   categoryController,
   hostController,
 } from "frameworks/di/resolver";
@@ -58,5 +59,13 @@ export class HostRoute extends BaseRoute {
       .patch(verifyToken, (req: Request, res: Response) => {
         activityController.updateActivity(req, res);
       });
+
+    this.router.get(
+      "/get-bookings",
+      verifyToken,
+      (req: Request, res: Response) => {
+        bookingController.getActivityBookings(req, res);
+      },
+    );
   }
 }

@@ -1,4 +1,4 @@
-import { IActivityRepositoryInterface } from "entities/repositoryInterfaces/activity/activityRepository.interface";
+import { IActivityRepository } from "entities/repositoryInterfaces/activity/activityRepository.interface";
 import {
   ActivityModel,
   IActivityModel,
@@ -11,7 +11,7 @@ import { FilterQuery } from "mongoose";
 @injectable()
 export class ActivityRepository
   extends BaseRepository<IActivityModel>
-  implements IActivityRepositoryInterface
+  implements IActivityRepository
 {
   constructor() {
     super(ActivityModel);

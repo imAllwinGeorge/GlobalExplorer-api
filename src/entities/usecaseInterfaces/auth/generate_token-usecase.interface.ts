@@ -1,6 +1,6 @@
 import { Schema } from "mongoose";
 
-export interface IGenerateTokenInterface {
+export interface IGenerateToken {
   execute(
     userId: Schema.Types.ObjectId,
     email: string,

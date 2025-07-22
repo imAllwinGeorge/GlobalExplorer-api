@@ -1,3 +1,3 @@
-export interface IForgotPasswordUsecaseInterface {
+export interface IForgotPasswordUsecase {
   execute(email: string, role: string): Promise<string>;
 }

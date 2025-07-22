@@ -2,8 +2,8 @@ import { inject, injectable } from "tsyringe";
 import { IRegisterUsecase } from "../../entities/usecaseInterfaces/auth/register-usecase.interface";
 import { HostSignupDTO, SignupDTO } from "../../shared/dtos/Auth.dto";
 import { IBcrypt } from "../../entities/security/bcrypt.interface";
-import { IUserRepositoryInterface } from "../../entities/repositoryInterfaces/users/user-repository.interface";
-import { IHostRepositoryInterface } from "entities/repositoryInterfaces/users/host-repository.interface";
+import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
+import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
 
 @injectable()
 export class RegisterUserusecase implements IRegisterUsecase {
@@ -12,10 +12,10 @@ export class RegisterUserusecase implements IRegisterUsecase {
     private _passwordBcrypt: IBcrypt,
 
     @inject("IUserRepository")
-    private _userRepository: IUserRepositoryInterface,
+    private _userRepository: IUserRepository,
 
     @inject("IHostRepository")
-    private _hostRepository: IHostRepositoryInterface,
+    private _hostRepository: IHostRepository,
   ) {}
 
   async execute(userData: SignupDTO | HostSignupDTO) {

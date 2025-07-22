@@ -1,6 +1,6 @@
 import { FilterQuery } from "mongoose";
 
-export interface IBaseRepositoryInterface<T> {
+export interface IBaseRepository<T> {
   find(filter: FilterQuery<object>): Promise<T[]>;
   findAll(
     limit: number,

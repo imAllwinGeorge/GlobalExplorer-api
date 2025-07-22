@@ -1,22 +1,22 @@
 import { inject, injectable } from "tsyringe";
-import { IUserControllerInterface } from "../../../entities/controllerInterfaces/users/user-controller.interface";
+import { IUserController } from "../../../entities/controllerInterfaces/users/user-controller.interface";
 import { Request, Response } from "express";
-import { IGetAllUsersUsecaseInterface } from "../../../entities/usecaseInterfaces/user/get-all-user.usecase.interface";
-import { IUpdateStatusUsecaseInterface } from "../../../entities/usecaseInterfaces/user/update-status.usecase.interface";
-import { IGetUserUsecaseInterface } from "entities/usecaseInterfaces/user/get-user.usecase.interface";
+import { IGetAllUsersUsecase } from "../../../entities/usecaseInterfaces/user/get-all-user.usecase.interface";
+import { IUpdateStatusUsecase } from "../../../entities/usecaseInterfaces/user/update-status.usecase.interface";
+import { IGetUserUsecase } from "entities/usecaseInterfaces/user/get-user.usecase.interface";
 import { HttpStatusCode } from "shared/constants/statusCodes";
 
 @injectable()
-export class IUserController implements IUserControllerInterface {
+export class UserController implements IUserController {
   constructor(
     @inject("IGetAllUsersUsecase")
-    private _getAllUsersUsecase: IGetAllUsersUsecaseInterface,
+    private _getAllUsersUsecase: IGetAllUsersUsecase,
 
     @inject("IUpdateStatusUsecase")
-    private _updateStatusUsecase: IUpdateStatusUsecaseInterface,
+    private _updateStatusUsecase: IUpdateStatusUsecase,
 
     @inject("IGetUserUsecase")
-    private _getUserUsecase: IGetUserUsecaseInterface,
+    private _getUserUsecase: IGetUserUsecase,
   ) {}
 
   async getAllUsers(req: Request, res: Response): Promise<void> {

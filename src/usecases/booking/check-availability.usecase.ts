@@ -1,5 +1,5 @@
-import { IActivityRepositoryInterface } from "entities/repositoryInterfaces/activity/activityRepository.interface";
-import { IBookingRepositoryInterface } from "entities/repositoryInterfaces/booking/booking-repository.interface";
+import { IActivityRepository } from "entities/repositoryInterfaces/activity/activityRepository.interface";
+import { IBookingRepository } from "entities/repositoryInterfaces/booking/booking-repository.interface";
 import { ICheckBookingAvailabiltyUsecase } from "entities/usecaseInterfaces/booking/check-availabilty.usecase.interface";
 import { BookingDTO } from "shared/dtos/Auth.dto";
 import { inject, injectable } from "tsyringe";
@@ -10,10 +10,10 @@ export class CheckBookingAvailabilityUsecase
 {
   constructor(
     @inject("IBookingRepository")
-    private _bookingRepository: IBookingRepositoryInterface,
+    private _bookingRepository: IBookingRepository,
 
     @inject("IActivityRepository")
-    private _activityRepository: IActivityRepositoryInterface,
+    private _activityRepository: IActivityRepository,
   ) {}
 
   async execute(data: BookingDTO): Promise<void> {

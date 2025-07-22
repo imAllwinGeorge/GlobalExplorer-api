@@ -1,4 +1,4 @@
-import { IBlogRepositoryInterface } from "entities/repositoryInterfaces/Blog/blog-repository.interface";
+import { IBlogRepository } from "entities/repositoryInterfaces/Blog/blog-repository.interface";
 import {
   BlogModel,
   IBlogModel,
@@ -9,7 +9,7 @@ import { BaseRepository } from "../base.repository";
 @injectable()
 export class BlogRepository
   extends BaseRepository<IBlogModel>
-  implements IBlogRepositoryInterface
+  implements IBlogRepository
 {
   constructor() {
     super(BlogModel);

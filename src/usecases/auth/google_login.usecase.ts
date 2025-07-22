@@ -1,14 +1,14 @@
 import { inject, injectable } from "tsyringe";
-import { IGoogleLoginUsecaseInterface } from "../../entities/usecaseInterfaces/auth/google_login.usecase.interface";
+import { IGoogleLoginUsecase } from "../../entities/usecaseInterfaces/auth/google_login.usecase.interface";
 import { IUserModel } from "../../frameworks/database/mongo/models/user.model";
 import { GoogleUserDTO } from "../../shared/dtos/Auth.dto";
-import { IUserRepositoryInterface } from "../../entities/repositoryInterfaces/users/user-repository.interface";
+import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
 
 @injectable()
-export class GoogleLoginUsecase implements IGoogleLoginUsecaseInterface {
+export class GoogleLoginUsecase implements IGoogleLoginUsecase {
   constructor(
     @inject("IUserRepository")
-    private _repository: IUserRepositoryInterface,
+    private _repository: IUserRepository,
   ) {}
 
   async execute(

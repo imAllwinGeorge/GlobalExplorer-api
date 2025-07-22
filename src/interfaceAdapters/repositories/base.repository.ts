@@ -1,7 +1,7 @@
 import { FilterQuery, Model } from "mongoose";
-import { IBaseRepositoryInterface } from "../../entities/repositoryInterfaces/IBaseRepository.interface";
+import { IBaseRepository } from "../../entities/repositoryInterfaces/IBaseRepository.interface";
 
-export class BaseRepository<T> implements IBaseRepositoryInterface<T> {
+export class BaseRepository<T> implements IBaseRepository<T> {
   constructor(protected model: Model<T>) {}
 
   async find(filter: FilterQuery<object>): Promise<T[]> {

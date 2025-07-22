@@ -1,4 +1,4 @@
-export interface IGetAllCategoryUsecaseInterface {
+export interface IGetAllCategoryUsecase {
   execute(
     limit: number,
     skip: number,

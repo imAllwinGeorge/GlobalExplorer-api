@@ -1,5 +1,5 @@
 import { injectable } from "tsyringe";
-import { IUserRepositoryInterface } from "../../../entities/repositoryInterfaces/users/user-repository.interface";
+import { IUserRepository } from "../../../entities/repositoryInterfaces/users/user-repository.interface";
 import {
   IUserModel,
   UserModel,
@@ -9,7 +9,7 @@ import { BaseRepository } from "../base.repository";
 @injectable()
 export class UserRepository
   extends BaseRepository<IUserModel>
-  implements IUserRepositoryInterface
+  implements IUserRepository
 {
   constructor() {
     super(UserModel);

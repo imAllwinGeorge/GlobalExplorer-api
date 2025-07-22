@@ -1,17 +1,17 @@
 import { Schema } from "mongoose";
-import { IGenerateTokenInterface } from "../../entities/usecaseInterfaces/auth/generate_token-usecase.interface";
-import { IJwtserviceInterface } from "../../entities/serviceInterfaces/jwt-services.interface";
+import { IGenerateToken } from "../../entities/usecaseInterfaces/auth/generate_token-usecase.interface";
+import { IJwtservice } from "../../entities/serviceInterfaces/jwt-services.interface";
 import { inject, injectable } from "tsyringe";
-import { IRefreshTokenRepositoryInterface } from "entities/repositoryInterfaces/refreshToken/refresh-token.repository.interface";
+import { IRefreshTokenRepository } from "entities/repositoryInterfaces/refreshToken/refresh-token.repository.interface";
 
 @injectable()
-export class GenerateToken implements IGenerateTokenInterface {
+export class GenerateToken implements IGenerateToken {
   constructor(
     @inject("IJwtService")
-    private _tokenService: IJwtserviceInterface,
+    private _tokenService: IJwtservice,
 
     @inject("IRefreshTokenRepository")
-    private _refreshTokenRepository: IRefreshTokenRepositoryInterface,
+    private _refreshTokenRepository: IRefreshTokenRepository,
   ) {}
   async execute(
     userId: Schema.Types.ObjectId,

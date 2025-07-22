@@ -1,7 +1,7 @@
 import { IActivityModel } from "frameworks/database/mongo/models/activity.model";
 import { Filter } from "shared/types/types";
 
-export interface IGetFilteredAcitivityUsecaseInterface {
+export interface IGetFilteredAcitivityUsecase {
   execute(
     limit: number,
     skip: number,

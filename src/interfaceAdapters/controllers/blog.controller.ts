@@ -1,23 +1,27 @@
-import { IBlogControllerInterface } from "entities/controllerInterfaces/blog-controller.interface";
+import { IBlogController } from "entities/controllerInterfaces/blog-controller.interface";
 import { BlogSection } from "entities/models/blog.entity";
-import { ICreateBlogUsecaseInterface } from "entities/usecaseInterfaces/blog/create-blog.usecase.interface";
-import { IGetAllBlogUsecaseInterface } from "entities/usecaseInterfaces/blog/get-all-blog.usecase.interface";
+import { ICreateBlogUsecase } from "entities/usecaseInterfaces/blog/create-blog.usecase.interface";
+import { IEditBlogUsecase } from "entities/usecaseInterfaces/blog/edit-blog.usecase.interface";
+import { IGetAllBlogUsecase } from "entities/usecaseInterfaces/blog/get-all-blog.usecase.interface";
 import { IGetMyBlogsUsecase } from "entities/usecaseInterfaces/blog/get-my-blog.usecase.interface";
 import { Request, Response } from "express";
 import { HttpStatusCode } from "shared/constants/statusCodes";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
-export class BlogController implements IBlogControllerInterface {
+export class BlogController implements IBlogController {
   constructor(
     @inject("ICreateBlogUsecase")
-    private _createBlogUsecase: ICreateBlogUsecaseInterface,
+    private _createBlogUsecase: ICreateBlogUsecase,
 
     @inject("IGetAllBlogUsecase")
-    private _getAllBlogUsecase: IGetAllBlogUsecaseInterface,
+    private _getAllBlogUsecase: IGetAllBlogUsecase,
 
     @inject("IGetMyBlogUsecase")
     private _getMyBlogUsecase: IGetMyBlogsUsecase,
+
+    @inject("IEditBlogUsecase")
+    private _editBlogUsecase: IEditBlogUsecase,
   ) {}
 
   async createBlog(req: Request, res: Response): Promise<void> {
@@ -128,6 +132,74 @@ export class BlogController implements IBlogControllerInterface {
       res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
         .json({ message: "Internal server Error" });
+    }
+  }
+
+  async editBlog(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      const body = req.body;
+      const files = req.files as Express.Multer.File[];
+      console.log(id);
+      // if(files){
+      //   files.forEach((file) => {
+      //     if(file.fieldname === "mainImage"){
+      //       body.image = filename;
+      //     }
+      //   });
+      //   body.sections.forEach((file, index) => {
+      //     if(index === file.fieldname){
+      //       body.secions[image] = file.filename
+      //     }
+      //   })
+      // }
+      type Sections = {
+        sectionTitle?: string;
+        content?: string;
+        image: string;
+      };
+
+      // Parse the sections from string to array
+      let parsedSections: Sections[] = [];
+      if (body.sections) {
+        try {
+          parsedSections = JSON.parse(body.sections); // 💥 convert string to array
+        } catch (err) {
+          console.error("Failed to parse sections:", err);
+          res.status(400).json({ message: "Invalid sections format" });
+          return;
+        }
+      }
+
+      // Handle image uploads
+      if (files && files.length) {
+        files.forEach((file) => {
+          if (file.fieldname === "mainImage") {
+            body.image = file.filename;
+          } else if (!isNaN(Number(file.fieldname))) {
+            // This is a section image
+            const sectionIndex = parseInt(file.fieldname);
+            if (parsedSections[sectionIndex]) {
+              parsedSections[sectionIndex].image = file.filename;
+            }
+          }
+        });
+      }
+
+      // Replace sections with the updated array
+      body.sections = parsedSections;
+      console.log(body, parsedSections);
+      const blog = await this._editBlogUsecase.execute(body);
+      res.status(HttpStatusCode.OK).json({ blog });
+    } catch (error) {
+      console.log(error);
+      if (error instanceof Error) {
+        res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
+        return;
+      }
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: "Internal Server Error" });
     }
   }
 }

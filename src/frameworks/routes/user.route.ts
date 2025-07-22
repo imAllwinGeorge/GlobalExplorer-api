@@ -74,6 +74,15 @@ export class UserRoutes extends BaseRoute {
       },
     );
 
+    this.router.put(
+      "/blog/edit-blog/:id",
+      verifyToken,
+      upload.any(),
+      (req: Request, res: Response) => {
+        blogController.editBlog(req, res);
+      },
+    );
+
     this.router.get(
       "/activity/get-details/:id",
       verifyToken,

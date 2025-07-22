@@ -1,11 +1,11 @@
-import { ISendOtpUsecaseInterface } from "../../entities/usecaseInterfaces/auth/send-otp.usecase.interface";
+import { ISendOtpUsecase } from "../../entities/usecaseInterfaces/auth/send-otp.usecase.interface";
 import { inject, injectable } from "tsyringe";
 import { IUserExistanceService } from "../../entities/serviceInterfaces/user-existance-service.interface";
 import { IOtpService } from "../../entities/serviceInterfaces/otp-service.interface";
-import { IEmailSevicesInterface } from "../../entities/serviceInterfaces/email-services.interface";
+import { IEmailSevices } from "../../entities/serviceInterfaces/email-services.interface";
 
 @injectable()
-export class SendOtpUsecase implements ISendOtpUsecaseInterface {
+export class SendOtpUsecase implements ISendOtpUsecase {
   constructor(
     @inject("IUserExistanceService")
     private _userExistanceService: IUserExistanceService,
@@ -14,7 +14,7 @@ export class SendOtpUsecase implements ISendOtpUsecaseInterface {
     private _otpService: IOtpService,
 
     @inject("IEmailServices")
-    private _emailServices: IEmailSevicesInterface,
+    private _emailServices: IEmailSevices,
   ) {}
   async execute(email: string, role: string): Promise<string> {
     const isEmailExisting = await this._userExistanceService.emailExists(

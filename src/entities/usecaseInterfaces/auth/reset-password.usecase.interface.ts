@@ -2,7 +2,7 @@ import { IHostModel } from "frameworks/database/mongo/models/host.model";
 import { IUserModel } from "../../../frameworks/database/mongo/models/user.model";
 import { IAdminModel } from "frameworks/database/mongo/models/admin.model";
 
-export interface IResetPasswordUseCaseInterface {
+export interface IResetPasswordUseCase {
   execute(
     id: string,
     role: string,

@@ -1,4 +1,4 @@
-import { IBookingRepositoryInterface } from "entities/repositoryInterfaces/booking/booking-repository.interface";
+import { IBookingRepository } from "entities/repositoryInterfaces/booking/booking-repository.interface";
 import { IpaymentService } from "entities/serviceInterfaces/razorpay-service.interface";
 import { ICancelBookingUsecase } from "entities/usecaseInterfaces/booking/cancel.booking.usecase.interface";
 import { IBookingModal } from "frameworks/database/mongo/models/booking.model";
@@ -8,7 +8,7 @@ import { inject, injectable } from "tsyringe";
 export class CancelBookingUsecase implements ICancelBookingUsecase {
   constructor(
     @inject("IBookingRepository")
-    private _bookingRepository: IBookingRepositoryInterface,
+    private _bookingRepository: IBookingRepository,
 
     @inject("IPaymentService")
     private _paymentService: IpaymentService,
@@ -29,7 +29,7 @@ export class CancelBookingUsecase implements ICancelBookingUsecase {
       );
     }
 
-    const amount = booking.participantCount * booking.pricePerParticipant * 0.1;
+    const amount = booking.participantCount * booking.pricePerParticipant * 0.9;
 
     const refundId = await this._paymentService.refundPayment(
       booking.razorpayPaymentId as string,

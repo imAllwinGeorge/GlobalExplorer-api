@@ -1,4 +1,4 @@
-import { IBookingRepositoryInterface } from "entities/repositoryInterfaces/booking/booking-repository.interface";
+import { IBookingRepository } from "entities/repositoryInterfaces/booking/booking-repository.interface";
 import { IGetBookedActivityUsecase } from "entities/usecaseInterfaces/booking/get-bookings.usecase.interface";
 import { inject, injectable } from "tsyringe";
 
@@ -6,7 +6,7 @@ import { inject, injectable } from "tsyringe";
 export class GetBookedActivityUsecase implements IGetBookedActivityUsecase {
   constructor(
     @inject("IBookingRepository")
-    private _bookingRepository: IBookingRepositoryInterface,
+    private _bookingRepository: IBookingRepository,
   ) {}
 
   async execute(

@@ -1,9 +1,9 @@
 import { injectable } from "tsyringe";
-import { IJwtserviceInterface } from "../../entities/serviceInterfaces/jwt-services.interface";
+import { IJwtservice } from "../../entities/serviceInterfaces/jwt-services.interface";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 @injectable()
-export class JwtService implements IJwtserviceInterface {
+export class JwtService implements IJwtservice {
   constructor() {}
   generateAccessToken(payload: object): string {
     const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET!, {

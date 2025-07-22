@@ -1,4 +1,4 @@
-export interface IGetAllUsersUsecaseInterface {
+export interface IGetAllUsersUsecase {
   execute(
     limit: number,
     skip: number,

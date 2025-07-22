@@ -1,4 +1,4 @@
-export interface IGetActivityUsecaseInterface {
+export interface IGetActivityUsecase {
   execute(
     limit: number,
     skip: number,

@@ -1,13 +1,13 @@
-import { IBlogRepositoryInterface } from "entities/repositoryInterfaces/Blog/blog-repository.interface";
-import { IEditBlogUsecaseInterface } from "entities/usecaseInterfaces/blog/edit-blog.usecase.interface";
+import { IBlogRepository } from "entities/repositoryInterfaces/Blog/blog-repository.interface";
+import { IEditBlogUsecase } from "entities/usecaseInterfaces/blog/edit-blog.usecase.interface";
 import { IBlogModel } from "frameworks/database/mongo/models/blog.model";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
-export class EditBlogUsecase implements IEditBlogUsecaseInterface {
+export class EditBlogUsecase implements IEditBlogUsecase {
   constructor(
     @inject("IBlogRepository")
-    private _blogRepository: IBlogRepositoryInterface,
+    private _blogRepository: IBlogRepository,
   ) {}
 
   async execute(data: IBlogModel): Promise<IBlogModel> {

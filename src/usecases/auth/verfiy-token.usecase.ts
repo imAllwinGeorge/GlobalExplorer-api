@@ -1,27 +1,27 @@
 import { inject, injectable } from "tsyringe";
-import { IVerifyTokenUsecaseInterface } from "../../entities/usecaseInterfaces/auth/verify-token.usecase.interface";
-import { IJwtserviceInterface } from "../../entities/serviceInterfaces/jwt-services.interface";
-import { IUserRepositoryInterface } from "../../entities/repositoryInterfaces/users/user-repository.interface";
-import { IAdminRepositoryInterface } from "../../entities/repositoryInterfaces/users/admin-repository.inteface";
+import { IVerifyTokenUsecase } from "../../entities/usecaseInterfaces/auth/verify-token.usecase.interface";
+import { IJwtservice } from "../../entities/serviceInterfaces/jwt-services.interface";
+import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
+import { IAdminRepository } from "../../entities/repositoryInterfaces/users/admin-repository.inteface";
 import { IUserModel } from "../../frameworks/database/mongo/models/user.model";
 import { IAdminModel } from "../../frameworks/database/mongo/models/admin.model";
-import { IHostRepositoryInterface } from "entities/repositoryInterfaces/users/host-repository.interface";
+import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
 import { IHostModel } from "frameworks/database/mongo/models/host.model";
 
 @injectable()
-export class VerifyTokenUsecase implements IVerifyTokenUsecaseInterface {
+export class VerifyTokenUsecase implements IVerifyTokenUsecase {
   constructor(
     @inject("IJwtService")
-    private _tokenService: IJwtserviceInterface,
+    private _tokenService: IJwtservice,
 
     @inject("IUserRepository")
-    private _UserRepository: IUserRepositoryInterface,
+    private _UserRepository: IUserRepository,
 
     @inject("IAdminRepository")
-    private _adminRepository: IAdminRepositoryInterface,
+    private _adminRepository: IAdminRepository,
 
     @inject("IHostRepository")
-    private _hostRepository: IHostRepositoryInterface,
+    private _hostRepository: IHostRepository,
   ) {}
   async execute(
     token: string,

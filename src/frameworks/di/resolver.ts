@@ -2,17 +2,17 @@ import { container } from "tsyringe";
 import { DependancyInjection } from "./container";
 import { IAuthController } from "../../entities/controllerInterfaces/users/auth-controller.interface";
 import { AuthController } from "../../interfaceAdapters/controllers/auth/auth.controller";
-import { IUserControllerInterface } from "../../entities/controllerInterfaces/users/user-controller.interface";
-import { IUserController } from "../../interfaceAdapters/controllers/user/user.controller";
-import { ICategoryController } from "interfaceAdapters/controllers/category.controller";
-import { ICategoryControllerInterface } from "entities/controllerInterfaces/category-controller.interface";
-import { IActivityControllerInterface } from "entities/controllerInterfaces/activity-controller.interface";
+import { IUserController } from "../../entities/controllerInterfaces/users/user-controller.interface";
+import { UserController } from "../../interfaceAdapters/controllers/user/user.controller";
+import { CategoryController } from "interfaceAdapters/controllers/category.controller";
+import { ICategoryController } from "entities/controllerInterfaces/category-controller.interface";
+import { IActivityController } from "entities/controllerInterfaces/activity-controller.interface";
 import { ActivityController } from "interfaceAdapters/controllers/activity.controller";
-import { IHostControllerInterface } from "entities/controllerInterfaces/users/host-controller.interface";
+import { IHostController } from "entities/controllerInterfaces/users/host-controller.interface";
 import { HostController } from "interfaceAdapters/controllers/user/host.controller";
-import { IBlogControllerInterface } from "entities/controllerInterfaces/blog-controller.interface";
+import { IBlogController } from "entities/controllerInterfaces/blog-controller.interface";
 import { BlogController } from "interfaceAdapters/controllers/blog.controller";
-import { IBookingControllerInterface } from "entities/controllerInterfaces/Booking-controller.interface";
+import { IBookingController } from "entities/controllerInterfaces/Booking-controller.interface";
 import { BookingController } from "interfaceAdapters/controllers/booking.controller";
 
 DependancyInjection.registerAll();
@@ -21,19 +21,19 @@ export const authController =
   container.resolve<IAuthController>(AuthController);
 
 export const userController =
-  container.resolve<IUserControllerInterface>(IUserController);
+  container.resolve<IUserController>(UserController);
 
 export const categoryController =
-  container.resolve<ICategoryControllerInterface>(ICategoryController);
+  container.resolve<ICategoryController>(CategoryController);
 
 export const activityController =
-  container.resolve<IActivityControllerInterface>(ActivityController);
+  container.resolve<IActivityController>(ActivityController);
 
 export const hostController =
-  container.resolve<IHostControllerInterface>(HostController);
+  container.resolve<IHostController>(HostController);
 
 export const blogController =
-  container.resolve<IBlogControllerInterface>(BlogController);
+  container.resolve<IBlogController>(BlogController);
 
 export const bookingController =
-  container.resolve<IBookingControllerInterface>(BookingController);
+  container.resolve<IBookingController>(BookingController);
