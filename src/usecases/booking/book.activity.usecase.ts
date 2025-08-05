@@ -1,8 +1,14 @@
 import { IBookingRepository } from "entities/repositoryInterfaces/booking/booking-repository.interface";
+import { INotificationRepository } from "entities/repositoryInterfaces/notification/notificationRepository";
 import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
+import { INotificationService } from "entities/serviceInterfaces/notification-service.interface";
 import { IpaymentService } from "entities/serviceInterfaces/razorpay-service.interface";
 import { IBookActivityUsecase } from "entities/usecaseInterfaces/booking/book.activity.usecase.interface";
 import { IBookingModal } from "frameworks/database/mongo/models/booking.model";
+import {
+  NOTIFICATION_EVENT,
+  NOTIFICATION_TYPE,
+} from "shared/constants/constants";
 import { BookingDTO } from "shared/dtos/Auth.dto";
 import { inject, injectable } from "tsyringe";
 
@@ -17,6 +23,12 @@ export class BookActivityUsecase implements IBookActivityUsecase {
 
     @inject("IHostRepository")
     private _hostRepository: IHostRepository,
+
+    @inject("INotificationService")
+    private _notificationService: INotificationService,
+
+    @inject("INotificationRepository")
+    private _notificationRepository: INotificationRepository,
   ) {}
 
   async execute(data: BookingDTO, id: string): Promise<IBookingModal> {
@@ -26,6 +38,7 @@ export class BookActivityUsecase implements IBookActivityUsecase {
     const hostAccountId = await this._hostRepository.getRazorpayAccountId(
       data.hostId,
     );
+    console.log("booking activity data :     ", data);
     // const adminAccountId = await this._paymentService.getMyAccountId();
     const result = await this._paymentService.createTransferWithHold({
       paymentId: data.razorpayPaymentId as string,
@@ -38,9 +51,39 @@ export class BookActivityUsecase implements IBookActivityUsecase {
     data.razorpayTransferId = result.transferId;
     data.paymentStatus = "paid";
     const booking = await this._bookingRepository.findOneAndUpdate(
-      { id },
+      { _id: id },
       data,
     );
+
+    const userNotification = await this._notificationRepository.save({
+      userId: booking?.userId,
+      message: `Your booking confirmed for ${booking?.activityTitle}`,
+      type: NOTIFICATION_TYPE.BOOKING,
+    });
+
+    const hostNotification = await this._notificationRepository.save({
+      userId: booking?.hostId,
+      message: `New Booking for ${booking?.activityTitle}`,
+      type: NOTIFICATION_TYPE.BOOKING,
+    });
+    console.log("user Notification:  ", userNotification);
+    console.log("host Notification: ", hostNotification);
+    if (userNotification) {
+      await this._notificationService.emitNotification(
+        booking?.userId as string,
+        userNotification,
+        NOTIFICATION_EVENT.SEND_NOTIFICATION,
+      );
+    }
+
+    if (hostNotification) {
+      await this._notificationService.emitNotification(
+        booking?.hostId as string,
+        hostNotification,
+        NOTIFICATION_EVENT.SEND_NOTIFICATION,
+      );
+    }
+    console.log("BBBBBBBBoooking :  ", booking);
     if (!booking) throw new Error("We Couldn't process the booking");
     return booking;
   }

@@ -1,7 +1,7 @@
 import { IBookingController } from "entities/controllerInterfaces/Booking-controller.interface";
 import { IBookActivityUsecase } from "entities/usecaseInterfaces/booking/book.activity.usecase.interface";
 import { Request, Response } from "express";
-import { HttpStatusCode } from "shared/constants/statusCodes";
+import { HttpStatusCode } from "shared/constants/constants";
 // import { razorpay } from "shared/utils/razorpay";
 import { inject, injectable } from "tsyringe";
 import crypto from "crypto";
@@ -71,7 +71,7 @@ export class BookingController implements IBookingController {
 
     await this._checkAvailabilityUsecase.execute(data);
     const bookedActivity = await this._createOrderUsecase.execute(data);
-
+    console.log("Booked activity: ", bookedActivity);
     res.json(bookedActivity);
   }
 
@@ -169,6 +169,7 @@ export class BookingController implements IBookingController {
       const message = req.query.message as string;
       console.log(id, message);
       const booking = await this._cancelBookingUsecase.execute(id, message);
+      console.log("Cancelled booking from cancel booking: ", booking);
       res.status(HttpStatusCode.OK).json({ message: booking });
     } catch (error) {
       if (error instanceof Error) {

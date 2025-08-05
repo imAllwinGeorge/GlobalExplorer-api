@@ -15,6 +15,14 @@ import { IRefreshTokenRepository } from "entities/repositoryInterfaces/refreshTo
 import { RefreshTokenRepository } from "interfaceAdapters/repositories/refresh-token.repository/refresh-token.repository";
 import { IBookingRepository } from "entities/repositoryInterfaces/booking/booking-repository.interface";
 import { BookingRepository } from "interfaceAdapters/repositories/Booking-repository";
+import { IMessageRepository } from "entities/repositoryInterfaces/chat/IMessage.repository.interface";
+import { MessageRepository } from "interfaceAdapters/repositories/chat.Repository/message.repository";
+import { IConversationRepository } from "entities/repositoryInterfaces/chat/Conversation.repository.interface";
+import { ConversationRepository } from "interfaceAdapters/repositories/chat.Repository/conversation.repository";
+import { ISocketUserMapRepository } from "entities/repositoryInterfaces/redis/socket-user.repository";
+import { RedisSocketUserRepository } from "interfaceAdapters/redis/socket-user.repository";
+import { INotificationRepository } from "entities/repositoryInterfaces/notification/notificationRepository";
+import { NotificationRepository } from "interfaceAdapters/repositories/notifiation.repository/notification.repository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
@@ -48,6 +56,22 @@ export class RepositoryRegistry {
 
     container.register<IBookingRepository>("IBookingRepository", {
       useClass: BookingRepository,
+    });
+
+    container.register<IMessageRepository>("IMessageRepository", {
+      useClass: MessageRepository,
+    });
+
+    container.register<IConversationRepository>("IConversationRepository", {
+      useClass: ConversationRepository,
+    });
+
+    container.register<ISocketUserMapRepository>("ISocketUserRepository", {
+      useClass: RedisSocketUserRepository,
+    });
+
+    container.register<INotificationRepository>("INotificationRepository", {
+      useClass: NotificationRepository,
     });
   }
 }

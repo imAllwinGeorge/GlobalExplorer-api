@@ -15,7 +15,7 @@ import { IGoogleLoginUsecase } from "../../../entities/usecaseInterfaces/auth/go
 import jwt from "jsonwebtoken";
 import { hostSchema } from "./validations/host-signup.validation.schema";
 import { z, ZodError } from "zod";
-import { HttpStatusCode } from "shared/constants/statusCodes";
+import { HttpStatusCode } from "shared/constants/constants";
 import { clearAuthCookies, setAuthCookies } from "shared/utils/cookie.helper";
 import { IRefreshTokenUsecase } from "entities/usecaseInterfaces/auth/refresh-token.usecase.interface";
 import { IRevokeRefreshTokenUsecase } from "entities/usecaseInterfaces/auth/revok-refresh-token.usecase.interface";

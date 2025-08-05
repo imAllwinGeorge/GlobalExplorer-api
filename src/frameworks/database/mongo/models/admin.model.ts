@@ -6,4 +6,4 @@ export interface IAdminModel extends IAdminEntity, Document {
   _id: ObjectId;
 }
 
-export const AdminModel = model<IAdminModel>("admin", adminSchema);
+export const AdminModel = model<IAdminModel>("Admin", adminSchema);

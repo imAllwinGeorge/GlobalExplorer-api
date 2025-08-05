@@ -7,4 +7,6 @@ export interface IBookingRepository extends IBaseRepository<IBookingModal> {
     activityId: ObjectId,
     date: Date,
   ): Promise<number>;
+
+  dashboardData(hostId?: string): Promise<object>;
 }

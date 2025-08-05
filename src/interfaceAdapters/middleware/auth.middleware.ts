@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { HttpStatusCode } from "shared/constants/statusCodes";
+import { HttpStatusCode } from "shared/constants/constants";
 // import { JwtService } from "interfaceAdapters/services/jwt-service";
 import { container } from "tsyringe";
 import { VerifyTokenUsecase } from "usecases/auth/verfiy-token.usecase";

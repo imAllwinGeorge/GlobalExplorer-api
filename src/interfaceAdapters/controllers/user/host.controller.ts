@@ -5,7 +5,7 @@ import { IGetAllCategoryNameUsecase } from "entities/usecaseInterfaces/category/
 import { IGetAllCategoryUsecase } from "entities/usecaseInterfaces/category/get-all-category.usecase.interface";
 import { Request, Response } from "express";
 import { Types } from "mongoose";
-import { HttpStatusCode } from "shared/constants/statusCodes";
+import { HttpStatusCode } from "shared/constants/constants";
 import { inject, injectable } from "tsyringe";
 import { hostSchema } from "../auth/validations/host-signup.validation.schema";
 import { z } from "zod";

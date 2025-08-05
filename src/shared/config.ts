@@ -14,4 +14,8 @@ export const config = {
     RAZORPAY_SECRET: process.env.RAZORPAY_KEY_SECRET,
     RAZORPAY_KEY: process.env.RAZORPAY_KEY,
   },
+
+  cors: {
+    ALLOWED_ORIGIN: process.env.ALLOWED_ORIGIN,
+  },
 };

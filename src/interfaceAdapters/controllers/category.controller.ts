@@ -6,7 +6,7 @@ import { inject, injectable } from "tsyringe";
 import { categorySchema } from "./auth/validations/category.validation.schema";
 import { IEditCategoryUsecase } from "entities/usecaseInterfaces/category/edit-category.usecase.interface";
 import { IUpdateCategoryUsecase } from "entities/usecaseInterfaces/category/update-category.usecase.interface";
-import { HttpStatusCode } from "shared/constants/statusCodes";
+import { HttpStatusCode } from "shared/constants/constants";
 import { IGetAllCategoryNameUsecase } from "entities/usecaseInterfaces/category/get-all-category-names.usecase.interface";
 
 @injectable()

@@ -1,11 +1,12 @@
 import { IBlogController } from "entities/controllerInterfaces/blog-controller.interface";
 import { BlogSection } from "entities/models/blog.entity";
 import { ICreateBlogUsecase } from "entities/usecaseInterfaces/blog/create-blog.usecase.interface";
+import { IDeleteBlogUsecase } from "entities/usecaseInterfaces/blog/delete-blog.usecase.interfac";
 import { IEditBlogUsecase } from "entities/usecaseInterfaces/blog/edit-blog.usecase.interface";
 import { IGetAllBlogUsecase } from "entities/usecaseInterfaces/blog/get-all-blog.usecase.interface";
 import { IGetMyBlogsUsecase } from "entities/usecaseInterfaces/blog/get-my-blog.usecase.interface";
 import { Request, Response } from "express";
-import { HttpStatusCode } from "shared/constants/statusCodes";
+import { HttpStatusCode } from "shared/constants/constants";
 import { inject, injectable } from "tsyringe";
 
 @injectable()
@@ -22,6 +23,9 @@ export class BlogController implements IBlogController {
 
     @inject("IEditBlogUsecase")
     private _editBlogUsecase: IEditBlogUsecase,
+
+    @inject("IDeleteBlogUsecase")
+    private _deleteBlogUsecase: IDeleteBlogUsecase,
   ) {}
 
   async createBlog(req: Request, res: Response): Promise<void> {
@@ -193,6 +197,24 @@ export class BlogController implements IBlogController {
       res.status(HttpStatusCode.OK).json({ blog });
     } catch (error) {
       console.log(error);
+      if (error instanceof Error) {
+        res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
+        return;
+      }
+      res
+        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+        .json({ message: "Internal Server Error" });
+    }
+  }
+
+  async deleteBlog(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      this._deleteBlogUsecase.execute(id);
+      res
+        .status(HttpStatusCode.OK)
+        .json({ message: "Blog Deleted success full" });
+    } catch (error) {
       if (error instanceof Error) {
         res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
         return;

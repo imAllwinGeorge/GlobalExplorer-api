@@ -4,7 +4,7 @@ import { IGetActivityDetailsUsecase } from "entities/usecaseInterfaces/activity/
 import { IGetActivityUsecase } from "entities/usecaseInterfaces/activity/get-activity.usecase.interface";
 import { IGetFilteredAcitivityUsecase } from "entities/usecaseInterfaces/activity/get-filtered-activity.usecase.interface";
 import { Request, Response } from "express";
-import { HttpStatusCode } from "shared/constants/statusCodes";
+import { HttpStatusCode } from "shared/constants/constants";
 import { inject, injectable } from "tsyringe";
 
 @injectable()

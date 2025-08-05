@@ -101,4 +101,4 @@ const hostSchema = new Schema(
   },
 );
 
-export const HostModel = model<IHostModel>("host", hostSchema);
+export const HostModel = model<IHostModel>("Host", hostSchema);

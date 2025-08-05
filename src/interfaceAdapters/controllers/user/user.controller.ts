@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 import { IGetAllUsersUsecase } from "../../../entities/usecaseInterfaces/user/get-all-user.usecase.interface";
 import { IUpdateStatusUsecase } from "../../../entities/usecaseInterfaces/user/update-status.usecase.interface";
 import { IGetUserUsecase } from "entities/usecaseInterfaces/user/get-user.usecase.interface";
-import { HttpStatusCode } from "shared/constants/statusCodes";
+import { HttpStatusCode } from "shared/constants/constants";
 
 @injectable()
 export class UserController implements IUserController {

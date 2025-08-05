@@ -5,6 +5,8 @@ import {
   activityController,
   bookingController,
   categoryController,
+  chatController,
+  dashboardController,
   hostController,
 } from "frameworks/di/resolver";
 import upload from "frameworks/multer/multer";
@@ -65,6 +67,30 @@ export class HostRoute extends BaseRoute {
       verifyToken,
       (req: Request, res: Response) => {
         bookingController.getActivityBookings(req, res);
+      },
+    );
+
+    this.router.get(
+      "/dashboard/:id",
+      verifyToken,
+      (req: Request, res: Response) => {
+        dashboardController.hostDashboardContrller(req, res);
+      },
+    );
+
+    this.router.patch(
+      "/mark-read-message/:conversationId/:userId",
+      verifyToken,
+      (req: Request, res: Response) => {
+        chatController.markReadMessage(req, res);
+      },
+    );
+
+    this.router.get(
+      "/chat/get-conversation/:id",
+      verifyToken,
+      (req: Request, res: Response) => {
+        chatController.getAllConversation(req, res);
       },
     );
   }

@@ -77,6 +77,30 @@ import { ICancelBookingUsecase } from "entities/usecaseInterfaces/booking/cancel
 import { CancelBookingUsecase } from "usecases/booking/cancel.booking.usecase";
 import { IGetMyBlogsUsecase } from "entities/usecaseInterfaces/blog/get-my-blog.usecase.interface";
 import { GetMyBlogsUsecase } from "usecases/blog/get-my-blog.usecase";
+import { IDeleteBlogUsecase } from "entities/usecaseInterfaces/blog/delete-blog.usecase.interfac";
+import { DeleteBlogUsecase } from "usecases/blog/delete-blog.usecase";
+import { ISendDirectMessageUsecase } from "entities/usecaseInterfaces/chat/direct-message/send-message.usecase.interface";
+import { SendDirectMessageUsecase } from "usecases/chat/direct-message/send-message.usecase";
+import { ISocketServices } from "entities/serviceInterfaces/socket.service";
+import { SocketServices } from "interfaceAdapters/services/socket.service";
+import { IGetConversationUsecase } from "entities/usecaseInterfaces/chat/direct-message/get-conversation.usecase.interface";
+import { GetConversationUsecase } from "usecases/chat/direct-message/get-conversation.usecase";
+import { IUserSearchUsecase } from "entities/usecaseInterfaces/chat/direct-message/user-search.usecase.interface";
+import { UserSearchUsecase } from "usecases/chat/direct-message/user-search.usecase";
+import { IGetMessageUsecase } from "entities/usecaseInterfaces/chat/direct-message/get-message.usecase.interface";
+import { GetMessageUsecase } from "usecases/chat/direct-message/get-message.usecase";
+import { IMarkReadMessageUsecase } from "entities/usecaseInterfaces/chat/direct-message/mark-read-message.usecase.interface";
+import { MarkReadMessageUsecase } from "usecases/chat/direct-message/mark-read-message.usecase";
+import { INotificationService } from "entities/serviceInterfaces/notification-service.interface";
+import { NotificationService } from "interfaceAdapters/services/notification-service";
+import { IGetNotificationUsecase } from "entities/usecaseInterfaces/notification/get-notification.interface";
+import { GetNotificationUsecase } from "usecases/notification/get-notification.interface";
+import { IReadNotificationUsecase } from "entities/usecaseInterfaces/notification/read-notification.interface";
+import { ReadNotificationUsecase } from "usecases/notification/read-notification.interface";
+import { IAdminDashboardUsecase } from "entities/usecaseInterfaces/dashboard/admin-dashboard.interface";
+import { AdminDashboardUsecase } from "usecases/dashboard/admin-dashboard.usecase";
+import { IHostDashboardUsecase } from "entities/usecaseInterfaces/dashboard/host-dashboard.interface";
+import { HostDashboardUsecase } from "usecases/dashboard/host-dashboard.usecase";
 
 export class UsecaseRegistery {
   static registerUsecases(): void {
@@ -248,6 +272,55 @@ export class UsecaseRegistery {
 
     container.register<IGetMyBlogsUsecase>("IGetMyBlogUsecase", {
       useClass: GetMyBlogsUsecase,
+    });
+
+    container.register<IDeleteBlogUsecase>("IDeleteBlogUsecase", {
+      useClass: DeleteBlogUsecase,
+    });
+
+    container.register<ISendDirectMessageUsecase>("ISendDirectMessageUsecase", {
+      useClass: SendDirectMessageUsecase,
+    });
+
+    container.registerSingleton<ISocketServices>(
+      "ISocketServices",
+      SocketServices,
+    );
+
+    container.register<IGetConversationUsecase>("IGetConversationUsecase", {
+      useClass: GetConversationUsecase,
+    });
+
+    container.register<IUserSearchUsecase>("IUserSearchUsecase", {
+      useClass: UserSearchUsecase,
+    });
+
+    container.register<IGetMessageUsecase>("IGetMessageUsecase", {
+      useClass: GetMessageUsecase,
+    });
+
+    container.register<IMarkReadMessageUsecase>("IMarkReadMessageUsecase", {
+      useClass: MarkReadMessageUsecase,
+    });
+
+    container.register<INotificationService>("INotificationService", {
+      useClass: NotificationService,
+    });
+
+    container.register<IGetNotificationUsecase>("IGetNotificationUsecase", {
+      useClass: GetNotificationUsecase,
+    });
+
+    container.register<IReadNotificationUsecase>("IReadNotificationUsecase", {
+      useClass: ReadNotificationUsecase,
+    });
+
+    container.register<IAdminDashboardUsecase>("IAdminDashboardUsecase", {
+      useClass: AdminDashboardUsecase,
+    });
+
+    container.register<IHostDashboardUsecase>("IHostDashboardUsecase", {
+      useClass: HostDashboardUsecase,
     });
   }
 }

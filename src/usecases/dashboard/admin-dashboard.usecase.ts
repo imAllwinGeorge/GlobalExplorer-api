@@ -1,0 +1,31 @@
+import { IBookingRepository } from "entities/repositoryInterfaces/booking/booking-repository.interface";
+import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
+import { IUserRepository } from "entities/repositoryInterfaces/users/user-repository.interface";
+import { IAdminDashboardUsecase } from "entities/usecaseInterfaces/dashboard/admin-dashboard.interface";
+import { inject, injectable } from "tsyringe";
+
+@injectable()
+export class AdminDashboardUsecase implements IAdminDashboardUsecase {
+  constructor(
+    @inject("IUserRepository")
+    private _userRepository: IUserRepository,
+
+    @inject("IHostRepository")
+    private _hostRepository: IHostRepository,
+
+    @inject("IBookingRepository")
+    private _bookingRepository: IBookingRepository,
+  ) {}
+
+  async execute(): Promise<Record<string, number | object>> {
+    const [userCount, hostCount, bookingCount, dashboardData] =
+      await Promise.all([
+        this._userRepository.countDocuments({}),
+        this._hostRepository.countDocuments({}),
+        this._bookingRepository.countDocuments({}),
+        this._bookingRepository.dashboardData(),
+      ]);
+
+    return { userCount, hostCount, bookingCount, dashboardData };
+  }
+}

@@ -10,9 +10,12 @@ export class BaseRepository<T> implements IBaseRepository<T> {
 
   async findAll(limit: number, skip: number, filter: FilterQuery<object>) {
     const [items, total] = await Promise.all([
-      this.model.find(filter).skip(skip).limit(limit).lean() as Promise<
-        object[]
-      >,
+      this.model
+        .find(filter)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean() as Promise<object[]>,
       this.model.countDocuments(filter),
     ]);
     return { items, total };
@@ -45,5 +48,12 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     {
       return this.model.countDocuments(filter);
     }
+  }
+
+  async findDetailsWithProjection(
+    filter: FilterQuery<object>,
+    projection: FilterQuery<object>,
+  ): Promise<object> {
+    return this.model.find(filter, projection);
   }
 }

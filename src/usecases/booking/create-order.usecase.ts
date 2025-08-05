@@ -26,6 +26,6 @@ export class CreateOrderUsecase implements ICreateOrderUsecase {
     });
     data.razporpayOrderId = order.id;
     const bookedActivity = await this._bookingRepository.save(data);
-    return { ...bookedActivity, ...order };
+    return { ...bookedActivity.toObject(), ...order };
   }
 }

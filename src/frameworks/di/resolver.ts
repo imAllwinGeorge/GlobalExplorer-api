@@ -14,6 +14,16 @@ import { IBlogController } from "entities/controllerInterfaces/blog-controller.i
 import { BlogController } from "interfaceAdapters/controllers/blog.controller";
 import { IBookingController } from "entities/controllerInterfaces/Booking-controller.interface";
 import { BookingController } from "interfaceAdapters/controllers/booking.controller";
+import { IDirectChatHandler } from "entities/socketHandlersInterfaces/IDirect-chat.handler.interface";
+import { DirectChatHandler } from "interfaceAdapters/socket/handlers/direct-chat.handler";
+import { IChatController } from "entities/controllerInterfaces/chat-controller.interface";
+import { ChatController } from "interfaceAdapters/controllers/chat.controller";
+import { INotificationController } from "entities/controllerInterfaces/notification-controller.interface";
+import { NotificationController } from "interfaceAdapters/controllers/notification.controller";
+import { INotificationHandler } from "entities/socketHandlersInterfaces/INotification.handler.interface";
+import { NotifcationHandler } from "interfaceAdapters/socket/handlers/notification.handler";
+import { IDashboardController } from "entities/controllerInterfaces/dashboard-controller.interface";
+import { DashBoardController } from "interfaceAdapters/controllers/dashboard.controller";
 
 DependancyInjection.registerAll();
 
@@ -37,3 +47,18 @@ export const blogController =
 
 export const bookingController =
   container.resolve<IBookingController>(BookingController);
+
+export const chatController =
+  container.resolve<IChatController>(ChatController);
+
+export const notificationController =
+  container.resolve<INotificationController>(NotificationController);
+
+export const directChantHandler =
+  container.resolve<IDirectChatHandler>(DirectChatHandler);
+
+export const notificationHandler =
+  container.resolve<INotificationHandler>(NotifcationHandler);
+
+export const dashboardController =
+  container.resolve<IDashboardController>(DashBoardController);
