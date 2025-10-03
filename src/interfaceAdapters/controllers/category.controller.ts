@@ -69,6 +69,14 @@ export class CategoryController implements ICategoryController {
         .json({ message: "Ivalid Request" });
     } catch (error) {
       console.log(error);
+      if (error instanceof Error) {
+        if (error.message === "Category name already exist!") {
+          res
+            .status(HttpStatusCode.BAD_REQUEST)
+            .json({ message: "Category name already exist!" });
+        }
+        return;
+      }
       res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
         .json({ message: "Internal sever error" });

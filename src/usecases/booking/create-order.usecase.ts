@@ -1,4 +1,5 @@
 import { IBookingRepository } from "entities/repositoryInterfaces/booking/booking-repository.interface";
+import { ICacheService } from "entities/serviceInterfaces/cache-service.interface";
 import { ICreateOrderUsecase } from "entities/usecaseInterfaces/booking/create-order.usecase.interface";
 import { BookingDTO } from "shared/dtos/Auth.dto";
 import { razorpay } from "shared/utils/razorpay";
@@ -9,6 +10,9 @@ export class CreateOrderUsecase implements ICreateOrderUsecase {
   constructor(
     @inject("IBookingRepository")
     private _bookingRepository: IBookingRepository,
+
+    @inject("ICacheService")
+    private _cacheService: ICacheService,
   ) {}
 
   async execute(data: BookingDTO): Promise<object> {
@@ -25,6 +29,7 @@ export class CreateOrderUsecase implements ICreateOrderUsecase {
       },
     });
     data.razporpayOrderId = order.id;
+    await this._cacheService.delByPattern(`order:*`);
     const bookedActivity = await this._bookingRepository.save(data);
     return { ...bookedActivity.toObject(), ...order };
   }

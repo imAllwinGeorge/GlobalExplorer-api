@@ -108,3 +108,11 @@ export interface MessageDTO {
   receiverId: string;
   content: string;
 }
+
+export interface ReviewDTO {
+  entityId: string;
+  userId: string;
+  title: string;
+  comment: string;
+  rating: number;
+}

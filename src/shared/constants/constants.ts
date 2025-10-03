@@ -40,3 +40,14 @@ export const NOTIFICATION_TYPE = {
   BOOKING: "Booking",
   CACELLING: "Cancelling",
 };
+
+// shared/constants/constants.ts
+export const VIDEO_CALL_EVENT = {
+  CALL_REQUEST: "video:call-request",
+  CALL_ACCEPT: "video:call-accept",
+  CALL_REJECT: "video:call-reject",
+  CALL_END: "video:call-end",
+  OFFER: "video:offer",
+  ANSWER: "video:answer",
+  ICECANDIDATE: "video:icecandidate",
+} as const;

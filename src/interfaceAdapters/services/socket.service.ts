@@ -8,7 +8,7 @@ export class SocketServices implements ISocketServices {
 
   setIO(io: Server): void {
     this._io = io;
-    console.log("socket setup", this._io);
+    // console.log("socket setup", this._io);
   }
   getIO(): Server {
     if (!this._io) {

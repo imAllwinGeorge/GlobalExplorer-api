@@ -32,7 +32,7 @@ export class DirectChatHandler implements IDirectChatHandler {
     },
   ): Promise<void> {
     try {
-      console.log(data.content);
+      // console.log(data.content);
 
       const senderId = (socket as CustomSocket).userId;
 
@@ -41,7 +41,7 @@ export class DirectChatHandler implements IDirectChatHandler {
       const senderSocketId = await this._socketUserMapRepository.getUserSocket(
         senderId as string,
       );
-
+      // console.log("direct chat socket id and id: ", recieverSocketId, data.receiverId)
       const { receiverId, content } = data;
 
       const result = await this._sendMessageUsecase.execute(

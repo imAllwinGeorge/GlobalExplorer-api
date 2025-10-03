@@ -13,7 +13,7 @@ export interface IHostEntity {
   accountNumber: string;
   ifsc: string;
   branch: string;
-  registractionCertificate: string;
+  registrationCertificate: string;
   safetyCertificate: string;
   insurance: string;
   license: string;

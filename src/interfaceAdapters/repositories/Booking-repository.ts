@@ -99,4 +99,12 @@ export class BookingRepository
     console.log("booking repository top 5 query result : ", topFive);
     return topFive;
   }
+
+  async checkBookings(userId: string): Promise<number> {
+    const bookings = await this.model.countDocuments({
+      userId,
+      createdAt: Date.now(),
+    });
+    return bookings as number;
+  }
 }

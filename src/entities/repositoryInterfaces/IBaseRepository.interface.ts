@@ -20,4 +20,5 @@ export interface IBaseRepository<T> {
     filter: FilterQuery<object>,
     projection: FilterQuery<object>,
   ): Promise<object>;
+  isNameExist(field: string, name: string): Promise<boolean>;
 }

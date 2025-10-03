@@ -9,6 +9,7 @@ import { ISocketUserMapRepository } from "entities/repositoryInterfaces/redis/so
 import { DirectChatEvents } from "interfaceAdapters/socket/events/direct-chat.events";
 import { CustomSocket } from "shared/types/types";
 import { NotificationEvent } from "interfaceAdapters/socket/events/notificaion.event";
+import { SignallingEvents } from "interfaceAdapters/socket/events/Signalling.events";
 
 @injectable()
 export class SocketServer {
@@ -64,7 +65,7 @@ export class SocketServer {
   public onConnection(callback: (socket: Socket) => void): void {
     this._io.on("connection", async (socket) => {
       const userId = (socket as CustomSocket).userId;
-      console.log("userSocket Id :     :    socket Id: ", socket.id);
+      // console.log("userSocket Id :     :    socket Id: ", socket.id);
       await this._socketUserRepoitory.setUserSocket(
         userId as string,
         socket.id,
@@ -73,7 +74,10 @@ export class SocketServer {
         socket.id,
         userId as string,
       );
-
+      socket.join(userId as string);
+      console.log(
+        `User ${userId} with socket ${socket.id} has joined room: ${userId}`,
+      );
       socket.on("disconnect", async () => {
         await this._socketUserRepoitory.removeUserSocket(userId as string);
         await this._socketUserRepoitory.removeUserSocket(socket.id as string);
@@ -83,8 +87,11 @@ export class SocketServer {
 
       const directChatEvents = new DirectChatEvents(socket, this._io);
       const notificationEvent = new NotificationEvent(socket, this._io);
+      const signallingEvent = new SignallingEvents(socket, this._io);
+
       directChatEvents.register();
       notificationEvent.register();
+      signallingEvent.register();
     });
   }
 }

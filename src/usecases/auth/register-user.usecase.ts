@@ -4,6 +4,7 @@ import { HostSignupDTO, SignupDTO } from "../../shared/dtos/Auth.dto";
 import { IBcrypt } from "../../entities/security/bcrypt.interface";
 import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
 import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
+import { HostMapper } from "shared/mappers/host.mapper";
 
 @injectable()
 export class RegisterUserusecase implements IRegisterUsecase {
@@ -16,6 +17,9 @@ export class RegisterUserusecase implements IRegisterUsecase {
 
     @inject("IHostRepository")
     private _hostRepository: IHostRepository,
+
+    @inject(HostMapper)
+    private _hostMapper: HostMapper,
   ) {}
 
   async execute(userData: SignupDTO | HostSignupDTO) {
@@ -24,7 +28,10 @@ export class RegisterUserusecase implements IRegisterUsecase {
     if (userData.role === "user") {
       return await this._userRepository.save(userData as SignupDTO);
     } else if (userData.role === "host") {
-      return await this._hostRepository.save(userData as HostSignupDTO);
+      const mappedHostData = this._hostMapper.toEntity(
+        userData as HostSignupDTO,
+      );
+      return await this._hostRepository.save(mappedHostData as HostSignupDTO);
     } else {
       throw new Error("invalid role");
     }

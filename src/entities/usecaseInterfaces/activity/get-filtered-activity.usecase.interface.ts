@@ -1,4 +1,4 @@
-import { IActivityModel } from "frameworks/database/mongo/models/activity.model";
+import { ActivityDTO } from "shared/dtos/Auth.dto";
 import { Filter } from "shared/types/types";
 
 export interface IGetFilteredAcitivityUsecase {
@@ -6,5 +6,5 @@ export interface IGetFilteredAcitivityUsecase {
     limit: number,
     skip: number,
     filter: Filter,
-  ): Promise<{ activities: IActivityModel[]; totalPages: number }>;
+  ): Promise<{ activities: ActivityDTO[]; totalPages: number }>;
 }

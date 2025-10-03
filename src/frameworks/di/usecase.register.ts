@@ -101,6 +101,13 @@ import { IAdminDashboardUsecase } from "entities/usecaseInterfaces/dashboard/adm
 import { AdminDashboardUsecase } from "usecases/dashboard/admin-dashboard.usecase";
 import { IHostDashboardUsecase } from "entities/usecaseInterfaces/dashboard/host-dashboard.interface";
 import { HostDashboardUsecase } from "usecases/dashboard/host-dashboard.usecase";
+import { ICacheService } from "entities/serviceInterfaces/cache-service.interface";
+import { CacheService } from "interfaceAdapters/services/cache-service";
+import { IWriteReviewUsecase } from "entities/usecaseInterfaces/review/write-review.interface";
+import { WriteReviewUsecase } from "usecases/review/write-review.usecase";
+import { ActivityMapper } from "shared/mappers/activity.mapper";
+import { HostMapper } from "shared/mappers/host.mapper";
+import { UserMapper } from "shared/mappers/user.mapper";
 
 export class UsecaseRegistery {
   static registerUsecases(): void {
@@ -322,5 +329,21 @@ export class UsecaseRegistery {
     container.register<IHostDashboardUsecase>("IHostDashboardUsecase", {
       useClass: HostDashboardUsecase,
     });
+
+    container.register<IWriteReviewUsecase>("IWriteReviewUsecase", {
+      useClass: WriteReviewUsecase,
+    });
+
+    container.register<ICacheService>("ICacheService", {
+      useClass: CacheService,
+    });
+
+    //   mappers....
+
+    container.registerSingleton(ActivityMapper);
+
+    container.registerSingleton(UserMapper);
+
+    container.registerSingleton(HostMapper);
   }
 }

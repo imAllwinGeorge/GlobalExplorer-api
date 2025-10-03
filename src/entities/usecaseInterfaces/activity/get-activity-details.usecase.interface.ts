@@ -1,7 +1,7 @@
-import { IActivityModel } from "frameworks/database/mongo/models/activity.model";
+import { ActivityResponseDTO } from "shared/dtos/response.dto";
 
 export interface IGetActivityDetailsUsecase {
   execute(
     id: string,
-  ): Promise<{ activity: IActivityModel; razorpayAccountId: string }>;
+  ): Promise<{ activity: ActivityResponseDTO; razorpayAccountId: string }>;
 }

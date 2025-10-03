@@ -3,11 +3,16 @@ import { ILoginUser } from "../../entities/usecaseInterfaces/auth/login-user.use
 import { LoginUserDTO } from "../../shared/dtos/Auth.dto";
 import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
 import { IBcrypt } from "../../entities/security/bcrypt.interface";
-import { IUserModel } from "../../frameworks/database/mongo/models/user.model";
 import { IAdminRepository } from "../../entities/repositoryInterfaces/users/admin-repository.inteface";
-import { IAdminModel } from "../../frameworks/database/mongo/models/admin.model";
 import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
-import { IHostModel } from "frameworks/database/mongo/models/host.model";
+import {
+  AdminResponseDTO,
+  HostResponseDTO,
+  UserResponseDTO,
+} from "shared/dtos/response.dto";
+import { HostMapper } from "shared/mappers/host.mapper";
+import { UserMapper } from "shared/mappers/user.mapper";
+import { AdminMapper } from "shared/mappers/admin.mapper";
 
 @injectable()
 export class LoginUsecase implements ILoginUser {
@@ -23,37 +28,61 @@ export class LoginUsecase implements ILoginUser {
 
     @inject("IPasswordBcrypt")
     private _passwordBcrypt: IBcrypt,
+
+    @inject(UserMapper)
+    private _userMapper: UserMapper,
+
+    @inject(HostMapper)
+    private _hostMapper: HostMapper,
+
+    @inject(AdminMapper)
+    private _adminMapper: AdminMapper,
   ) {}
 
   async execute(
     data: LoginUserDTO,
-  ): Promise<IUserModel | IAdminModel | IHostModel | undefined> {
+  ): Promise<UserResponseDTO | AdminResponseDTO | HostResponseDTO | undefined> {
     try {
       const { role } = data;
-      let repository;
+      let user;
       if (role === "user") {
-        repository = this._userRepository;
-      } else if (role === "admin") {
-        repository = this._adminRepository;
-      } else if (role === "host") {
-        repository = this._hostRepository;
-      } else {
-        throw new Error("invalid role");
+        user = await this._userRepository.findOne({ email: data.email });
+        if (!user) throw new Error("User not found!");
+        if (user.password) {
+          const isValidPassword = await this._passwordBcrypt.compare(
+            data.password,
+            user.password,
+          );
+          if (!isValidPassword) throw new Error("Invalid password");
+        }
+        return this._userMapper.toDTO(user);
       }
-      const user = await repository.findOne({ email: data.email });
-      if (!user) {
-        throw new Error("User not found");
+      if (role === "admin") {
+        user = await this._adminRepository.findOne({ email: data.email });
+        if (!user) throw new Error("admin not found!");
+        if (user.password) {
+          const isValidPassword = await this._passwordBcrypt.compare(
+            data.password,
+            user.password,
+          );
+          if (!isValidPassword) throw new Error("Invalid password");
+        }
+        return this._adminMapper.toDTO(user);
+      }
+      if (role === "host") {
+        user = await this._hostRepository.findOne({ email: data.email });
+        if (!user) throw new Error("Host not found!");
+        if (user.password) {
+          const isValidPassword = await this._passwordBcrypt.compare(
+            data.password,
+            user.password,
+          );
+          if (!isValidPassword) throw new Error("Invalid password");
+        }
+        return this._hostMapper.toDTO(user);
       }
 
-      if (user.password) {
-        const isValidPassword = await this._passwordBcrypt.compare(
-          data.password,
-          user.password,
-        );
-        if (!isValidPassword) throw new Error("Invalid password");
-      }
-
-      return user;
+      throw new Error("invalid role");
     } catch (error) {
       console.log(error);
     }

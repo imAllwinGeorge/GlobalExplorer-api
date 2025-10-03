@@ -23,6 +23,8 @@ import { ISocketUserMapRepository } from "entities/repositoryInterfaces/redis/so
 import { RedisSocketUserRepository } from "interfaceAdapters/redis/socket-user.repository";
 import { INotificationRepository } from "entities/repositoryInterfaces/notification/notificationRepository";
 import { NotificationRepository } from "interfaceAdapters/repositories/notifiation.repository/notification.repository";
+import { IReviewRepository } from "entities/repositoryInterfaces/review/review-repository.interface";
+import { ReviewRepository } from "interfaceAdapters/repositories/review.repository/review.repository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
@@ -72,6 +74,10 @@ export class RepositoryRegistry {
 
     container.register<INotificationRepository>("INotificationRepository", {
       useClass: NotificationRepository,
+    });
+
+    container.register<IReviewRepository>("IReviewRepository", {
+      useClass: ReviewRepository,
     });
   }
 }

@@ -1,6 +1,5 @@
-import { IHostModel } from "frameworks/database/mongo/models/host.model";
-import { IUserModel } from "../../../frameworks/database/mongo/models/user.model";
 import { IAdminModel } from "frameworks/database/mongo/models/admin.model";
+import { HostResponseDTO, UserResponseDTO } from "shared/dtos/response.dto";
 
 export interface IResetPasswordUseCase {
   execute(
@@ -8,5 +7,5 @@ export interface IResetPasswordUseCase {
     role: string,
     token: string,
     password: string,
-  ): Promise<IUserModel | IHostModel | IAdminModel | null>;
+  ): Promise<UserResponseDTO | HostResponseDTO | IAdminModel | null>;
 }

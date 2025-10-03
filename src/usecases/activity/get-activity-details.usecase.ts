@@ -2,9 +2,11 @@ import { IActivityRepository } from "entities/repositoryInterfaces/activity/acti
 import { IBookingRepository } from "entities/repositoryInterfaces/booking/booking-repository.interface";
 import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
 import { IGetActivityDetailsUsecase } from "entities/usecaseInterfaces/activity/get-activity-details.usecase.interface";
-import { IActivityModel } from "frameworks/database/mongo/models/activity.model";
 import { inject, injectable } from "tsyringe";
 import { formatInTimeZone, toZonedTime } from "date-fns-tz";
+import { ICacheService } from "entities/serviceInterfaces/cache-service.interface";
+import { ActivityMapper } from "shared/mappers/activity.mapper";
+import { ActivityResponseDTO } from "shared/dtos/response.dto";
 
 @injectable()
 export class GetActivityDetailsUsecase implements IGetActivityDetailsUsecase {
@@ -17,10 +19,16 @@ export class GetActivityDetailsUsecase implements IGetActivityDetailsUsecase {
 
     @inject("IBookingRepository")
     private _bookingRepository: IBookingRepository,
+
+    @inject("ICacheService")
+    private _cacheService: ICacheService,
+
+    @inject(ActivityMapper)
+    private _activityMapper: ActivityMapper,
   ) {}
 
   async execute(id: string): Promise<{
-    activity: IActivityModel;
+    activity: ActivityResponseDTO;
     razorpayAccountId: string;
     availability: {
       date: string;
@@ -28,7 +36,27 @@ export class GetActivityDetailsUsecase implements IGetActivityDetailsUsecase {
     }[];
   }> {
     const activity = await this._activityRepository.findOne({ _id: id });
-    if (!activity) throw new Error("Failed to fetch activity details");
+    let mappedActivity;
+    if (!activity) {
+      throw new Error("Failed to fetch activity details");
+    } else {
+      mappedActivity = this._activityMapper.toDTO(activity);
+    }
+
+    const cacheKey = `activity:${id}`;
+
+    const cached = await this._cacheService.get(cacheKey);
+
+    if (cached)
+      return cached as {
+        activity: ActivityResponseDTO;
+        razorpayAccountId: string;
+        availability: {
+          date: string;
+          availableSeats: number;
+        }[];
+      };
+
     const razorpayAccountId = await this._hostRepository.getRazorpayAccountId(
       activity.userId,
     );
@@ -83,6 +111,16 @@ export class GetActivityDetailsUsecase implements IGetActivityDetailsUsecase {
       }
     }
 
-    return { activity, razorpayAccountId, availability: result };
+    await this._cacheService.set(
+      cacheKey,
+      { activity: mappedActivity, razorpayAccountId, availability: result },
+      120,
+    );
+
+    return {
+      activity: mappedActivity,
+      razorpayAccountId,
+      availability: result,
+    };
   }
 }

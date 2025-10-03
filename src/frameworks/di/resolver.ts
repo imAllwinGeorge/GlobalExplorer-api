@@ -24,6 +24,10 @@ import { INotificationHandler } from "entities/socketHandlersInterfaces/INotific
 import { NotifcationHandler } from "interfaceAdapters/socket/handlers/notification.handler";
 import { IDashboardController } from "entities/controllerInterfaces/dashboard-controller.interface";
 import { DashBoardController } from "interfaceAdapters/controllers/dashboard.controller";
+import { IReviewController } from "entities/controllerInterfaces/review-controller.interface";
+import { ReviewController } from "interfaceAdapters/controllers/review.controller";
+import { ISignallingHandler } from "entities/socketHandlersInterfaces/ISignalling.handler.interface";
+import { SignallingHandler } from "interfaceAdapters/socket/handlers/Singnalling.handler";
 
 DependancyInjection.registerAll();
 
@@ -60,5 +64,11 @@ export const directChantHandler =
 export const notificationHandler =
   container.resolve<INotificationHandler>(NotifcationHandler);
 
+export const signallingHandler =
+  container.resolve<ISignallingHandler>(SignallingHandler);
+
 export const dashboardController =
   container.resolve<IDashboardController>(DashBoardController);
+
+export const reviewController =
+  container.resolve<IReviewController>(ReviewController);

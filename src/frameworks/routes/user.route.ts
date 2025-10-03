@@ -7,6 +7,7 @@ import {
   categoryController,
   chatController,
   notificationController,
+  reviewController,
   userController,
 } from "../di/resolver";
 import { verifyToken } from "interfaceAdapters/middleware/auth.middleware";
@@ -178,6 +179,14 @@ export class UserRoutes extends BaseRoute {
       // verifyToken,
       (req: Request, res: Response) => {
         notificationController.getNotifications(req, res);
+      },
+    );
+
+    this.router.post(
+      "/review/write-review",
+      verifyToken,
+      (req: Request, res: Response) => {
+        reviewController.writeReview(req, res);
       },
     );
   }

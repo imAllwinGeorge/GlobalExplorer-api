@@ -1,4 +1,4 @@
-import { FilterQuery, Model } from "mongoose";
+import { FilterQuery, Model, RootFilterQuery } from "mongoose";
 import { IBaseRepository } from "../../entities/repositoryInterfaces/IBaseRepository.interface";
 
 export class BaseRepository<T> implements IBaseRepository<T> {
@@ -55,5 +55,13 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     projection: FilterQuery<object>,
   ): Promise<object> {
     return this.model.find(filter, projection);
+  }
+
+  async isNameExist(field: string, name: string): Promise<boolean> {
+    const query = {
+      [field]: { $regex: `^${name}$`, $options: "i" },
+    } as unknown as RootFilterQuery<T>;
+    const result = await this.model.findOne(query);
+    return !!result;
   }
 }

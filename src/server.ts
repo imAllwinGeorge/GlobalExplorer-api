@@ -24,7 +24,7 @@ socketServer.onConnection((socket) => {
   //   socket.emit("test:response", { message: "hello from server" });
   // });
 
-  console.log("socket server connecte successfull: ", socket);
+  console.log("socket server connecte successfull: ", socket.id);
 });
 
 httpServer.listen(3000, () => {

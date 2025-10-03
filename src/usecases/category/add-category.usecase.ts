@@ -10,7 +10,18 @@ export class AddCategoryUseCase implements IAddCategoryUsecase {
     private _categoryRepository: ICategoryRepository,
   ) {}
 
-  async execute(data: object): Promise<ICategoryModel> {
+  async execute(data: {
+    categoryName: string;
+    description: string;
+  }): Promise<ICategoryModel> {
+    const isExist = await this._categoryRepository.isNameExist(
+      "categoryName",
+      data.categoryName,
+    );
+
+    if (isExist) {
+      throw new Error("Category name already exist!");
+    }
     const category = await this._categoryRepository.save(data);
     return category;
   }

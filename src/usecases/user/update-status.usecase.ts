@@ -1,9 +1,10 @@
 import { inject, injectable } from "tsyringe";
 import { IUpdateStatusUsecase } from "../../entities/usecaseInterfaces/user/update-status.usecase.interface";
-import { IUserModel } from "../../frameworks/database/mongo/models/user.model";
 import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
 import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
-import { IHostModel } from "frameworks/database/mongo/models/host.model";
+import { HostMapper } from "shared/mappers/host.mapper";
+import { HostResponseDTO, UserResponseDTO } from "shared/dtos/response.dto";
+import { UserMapper } from "shared/mappers/user.mapper";
 
 @injectable()
 export class UpdateStatusUsecase implements IUpdateStatusUsecase {
@@ -13,27 +14,30 @@ export class UpdateStatusUsecase implements IUpdateStatusUsecase {
 
     @inject("IHostRepository")
     private _hostRepository: IHostRepository,
+
+    @inject(UserMapper)
+    private _userMapper: UserMapper,
+
+    @inject(HostMapper)
+    private _hostMapper: HostMapper,
   ) {}
 
   async execute(
     _id: string,
     value: object,
     role: string,
-  ): Promise<IUserModel | IHostModel> {
+  ): Promise<UserResponseDTO | HostResponseDTO> {
     console.log("value for updating  ", value);
-    let repository;
+    let user;
     if (role === "user") {
-      repository = this._userRepository;
+      user = await this._userRepository.findOneAndUpdate({ _id }, value);
+      if (!user) throw new Error("User status update failed!");
+      return this._userMapper.toDTO(user);
     } else if (role === "host") {
-      repository = this._hostRepository;
-    } else {
-      throw new Error("invalid request");
+      user = await this._hostRepository.findOneAndUpdate({ _id }, value);
+      if (!user) throw new Error("User status update failed!");
+      return this._hostMapper.toDTO(user);
     }
-    const user = await repository.findOneAndUpdate({ _id }, value);
-    if (!user) {
-      throw new Error("user status update failed");
-    }
-    console.log("update status", user);
-    return user;
+    throw new Error("invalid request");
   }
 }

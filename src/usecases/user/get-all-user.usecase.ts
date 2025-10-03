@@ -2,6 +2,10 @@ import { inject, injectable } from "tsyringe";
 import { IGetAllUsersUsecase } from "../../entities/usecaseInterfaces/user/get-all-user.usecase.interface";
 import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
 import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
+import { HostMapper } from "shared/mappers/host.mapper";
+import { IHostModel } from "frameworks/database/mongo/models/host.model";
+import { UserMapper } from "shared/mappers/user.mapper";
+import { IUserModel } from "frameworks/database/mongo/models/user.model";
 
 @injectable()
 export class GetAllUsersUsecase implements IGetAllUsersUsecase {
@@ -11,6 +15,12 @@ export class GetAllUsersUsecase implements IGetAllUsersUsecase {
 
     @inject("IHostRepository")
     private _hostRepository: IHostRepository,
+
+    @inject(UserMapper)
+    private _userMapper: UserMapper,
+
+    @inject(HostMapper)
+    private _hostMapper: HostMapper,
   ) {}
 
   async execute(
@@ -18,13 +28,16 @@ export class GetAllUsersUsecase implements IGetAllUsersUsecase {
     skip: number,
     role: string,
   ): Promise<{ items: object[]; total: number }> {
-    let repository;
+    let result;
     if (role === "user") {
-      repository = this._userRepository;
+      result = await this._userRepository.findAll(limit, skip, { role });
+      const users = this._userMapper.toDTOs(result.items as IUserModel[]);
+      return { items: users, total: result.total };
     } else if (role === "host") {
-      repository = this._hostRepository;
+      result = await this._hostRepository.findAll(limit, skip, { role });
+      const users = this._hostMapper.toDTOs(result.items as IHostModel[]);
+      return { items: users, total: result.total };
     }
-    const result = await repository?.findAll(limit, skip, { role });
     if (!result) {
       throw new Error("failed to fetch users");
     }
