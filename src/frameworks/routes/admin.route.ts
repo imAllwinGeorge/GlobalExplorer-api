@@ -6,7 +6,7 @@ import {
   dashboardController,
   userController,
 } from "../di/resolver";
-import { verifyToken } from "interfaceAdapters/middleware/auth.middleware";
+import { verifyToken } from "../../interfaceAdapters/middleware/auth.middleware";
 
 export class AdminRoutes {
   public router: Router;

@@ -1,15 +1,19 @@
-import { IHostController } from "entities/controllerInterfaces/users/host-controller.interface";
-import { IAddActivityUsecase } from "entities/usecaseInterfaces/activity/add-activity.usecase.interface";
-import { IGetActivityUsecase } from "entities/usecaseInterfaces/activity/get-activity.usecase.interface";
-import { IGetAllCategoryNameUsecase } from "entities/usecaseInterfaces/category/get-all-category-names.usecase.interface";
-import { IGetAllCategoryUsecase } from "entities/usecaseInterfaces/category/get-all-category.usecase.interface";
-import { Request, Response } from "express";
-import { Types } from "mongoose";
-import { HttpStatusCode } from "shared/constants/constants";
 import { inject, injectable } from "tsyringe";
 import { hostSchema } from "../auth/validations/host-signup.validation.schema";
+import { IHostController } from "../../../entities/controllerInterfaces/users/host-controller.interface";
+import { IGetAllCategoryUsecase } from "../../../entities/usecaseInterfaces/category/get-all-category.usecase.interface";
+import { IGetActivityUsecase } from "../../../entities/usecaseInterfaces/activity/get-activity.usecase.interface";
+import { IAddActivityUsecase } from "../../../entities/usecaseInterfaces/activity/add-activity.usecase.interface";
+import { IGetAllCategoryNameUsecase } from "../../../entities/usecaseInterfaces/category/get-all-category-names.usecase.interface";
+import { IUpdateStatusUsecase } from "../../../entities/usecaseInterfaces/user/update-status.usecase.interface";
+import { Request, Response } from "express";
+import {
+  calculateTotalPages,
+  getPaginationParams,
+} from "../../../shared/utils/pagination.helper";
+import { Types } from "mongoose";
+import { HttpStatusCode } from "../../../shared/constants/constants";
 import { z } from "zod";
-import { IUpdateStatusUsecase } from "entities/usecaseInterfaces/user/update-status.usecase.interface";
 
 type HostData = z.infer<typeof hostSchema>;
 @injectable()
@@ -34,13 +38,11 @@ export class HostController implements IHostController {
   async getActivity(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const page = parseInt(req.query.page as string) || 1;
-      const limit = parseInt(req.query.limit as string) || 10;
-      const skip = (page - 1) * limit;
+      const { limit, skip } = getPaginationParams(req);
       const result = await this._getActivityUsecase.execute(limit, skip, {
         userId: new Types.ObjectId(id),
       });
-      const totalPages = Math.ceil(result.total / limit);
+      const totalPages = calculateTotalPages(result.total, limit);
       res
         .status(HttpStatusCode.OK)
         .json({ activities: result.items, totalPages });
@@ -78,7 +80,6 @@ export class HostController implements IHostController {
         reportingTime,
         location,
       } = req.body;
-      console.log("jasgsdgvbo;asdgvo;nasd;gvn;sd           :", recurrenceDays);
       let images = [];
       const files = req.files as Express.Multer.File[];
 

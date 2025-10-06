@@ -1,4 +1,4 @@
-import { IConversationModel } from "frameworks/database/mongo/models/conversation.model";
+import { IConversationModel } from "../../frameworks/database/mongo/models/conversation.model";
 
 export function extractUserIds(
   conversations: IConversationModel[],

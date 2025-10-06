@@ -96,9 +96,9 @@
 
 // interfaceAdapters/socket/events/Signalling.events.ts
 import { Server, Socket } from "socket.io";
-import { VIDEO_CALL_EVENT } from "shared/constants/constants";
-import { ISignallingHandler } from "entities/socketHandlersInterfaces/ISignalling.handler.interface";
-import { signallingHandler } from "frameworks/di/resolver";
+import { ISignallingHandler } from "../../../entities/socketHandlersInterfaces/ISignalling.handler.interface";
+import { signallingHandler } from "../../../frameworks/di/resolver";
+import { VIDEO_CALL_EVENT } from "../../../shared/constants/constants";
 
 export class SignallingEvents {
   private _handler: ISignallingHandler;

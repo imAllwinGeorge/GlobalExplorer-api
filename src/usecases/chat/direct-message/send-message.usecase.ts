@@ -1,9 +1,13 @@
-import { IConversationRepository } from "entities/repositoryInterfaces/chat/Conversation.repository.interface";
-import { IMessageRepository } from "entities/repositoryInterfaces/chat/IMessage.repository.interface";
-import { ISendDirectMessageUsecase } from "entities/usecaseInterfaces/chat/direct-message/send-message.usecase.interface";
-import { IConversationModel } from "frameworks/database/mongo/models/conversation.model";
-import { IMessageModel } from "frameworks/database/mongo/models/message.model";
 import { inject, injectable } from "tsyringe";
+import { ISendDirectMessageUsecase } from "../../../entities/usecaseInterfaces/chat/direct-message/send-message.usecase.interface";
+import { IMessageRepository } from "../../../entities/repositoryInterfaces/chat/IMessage.repository.interface";
+import { IConversationRepository } from "../../../entities/repositoryInterfaces/chat/Conversation.repository.interface";
+import { ConversationMapper } from "../../../shared/mappers/conversation.mapper";
+import { MessageMapper } from "../../../shared/mappers/message.mapper";
+import {
+  ConversationResponseDTO,
+  MessageResponseDTO,
+} from "../../../shared/dtos/response.dto";
 
 @injectable()
 export class SendDirectMessageUsecase implements ISendDirectMessageUsecase {
@@ -13,18 +17,28 @@ export class SendDirectMessageUsecase implements ISendDirectMessageUsecase {
 
     @inject("IConversationRepository")
     private _conversationRepository: IConversationRepository,
+
+    @inject(ConversationMapper)
+    private _conversationMapper: ConversationMapper,
+
+    @inject(MessageMapper)
+    private _messageMapper: MessageMapper,
   ) {}
 
   async execute(
     senderId: string,
     receiverId: string,
     content: string,
-  ): Promise<{ message: IMessageModel; conversation: IConversationModel }> {
-    console.log(senderId, receiverId, content);
+  ): Promise<{
+    message: MessageResponseDTO;
+    conversation: ConversationResponseDTO;
+  }> {
     if (senderId === receiverId) throw new Error("Bad Request");
+
     const normalized = [senderId, receiverId].sort((a, b) =>
       a.toString().localeCompare(b.toString()),
     );
+
     let conversation =
       await this._conversationRepository.findByParticipants(normalized);
 
@@ -59,6 +73,9 @@ export class SendDirectMessageUsecase implements ISendDirectMessageUsecase {
       read: false,
     });
 
-    return { message, conversation };
+    const mappedConversation = this._conversationMapper.toDTO(conversation);
+    const mappedMessage = this._messageMapper.toDTO(message);
+
+    return { message: mappedMessage, conversation: mappedConversation };
   }
 }

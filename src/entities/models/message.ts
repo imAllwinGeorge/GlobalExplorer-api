@@ -1,6 +1,7 @@
 import { ObjectId } from "mongoose";
+import { IBaseEntitiy } from "./base.entity";
 
-export interface IMessageEntitiy {
+export interface IMessageEntitiy extends IBaseEntitiy {
   conversationId: string | ObjectId;
   senderId: string;
   receiverId: string;

@@ -1,5 +1,11 @@
 import { ObjectId } from "mongoose";
 
+interface BaseEntitiy {
+  _id: ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export type ActivityResponseDTO = {
   _id: string;
   activityName: string;
@@ -71,4 +77,96 @@ export interface AdminResponseDTO {
   email: string;
   role: "user" | "admin" | "host";
   isBlocked: boolean;
+}
+
+export interface ReviewResponseDTO {
+  _id: ObjectId;
+  entityId: string;
+  userId:
+    | string
+    | {
+        _id: ObjectId;
+        firstName: string;
+        lastName: string;
+      };
+  ratiing: number;
+  title: string;
+  comment: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface BlogResponseDTO extends BaseEntitiy {
+  _id: ObjectId;
+  userId: string; // Author's user ID
+  title: string; // Blog title
+  author: string; // Author name (redundant but useful for fast access)
+  introduction: string; // Short intro or preview text
+  sections: BlogSection[]; // Multiple sections in the blog
+  image: string; // Main or introduction image
+  views: number; // Number of views
+  likes: string[]; // Array of userIds who liked it
+}
+
+export interface BlogSection {
+  sectionTitle: string; // Title of the section
+  content: string; // Body content (Markdown or HTML)
+  image: string; // Optional image for the section
+}
+
+export interface BookingResponseDTO {
+  _id: ObjectId;
+  userId: string;
+  activityId: string;
+  activityTitle: string;
+  date: Date;
+  participantCount: number;
+  pricePerParticipant: number;
+  paymentStatus: "pending" | "paid" | "failed" | "refunded";
+  razorpayPaymentId?: string;
+  razporpayOrderId?: string;
+  razorpaySignatue?: string;
+  bookingStatus: "pending" | "cancelled" | "completed";
+  hostId: string;
+  isCancelled: boolean;
+  cancellationReason?: string;
+  isRefunded: boolean;
+  refundId?: string;
+  refundAmount?: number;
+  refundStatus?: "initialized" | "completed" | "failed";
+  razorpayTransferId?: string;
+  isReleased: boolean;
+  holdUntilDate: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface CategoryResponseDTO extends BaseEntitiy {
+  categoryName: string;
+  description: string;
+  isActive: boolean;
+}
+
+export interface ConversationResponseDTO extends BaseEntitiy {
+  participants: string[];
+  lastMessage: string;
+  lastSender: string;
+  lastMessageAt: Date;
+  unreadCount: Record<string, number>;
+}
+
+export interface MessageResponseDTO extends BaseEntitiy {
+  conversationId: string | ObjectId;
+  senderId: string;
+  receiverId: string;
+  content: string;
+  read: boolean;
+  sentAt: Date;
+}
+
+export interface NotificationResponseDTO extends BaseEntitiy {
+  userId: string;
+  message: string;
+  type: string;
+  isRead: boolean;
 }

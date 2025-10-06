@@ -1,6 +1,6 @@
-import { ISocketServices } from "entities/serviceInterfaces/socket.service";
 import { Server } from "socket.io";
 import { injectable } from "tsyringe";
+import { ISocketServices } from "../../entities/serviceInterfaces/socket.service";
 
 @injectable()
 export class SocketServices implements ISocketServices {

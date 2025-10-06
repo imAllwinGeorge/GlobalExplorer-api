@@ -1,6 +1,4 @@
-import { verifyToken } from "interfaceAdapters/middleware/auth.middleware";
-import { BaseRoute } from "./base.route";
-import { Request, Response } from "express";
+import { verifyToken } from "../../interfaceAdapters/middleware/auth.middleware";
 import {
   activityController,
   bookingController,
@@ -8,8 +6,10 @@ import {
   chatController,
   dashboardController,
   hostController,
-} from "frameworks/di/resolver";
-import upload from "frameworks/multer/multer";
+} from "../di/resolver";
+import upload from "../multer/multer";
+import { BaseRoute } from "./base.route";
+import { Request, Response } from "express";
 
 export class HostRoute extends BaseRoute {
   constructor() {

@@ -1,10 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { HttpStatusCode } from "shared/constants/constants";
-// import { JwtService } from "interfaceAdapters/services/jwt-service";
+import { HttpStatusCode } from "../../shared/constants/constants";
 import { container } from "tsyringe";
-import { VerifyTokenUsecase } from "usecases/auth/verfiy-token.usecase";
-
-// const tokenService = new JwtService();
+import { VerifyTokenUsecase } from "../../usecases/auth/verfiy-token.usecase";
 
 const extractToken = (req: Request): { token: string; role: string } | null => {
   const url = req.originalUrl;
@@ -23,7 +20,6 @@ const extractToken = (req: Request): { token: string; role: string } | null => {
   } else {
     token = null;
   }
-  console.log("12345678901234567890       ", token, infferedRole);
   if (token && role) {
     return { token, role };
   }

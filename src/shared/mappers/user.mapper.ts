@@ -1,6 +1,6 @@
-import { IUserModel } from "frameworks/database/mongo/models/user.model";
-import { UserResponseDTO } from "shared/dtos/response.dto";
 import { injectable } from "tsyringe";
+import { IUserModel } from "../../frameworks/database/mongo/models/user.model";
+import { UserResponseDTO } from "../dtos/response.dto";
 
 @injectable()
 export class UserMapper {

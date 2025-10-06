@@ -1,16 +1,17 @@
-import { IAdminRepository } from "entities/repositoryInterfaces/users/admin-repository.inteface";
-import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
-import { IUserRepository } from "entities/repositoryInterfaces/users/user-repository.interface";
-import { IGetProfileUsecase } from "entities/usecaseInterfaces/auth/get-profile.usecase.interface";
+import { inject, injectable } from "tsyringe";
+import { IGetProfileUsecase } from "../../entities/usecaseInterfaces/auth/get-profile.usecase.interface";
+import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
+import { IHostRepository } from "../../entities/repositoryInterfaces/users/host-repository.interface";
+import { IAdminRepository } from "../../entities/repositoryInterfaces/users/admin-repository.inteface";
+import { UserMapper } from "../../shared/mappers/user.mapper";
+import { HostMapper } from "../../shared/mappers/host.mapper";
+import { AdminMapper } from "../../shared/mappers/admin.mapper";
 import {
   AdminResponseDTO,
   HostResponseDTO,
   UserResponseDTO,
-} from "shared/dtos/response.dto";
-import { AdminMapper } from "shared/mappers/admin.mapper";
-import { HostMapper } from "shared/mappers/host.mapper";
-import { UserMapper } from "shared/mappers/user.mapper";
-import { inject, injectable } from "tsyringe";
+} from "../../shared/dtos/response.dto";
+import { ROLE } from "../../shared/constants/constants";
 
 @injectable()
 export class GetProfileUsecase implements IGetProfileUsecase {
@@ -39,17 +40,20 @@ export class GetProfileUsecase implements IGetProfileUsecase {
     role: string,
   ): Promise<UserResponseDTO | HostResponseDTO | AdminResponseDTO> {
     let profile;
-    if (role === "user") {
+
+    if (role === ROLE.USER) {
       profile = await this._userRepository.findOne({ _id: id });
       if (!profile) throw new Error("Profile not found!");
       return this._userMapper.toDTO(profile);
     }
-    if (role === "host") {
+
+    if (role === ROLE.HOST) {
       profile = await this._hostRepository.findOne({ _id: id });
       if (!profile) throw new Error("Profile not found!");
       return this._hostMapper.toDTO(profile);
     }
-    if (role === "admin") {
+
+    if (role === ROLE.ADMIN) {
       profile = await this._adminRepository.findOne({ _id: id });
       if (!profile) throw new Error("Profile not found!");
       return this._adminMapper.toDTO(profile);

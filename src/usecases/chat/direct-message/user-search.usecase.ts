@@ -1,8 +1,8 @@
-import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
-import { IUserRepository } from "entities/repositoryInterfaces/users/user-repository.interface";
-import { IUserSearchUsecase } from "entities/usecaseInterfaces/chat/direct-message/user-search.usecase.interface";
 import { ObjectId } from "mongoose";
 import { inject, injectable } from "tsyringe";
+import { IUserSearchUsecase } from "../../../entities/usecaseInterfaces/chat/direct-message/user-search.usecase.interface";
+import { IUserRepository } from "../../../entities/repositoryInterfaces/users/user-repository.interface";
+import { IHostRepository } from "../../../entities/repositoryInterfaces/users/host-repository.interface";
 
 @injectable()
 export class UserSearchUsecase implements IUserSearchUsecase {
@@ -28,6 +28,7 @@ export class UserSearchUsecase implements IUserSearchUsecase {
       firstName: 1,
       lastName: 1,
     };
+
     const users = await this._userRepository.findDetailsWithProjection(
       filter,
       projection,

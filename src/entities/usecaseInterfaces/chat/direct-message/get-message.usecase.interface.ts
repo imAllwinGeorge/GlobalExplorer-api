@@ -1,5 +1,5 @@
-import { IMessageModel } from "frameworks/database/mongo/models/message.model";
+import { MessageResponseDTO } from "../../../../shared/dtos/response.dto";
 
 export interface IGetMessageUsecase {
-  execute(conversationId: string): Promise<IMessageModel[]>;
+  execute(conversationId: string): Promise<MessageResponseDTO[]>;
 }

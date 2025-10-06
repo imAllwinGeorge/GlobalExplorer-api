@@ -24,6 +24,12 @@ export enum HttpStatusCode {
   GATEWAY_TIMEOUT = 504, // Upstream server timed out (e.g., long API response time)
 }
 
+export enum ROLE {
+  ADMIN = "admin",
+  HOST = "host",
+  USER = "user",
+}
+
 export const DIRECT_CHAT_EVENTS = {
   SEND_MESSAGE: "direct-chat:send-message",
   RECEIVE_MESSAGE: "direct-chat:receive-message",

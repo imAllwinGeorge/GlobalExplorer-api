@@ -1,5 +1,5 @@
-import { ICacheService } from "entities/serviceInterfaces/cache-service.interface";
-import { redisClient } from "frameworks/cache/redis.connect";
+import { ICacheService } from "../../entities/serviceInterfaces/cache-service.interface";
+import { redisClient } from "../../frameworks/cache/redis.connect";
 
 export class CacheService implements ICacheService {
   private _redisClient;

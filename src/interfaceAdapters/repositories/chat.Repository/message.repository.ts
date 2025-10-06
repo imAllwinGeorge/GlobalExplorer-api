@@ -1,9 +1,10 @@
-import { IMessageRepository } from "entities/repositoryInterfaces/chat/IMessage.repository.interface";
-import { BaseRepository } from "../base.repository";
+import { IMessageRepository } from "../../../entities/repositoryInterfaces/chat/IMessage.repository.interface";
 import {
   IMessageModel,
   MessageModel,
-} from "frameworks/database/mongo/models/message.model";
+} from "../../../frameworks/database/mongo/models/message.model";
+import { BaseRepository } from "../base.repository";
+
 import { injectable } from "tsyringe";
 
 @injectable()

@@ -1,9 +1,9 @@
-import { IActivityRepository } from "entities/repositoryInterfaces/activity/activityRepository.interface";
-import { ICacheService } from "entities/serviceInterfaces/cache-service.interface";
-import { IEditActivityUsecase } from "entities/usecaseInterfaces/activity/edit-activity.usecase.interface";
-import { ActivityResponseDTO } from "shared/dtos/response.dto";
-import { ActivityMapper } from "shared/mappers/activity.mapper";
 import { inject, injectable } from "tsyringe";
+import { IEditActivityUsecase } from "../../entities/usecaseInterfaces/activity/edit-activity.usecase.interface";
+import { IActivityRepository } from "../../entities/repositoryInterfaces/activity/activityRepository.interface";
+import { ICacheService } from "../../entities/serviceInterfaces/cache-service.interface";
+import { ActivityMapper } from "../../shared/mappers/activity.mapper";
+import { ActivityResponseDTO } from "../../shared/dtos/response.dto";
 
 @injectable()
 export class EditActivityUsecase implements IEditActivityUsecase {

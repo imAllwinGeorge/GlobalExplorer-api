@@ -5,8 +5,9 @@ import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-
 import { IAdminRepository } from "../../entities/repositoryInterfaces/users/admin-repository.inteface";
 import { IUserModel } from "../../frameworks/database/mongo/models/user.model";
 import { IAdminModel } from "../../frameworks/database/mongo/models/admin.model";
-import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
-import { IHostModel } from "frameworks/database/mongo/models/host.model";
+import { IHostRepository } from "../../entities/repositoryInterfaces/users/host-repository.interface";
+import { IHostModel } from "../../frameworks/database/mongo/models/host.model";
+import { ROLE } from "../../shared/constants/constants";
 
 @injectable()
 export class VerifyTokenUsecase implements IVerifyTokenUsecase {
@@ -28,28 +29,26 @@ export class VerifyTokenUsecase implements IVerifyTokenUsecase {
     role: string,
   ): Promise<IAdminModel | IHostModel | IUserModel> {
     const decode = this._tokenService.verifyToken(token);
+
     let repository;
-    if (role === "user") {
-      console.log("user repository look up");
+
+    if (role === ROLE.USER) {
       repository = this._UserRepository;
-    } else if (role === "admin") {
-      console.log("admin repository lookup");
+    } else if (role === ROLE.ADMIN) {
       repository = this._adminRepository;
-    } else if (role === "host") {
-      console.log("host repository lookup");
+    } else if (role === ROLE.HOST) {
       repository = this._adminRepository;
     } else {
       throw new Error("session Expired");
     }
-    // console.log(decode);
     let user: IUserModel | IAdminModel | null;
+
     user = await repository.findOne({ email: decode.email });
-    console.log("after look up user:", user);
-    console.log("decoded data", decode);
 
     if (!user) {
       throw new Error("authentication Error");
     }
+
     return user;
   }
 }

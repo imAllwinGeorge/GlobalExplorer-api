@@ -1,8 +1,8 @@
-import { IReviewRepository } from "entities/repositoryInterfaces/review/review-repository.interface";
-import { IWriteReviewUsecase } from "entities/usecaseInterfaces/review/write-review.interface";
-import { IReviewModel } from "frameworks/database/mongo/models/review.model";
-import { ReviewDTO } from "shared/dtos/Auth.dto";
 import { inject, injectable } from "tsyringe";
+import { IWriteReviewUsecase } from "../../entities/usecaseInterfaces/review/write-review.interface";
+import { IReviewRepository } from "../../entities/repositoryInterfaces/review/review-repository.interface";
+import { IReviewModel } from "../../frameworks/database/mongo/models/review.model";
+import { ReviewDTO } from "../../shared/dtos/Auth.dto";
 
 @injectable()
 export class WriteReviewUsecase implements IWriteReviewUsecase {

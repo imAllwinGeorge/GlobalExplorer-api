@@ -1,5 +1,5 @@
-import { IActivityEntity } from "entities/models/activity.entity";
 import { Document, model, ObjectId, Schema } from "mongoose";
+import { IActivityEntity } from "../../../../entities/models/activity.entity";
 
 export interface IActivityModel extends IActivityEntity, Document {
   _id: ObjectId;

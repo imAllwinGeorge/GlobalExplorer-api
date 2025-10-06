@@ -1,4 +1,6 @@
-export interface IBookingEntitiy {
+import { IBaseEntitiy } from "./base.entity";
+
+export interface IBookingEntitiy extends IBaseEntitiy {
   userId: string;
   activityId: string;
   activityTitle: string;
@@ -20,6 +22,4 @@ export interface IBookingEntitiy {
   razorpayTransferId?: string;
   isReleased: boolean;
   holdUntilDate: Date;
-  updatedAt: Date;
-  createdAt: Date;
 }

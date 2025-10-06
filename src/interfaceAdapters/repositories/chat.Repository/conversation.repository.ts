@@ -1,11 +1,11 @@
+import { BaseRepository } from "../base.repository";
+import { injectable } from "tsyringe";
+import { ObjectId } from "mongoose";
 import {
   ConversationModel,
   IConversationModel,
-} from "frameworks/database/mongo/models/conversation.model";
-import { BaseRepository } from "../base.repository";
-import { injectable } from "tsyringe";
-import { IConversationRepository } from "entities/repositoryInterfaces/chat/Conversation.repository.interface";
-import { ObjectId } from "mongoose";
+} from "../../../frameworks/database/mongo/models/conversation.model";
+import { IConversationRepository } from "../../../entities/repositoryInterfaces/chat/Conversation.repository.interface";
 
 @injectable()
 export class ConversationRepository

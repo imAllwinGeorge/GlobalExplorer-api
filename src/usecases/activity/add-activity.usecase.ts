@@ -1,9 +1,9 @@
-import { IActivityRepository } from "entities/repositoryInterfaces/activity/activityRepository.interface";
-import { IAddActivityUsecase } from "entities/usecaseInterfaces/activity/add-activity.usecase.interface";
-import { ActivityDTO } from "shared/dtos/Auth.dto";
-import { ActivityResponseDTO } from "shared/dtos/response.dto";
-import { ActivityMapper } from "shared/mappers/activity.mapper";
 import { inject, injectable } from "tsyringe";
+import { IAddActivityUsecase } from "../../entities/usecaseInterfaces/activity/add-activity.usecase.interface";
+import { IActivityRepository } from "../../entities/repositoryInterfaces/activity/activityRepository.interface";
+import { ActivityMapper } from "../../shared/mappers/activity.mapper";
+import { ActivityDTO } from "../../shared/dtos/Auth.dto";
+import { ActivityResponseDTO } from "../../shared/dtos/response.dto";
 
 @injectable()
 export class AddActivityUsecase implements IAddActivityUsecase {

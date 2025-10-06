@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
 import { IUserExistanceService } from "../../entities/serviceInterfaces/user-existance-service.interface";
 import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
-import { IUserModel } from "frameworks/database/mongo/models/user.model";
-import { IHostModel } from "frameworks/database/mongo/models/host.model";
-import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
+import { IHostRepository } from "../../entities/repositoryInterfaces/users/host-repository.interface";
+import { IUserModel } from "../../frameworks/database/mongo/models/user.model";
+import { IHostModel } from "../../frameworks/database/mongo/models/host.model";
 
 @injectable()
 export class UserExistanceService implements IUserExistanceService {

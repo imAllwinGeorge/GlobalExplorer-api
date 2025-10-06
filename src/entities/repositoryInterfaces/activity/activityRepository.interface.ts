@@ -1,5 +1,5 @@
+import { IActivityModel } from "../../../frameworks/database/mongo/models/activity.model";
 import { IBaseRepository } from "../IBaseRepository.interface";
-import { IActivityModel } from "frameworks/database/mongo/models/activity.model";
 
 export interface IActivityRepository extends IBaseRepository<IActivityModel> {
   FilterActivity(

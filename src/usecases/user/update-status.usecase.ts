@@ -1,10 +1,18 @@
 import { inject, injectable } from "tsyringe";
 import { IUpdateStatusUsecase } from "../../entities/usecaseInterfaces/user/update-status.usecase.interface";
 import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
-import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
-import { HostMapper } from "shared/mappers/host.mapper";
-import { HostResponseDTO, UserResponseDTO } from "shared/dtos/response.dto";
-import { UserMapper } from "shared/mappers/user.mapper";
+import { IHostRepository } from "../../entities/repositoryInterfaces/users/host-repository.interface";
+import { ISocketUserMapRepository } from "../../entities/repositoryInterfaces/redis/socket-user.repository";
+import { ISocketServices } from "../../entities/serviceInterfaces/socket.service";
+import { UserMapper } from "../../shared/mappers/user.mapper";
+import { HostMapper } from "../../shared/mappers/host.mapper";
+import {
+  HostResponseDTO,
+  UserResponseDTO,
+} from "../../shared/dtos/response.dto";
+import { ROLE } from "../../shared/constants/constants";
+import { IUserModel } from "../../frameworks/database/mongo/models/user.model";
+import { IHostModel } from "../../frameworks/database/mongo/models/host.model";
 
 @injectable()
 export class UpdateStatusUsecase implements IUpdateStatusUsecase {
@@ -14,6 +22,12 @@ export class UpdateStatusUsecase implements IUpdateStatusUsecase {
 
     @inject("IHostRepository")
     private _hostRepository: IHostRepository,
+
+    @inject("ISocketUserRepository")
+    private _socketRepository: ISocketUserMapRepository,
+
+    @inject("ISocketServices")
+    private _socketServices: ISocketServices,
 
     @inject(UserMapper)
     private _userMapper: UserMapper,
@@ -27,17 +41,44 @@ export class UpdateStatusUsecase implements IUpdateStatusUsecase {
     value: object,
     role: string,
   ): Promise<UserResponseDTO | HostResponseDTO> {
-    console.log("value for updating  ", value);
-    let user;
-    if (role === "user") {
-      user = await this._userRepository.findOneAndUpdate({ _id }, value);
-      if (!user) throw new Error("User status update failed!");
-      return this._userMapper.toDTO(user);
-    } else if (role === "host") {
-      user = await this._hostRepository.findOneAndUpdate({ _id }, value);
-      if (!user) throw new Error("User status update failed!");
-      return this._hostMapper.toDTO(user);
+    let repository;
+
+    if (role === ROLE.USER) {
+      repository = this._userRepository;
+    } else if (role === ROLE.HOST) {
+      repository = this._hostRepository;
     }
-    throw new Error("invalid request");
+    console.log("before operation:   ", value);
+    const user = await repository?.findOneAndUpdate({ _id }, value);
+
+    if (!user) throw new Error("Invalid request!");
+
+    if (user.isBlocked === true) {
+      console.log(" after cheking the user is blocked or not:  ", user);
+
+      const socketId = await this._socketRepository.getUserSocket(
+        user._id as unknown as string,
+      );
+      if (socketId) {
+        const io = this._socketServices.getIO();
+        const socket = io.sockets.sockets.get(socketId);
+
+        if (socket) {
+          console.log("socket dissconnect triggered......");
+          socket.disconnect(true);
+        } else {
+          console.log("socket not found for user: ", user._id);
+        }
+      }
+      await this._socketRepository.removeUserSocket(
+        user._id as unknown as string,
+      );
+    }
+
+    if (user.role === ROLE.USER) {
+      return this._userMapper.toDTO(user as IUserModel);
+    } else {
+      return this._hostMapper.toDTO(user as IHostModel);
+    }
   }
 }

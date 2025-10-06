@@ -1,7 +1,7 @@
-import { IActivityModel } from "frameworks/database/mongo/models/activity.model";
-import { ActivityDTO } from "shared/dtos/Auth.dto";
-import { ActivityResponseDTO } from "shared/dtos/response.dto";
 import { injectable } from "tsyringe";
+import { ActivityDTO } from "../dtos/Auth.dto";
+import { IActivityModel } from "../../frameworks/database/mongo/models/activity.model";
+import { ActivityResponseDTO } from "../dtos/response.dto";
 
 @injectable()
 export class ActivityMapper {

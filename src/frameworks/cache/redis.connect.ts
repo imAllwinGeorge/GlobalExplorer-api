@@ -1,5 +1,5 @@
 import { createClient } from "redis";
-import { config } from "shared/config";
+import { config } from "../../shared/config";
 
 export const redisClient = createClient({
   username: config.redis.REDIS_USERNAME || "default",

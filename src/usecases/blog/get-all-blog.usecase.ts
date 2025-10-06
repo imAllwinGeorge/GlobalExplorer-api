@@ -1,7 +1,9 @@
-import { IBlogRepository } from "entities/repositoryInterfaces/Blog/blog-repository.interface";
-import { ICacheService } from "entities/serviceInterfaces/cache-service.interface";
-import { IGetAllBlogUsecase } from "entities/usecaseInterfaces/blog/get-all-blog.usecase.interface";
 import { inject, injectable } from "tsyringe";
+import { BlogMapper } from "../../shared/mappers/blog.mapper";
+import { IGetAllBlogUsecase } from "../../entities/usecaseInterfaces/blog/get-all-blog.usecase.interface";
+import { IBlogRepository } from "../../entities/repositoryInterfaces/Blog/blog-repository.interface";
+import { ICacheService } from "../../entities/serviceInterfaces/cache-service.interface";
+import { IBlogModel } from "../../frameworks/database/mongo/models/blog.model";
 
 @injectable()
 export class GetAllBlogUsecase implements IGetAllBlogUsecase {
@@ -11,6 +13,9 @@ export class GetAllBlogUsecase implements IGetAllBlogUsecase {
 
     @inject("ICacheService")
     private _cacheService: ICacheService,
+
+    @inject(BlogMapper)
+    private _blogMapper: BlogMapper,
   ) {}
 
   async execute(
@@ -23,11 +28,16 @@ export class GetAllBlogUsecase implements IGetAllBlogUsecase {
     const cached = await this._cacheService.get(cachekey);
 
     if (cached) return cached as { items: object[]; total: number };
+
     const result = await this._blogRepository.findAll(limit, skip, filter);
+
     if (!result.items)
       throw new Error("We can not process the request... Please try again.");
 
     await this._cacheService.set(cachekey, result, 120);
-    return result;
+
+    const mappedBlogs = this._blogMapper.toDTOs(result.items as IBlogModel[]);
+
+    return { items: mappedBlogs, total: result.total };
   }
 }

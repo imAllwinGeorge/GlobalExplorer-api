@@ -1,7 +1,7 @@
-import { INotificationHandler } from "entities/socketHandlersInterfaces/INotification.handler.interface";
-import { notificationHandler } from "frameworks/di/resolver";
-import { NOTIFICATION_EVENT } from "shared/constants/constants";
 import { Server, Socket } from "socket.io";
+import { INotificationHandler } from "../../../entities/socketHandlersInterfaces/INotification.handler.interface";
+import { notificationHandler } from "../../../frameworks/di/resolver";
+import { NOTIFICATION_EVENT } from "../../../shared/constants/constants";
 
 export class NotificationEvent {
   private _handler!: INotificationHandler;

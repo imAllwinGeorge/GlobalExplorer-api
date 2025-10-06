@@ -1,17 +1,18 @@
-import { IBookingRepository } from "entities/repositoryInterfaces/booking/booking-repository.interface";
-import { INotificationRepository } from "entities/repositoryInterfaces/notification/notificationRepository";
-import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
-import { ICacheService } from "entities/serviceInterfaces/cache-service.interface";
-import { INotificationService } from "entities/serviceInterfaces/notification-service.interface";
-import { IpaymentService } from "entities/serviceInterfaces/razorpay-service.interface";
-import { IBookActivityUsecase } from "entities/usecaseInterfaces/booking/book.activity.usecase.interface";
-import { IBookingModal } from "frameworks/database/mongo/models/booking.model";
+import { inject, injectable } from "tsyringe";
+import { IBookActivityUsecase } from "../../entities/usecaseInterfaces/booking/book.activity.usecase.interface";
+import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/booking-repository.interface";
+import { IpaymentService } from "../../entities/serviceInterfaces/razorpay-service.interface";
+import { IHostRepository } from "../../entities/repositoryInterfaces/users/host-repository.interface";
+import { INotificationService } from "../../entities/serviceInterfaces/notification-service.interface";
+import { INotificationRepository } from "../../entities/repositoryInterfaces/notification/notificationRepository";
+import { ICacheService } from "../../entities/serviceInterfaces/cache-service.interface";
+import { BookingDTO } from "../../shared/dtos/Auth.dto";
+import { BookingResponseDTO } from "../../shared/dtos/response.dto";
 import {
   NOTIFICATION_EVENT,
   NOTIFICATION_TYPE,
-} from "shared/constants/constants";
-import { BookingDTO } from "shared/dtos/Auth.dto";
-import { inject, injectable } from "tsyringe";
+} from "../../shared/constants/constants";
+import { BookingMapper } from "../../shared/mappers/booking.mapper";
 
 @injectable()
 export class BookActivityUsecase implements IBookActivityUsecase {
@@ -33,9 +34,12 @@ export class BookActivityUsecase implements IBookActivityUsecase {
 
     @inject("ICacheService")
     private _cacheService: ICacheService,
+
+    @inject(BookingMapper)
+    private _bookingMapper: BookingMapper,
   ) {}
 
-  async execute(data: BookingDTO, id: string): Promise<IBookingModal> {
+  async execute(data: BookingDTO, id: string): Promise<BookingResponseDTO> {
     await this._cacheService.delByPattern("order:*");
 
     const amount = data.pricePerParticipant * data.participantCount;
@@ -48,15 +52,11 @@ export class BookActivityUsecase implements IBookActivityUsecase {
       data.hostId,
     );
 
-    console.log("booking activity data :     ", data);
-    // const adminAccountId = await this._paymentService.getMyAccountId();
-
     const result = await this._paymentService.createTransferWithHold({
       paymentId: data.razorpayPaymentId as string,
       hostRazorpayAccountId: hostAccountId,
       amountToHost,
       commissionAmount: commission,
-      // adminAccountId,
     });
 
     data.razorpayTransferId = result.transferId;
@@ -79,9 +79,6 @@ export class BookActivityUsecase implements IBookActivityUsecase {
       type: NOTIFICATION_TYPE.BOOKING,
     });
 
-    console.log("user Notification:  ", userNotification);
-    console.log("host Notification: ", hostNotification);
-
     if (userNotification) {
       await this._notificationService.emitNotification(
         booking?.userId as string,
@@ -98,9 +95,8 @@ export class BookActivityUsecase implements IBookActivityUsecase {
       );
     }
 
-    console.log("BBBBBBBBoooking :  ", booking);
-
     if (!booking) throw new Error("We Couldn't process the booking");
-    return booking;
+
+    return this._bookingMapper.toDTO(booking);
   }
 }

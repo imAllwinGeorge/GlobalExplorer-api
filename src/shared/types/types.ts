@@ -1,5 +1,5 @@
-import { IConversationModel } from "frameworks/database/mongo/models/conversation.model";
 import { Socket } from "socket.io";
+import { IConversationModel } from "../../frameworks/database/mongo/models/conversation.model";
 
 export interface Filter {
   search: string | undefined;

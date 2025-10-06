@@ -1,10 +1,11 @@
-import { IConversationRepository } from "entities/repositoryInterfaces/chat/Conversation.repository.interface";
-import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
-import { IUserRepository } from "entities/repositoryInterfaces/users/user-repository.interface";
-import { IGetConversationUsecase } from "entities/usecaseInterfaces/chat/direct-message/get-conversation.usecase.interface";
-import { ConversationResponse } from "shared/types/types";
-import { extractUserIds } from "shared/utils/extractUserIds";
 import { inject, injectable } from "tsyringe";
+import { IGetConversationUsecase } from "../../../entities/usecaseInterfaces/chat/direct-message/get-conversation.usecase.interface";
+import { IConversationRepository } from "../../../entities/repositoryInterfaces/chat/Conversation.repository.interface";
+import { IUserRepository } from "../../../entities/repositoryInterfaces/users/user-repository.interface";
+import { IHostRepository } from "../../../entities/repositoryInterfaces/users/host-repository.interface";
+import { ConversationMapper } from "../../../shared/mappers/conversation.mapper";
+import { ConversationResponse } from "../../../shared/types/types";
+import { extractUserIds } from "../../../shared/utils/extractUserIds";
 
 @injectable()
 export class GetConversationUsecase implements IGetConversationUsecase {
@@ -17,6 +18,9 @@ export class GetConversationUsecase implements IGetConversationUsecase {
 
     @inject("IHostRepository")
     private _hostRepository: IHostRepository,
+
+    @inject(ConversationMapper)
+    private _conversationMapper: ConversationMapper,
   ) {}
 
   async execute(selfUserId: string): Promise<ConversationResponse[]> {
@@ -48,28 +52,6 @@ export class GetConversationUsecase implements IGetConversationUsecase {
       });
     });
 
-    // Format final response
-    const result = conversations.map((convo) => {
-      const otherId = convo.participants.find(
-        (id) => id.toString() !== selfUserId,
-      );
-
-      const user = otherId ? userMap.get(otherId.toString()) : null;
-      const unreadCountObj =
-        convo.unreadCount instanceof Map
-          ? Object.fromEntries(convo.unreadCount)
-          : convo.unreadCount;
-
-      console.log(convo);
-      return {
-        ...convo.toObject(),
-        unreadCount: unreadCountObj,
-        receiverId: user?._id,
-        firstName: user?.firstName,
-        lastName: user?.lastName,
-      };
-    });
-    console.log(result);
-    return result as unknown as ConversationResponse[];
+    return this._conversationMapper.toDTOs(conversations, userMap, selfUserId);
   }
 }

@@ -1,8 +1,8 @@
-import { IBookingRepository } from "entities/repositoryInterfaces/booking/booking-repository.interface";
-import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
-import { IUserRepository } from "entities/repositoryInterfaces/users/user-repository.interface";
-import { IAdminDashboardUsecase } from "entities/usecaseInterfaces/dashboard/admin-dashboard.interface";
 import { inject, injectable } from "tsyringe";
+import { IAdminDashboardUsecase } from "../../entities/usecaseInterfaces/dashboard/admin-dashboard.interface";
+import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
+import { IHostRepository } from "../../entities/repositoryInterfaces/users/host-repository.interface";
+import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/booking-repository.interface";
 
 @injectable()
 export class AdminDashboardUsecase implements IAdminDashboardUsecase {

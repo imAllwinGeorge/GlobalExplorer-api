@@ -1,5 +1,5 @@
-import { IConversationEntity } from "entities/models/conversation";
 import { Document, model, ObjectId, Schema } from "mongoose";
+import { IConversationEntity } from "../../../../entities/models/conversation";
 
 export interface IConversationModel extends IConversationEntity, Document {
   _id: ObjectId;

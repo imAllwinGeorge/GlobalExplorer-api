@@ -1,8 +1,8 @@
-import { INotificationHandler } from "entities/socketHandlersInterfaces/INotification.handler.interface";
-import { IReadNotificationUsecase } from "entities/usecaseInterfaces/notification/read-notification.interface";
-import { NOTIFICATION_EVENT } from "shared/constants/constants";
 import { Server, Socket } from "socket.io";
 import { inject, injectable } from "tsyringe";
+import { INotificationHandler } from "../../../entities/socketHandlersInterfaces/INotification.handler.interface";
+import { IReadNotificationUsecase } from "../../../entities/usecaseInterfaces/notification/read-notification.interface";
+import { NOTIFICATION_EVENT } from "../../../shared/constants/constants";
 
 @injectable()
 export class NotifcationHandler implements INotificationHandler {

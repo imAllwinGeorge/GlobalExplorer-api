@@ -1,4 +1,6 @@
-export interface IUserEntity {
+import { IBaseEntitiy } from "./base.entity";
+
+export interface IUserEntity extends IBaseEntitiy {
   firstName: string;
   lastName: string;
   email: string;
@@ -6,6 +8,4 @@ export interface IUserEntity {
   password?: string;
   role: "user" | "admin" | "host";
   isBlocked: boolean;
-  createdAt: Date;
-  updatedAt: Date;
 }

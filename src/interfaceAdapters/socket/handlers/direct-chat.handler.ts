@@ -1,10 +1,10 @@
-import { ISocketUserMapRepository } from "entities/repositoryInterfaces/redis/socket-user.repository";
-import { IDirectChatHandler } from "entities/socketHandlersInterfaces/IDirect-chat.handler.interface";
-import { ISendDirectMessageUsecase } from "entities/usecaseInterfaces/chat/direct-message/send-message.usecase.interface";
-import { DIRECT_CHAT_EVENTS } from "shared/constants/constants";
-import { CustomSocket } from "shared/types/types";
 import { Server, Socket } from "socket.io";
 import { inject, injectable } from "tsyringe";
+import { IDirectChatHandler } from "../../../entities/socketHandlersInterfaces/IDirect-chat.handler.interface";
+import { ISendDirectMessageUsecase } from "../../../entities/usecaseInterfaces/chat/direct-message/send-message.usecase.interface";
+import { ISocketUserMapRepository } from "../../../entities/repositoryInterfaces/redis/socket-user.repository";
+import { CustomSocket } from "../../../shared/types/types";
+import { DIRECT_CHAT_EVENTS } from "../../../shared/constants/constants";
 
 @injectable()
 export class DirectChatHandler implements IDirectChatHandler {

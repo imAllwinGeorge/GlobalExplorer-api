@@ -1,5 +1,5 @@
-import { IHostEntity } from "entities/models/host.entity";
 import { Document, model, ObjectId, Schema } from "mongoose";
+import { IHostEntity } from "../../../../entities/models/host.entity";
 
 export interface IHostModel extends IHostEntity, Document {
   _id: ObjectId;

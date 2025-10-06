@@ -1,8 +1,8 @@
 import { HttpStatusCode } from "axios";
-import { IReviewController } from "entities/controllerInterfaces/review-controller.interface";
-import { IWriteReviewUsecase } from "entities/usecaseInterfaces/review/write-review.interface";
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
+import { IReviewController } from "../../entities/controllerInterfaces/review-controller.interface";
+import { IWriteReviewUsecase } from "../../entities/usecaseInterfaces/review/write-review.interface";
 
 @injectable()
 export class ReviewController implements IReviewController {

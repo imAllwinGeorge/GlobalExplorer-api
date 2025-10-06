@@ -1,4 +1,4 @@
-import { ActivityResponseDTO } from "shared/dtos/response.dto";
+import { ActivityResponseDTO } from "../../../shared/dtos/response.dto";
 
 export interface IGetActivityUsecase {
   execute(

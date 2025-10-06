@@ -1,8 +1,8 @@
-export interface IRefreshTokenEntity {
+import { IBaseEntitiy } from "./base.entity";
+
+export interface IRefreshTokenEntity extends IBaseEntitiy {
   userId: string;
   userType: string;
   refreshToken: string;
   expiredAt: Date;
-  updatedAt: Date;
-  createdAt: Date;
 }

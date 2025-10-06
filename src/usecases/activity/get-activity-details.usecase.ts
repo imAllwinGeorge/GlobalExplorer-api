@@ -1,12 +1,13 @@
-import { IActivityRepository } from "entities/repositoryInterfaces/activity/activityRepository.interface";
-import { IBookingRepository } from "entities/repositoryInterfaces/booking/booking-repository.interface";
-import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
-import { IGetActivityDetailsUsecase } from "entities/usecaseInterfaces/activity/get-activity-details.usecase.interface";
 import { inject, injectable } from "tsyringe";
-import { formatInTimeZone, toZonedTime } from "date-fns-tz";
-import { ICacheService } from "entities/serviceInterfaces/cache-service.interface";
-import { ActivityMapper } from "shared/mappers/activity.mapper";
-import { ActivityResponseDTO } from "shared/dtos/response.dto";
+import { formatInTimeZone } from "date-fns-tz";
+import { IGetActivityDetailsUsecase } from "../../entities/usecaseInterfaces/activity/get-activity-details.usecase.interface";
+import { IActivityRepository } from "../../entities/repositoryInterfaces/activity/activityRepository.interface";
+import { IHostRepository } from "../../entities/repositoryInterfaces/users/host-repository.interface";
+import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/booking-repository.interface";
+import { ICacheService } from "../../entities/serviceInterfaces/cache-service.interface";
+import { ActivityMapper } from "../../shared/mappers/activity.mapper";
+import { ActivityResponseDTO } from "../../shared/dtos/response.dto";
+import { getNextDaysInTimezone } from "../../shared/utils/date.helper";
 
 @injectable()
 export class GetActivityDetailsUsecase implements IGetActivityDetailsUsecase {
@@ -60,56 +61,60 @@ export class GetActivityDetailsUsecase implements IGetActivityDetailsUsecase {
     const razorpayAccountId = await this._hostRepository.getRazorpayAccountId(
       activity.userId,
     );
-    const result = [];
+    // const result = [];
 
-    // Initialize today in Asia/Kolkata
-    const today = toZonedTime(new Date(), "Asia/Kolkata");
-    today.setHours(0, 0, 0, 0); // Midnight in Asia/Kolkata
+    // // Initialize today in Asia/Kolkata
+    // const today = toZonedTime(new Date(), "Asia/Kolkata");
+    // today.setHours(0, 0, 0, 0); // Midnight in Asia/Kolkata
 
-    console.log(
-      "Today (Asia/Kolkata):",
-      formatInTimeZone(today, "Asia/Kolkata", "yyyy-MM-dd HH:mm:ss zzz"),
+    // for (let i = 0; i < 10; i++) {
+    //   const targetDate = new Date(today);
+    //   targetDate.setDate(today.getDate() + i);
+    //   targetDate.setHours(0, 0, 0, 0); // Midnight in Asia/Kolkata
+
+    //   const weekday = formatInTimeZone(targetDate, "Asia/Kolkata", "EEEE");
+
+    //   if (
+    //     activity.recurrenceDays
+    //       .map((day) => day.toLowerCase())
+    //       .includes(weekday.toLowerCase())
+    //   ) {
+    //     const bookings =
+    //       await this._bookingRepository.getTotalParticipantsForDate(
+    //         activity._id,
+    //         targetDate,
+    //       );
+
+    //     const availableSeats = activity.maxCapacity - bookings;
+    //     result.push({
+    //       date: formatInTimeZone(targetDate, "Asia/Kolkata", "yyyy-MM-dd"),
+    //       availableSeats: Math.max(0, availableSeats),
+    //     });
+    //   }
+    // }
+
+    const dates = getNextDaysInTimezone(
+      10,
+      "Asia/Kolkata",
+      activity.recurrenceDays,
     );
 
-    for (let i = 0; i < 10; i++) {
-      const targetDate = new Date(today);
-      targetDate.setDate(today.getDate() + i);
-      targetDate.setHours(0, 0, 0, 0); // Midnight in Asia/Kolkata
-
-      const weekday = formatInTimeZone(targetDate, "Asia/Kolkata", "EEEE");
-
-      console.log(
-        "Target date (Asia/Kolkata):",
-        formatInTimeZone(targetDate, "Asia/Kolkata", "yyyy-MM-dd HH:mm:ss zzz"),
-        "Weekday:",
-        weekday,
-      );
-
-      if (
-        activity.recurrenceDays
-          .map((day) => day.toLowerCase())
-          .includes(weekday.toLowerCase())
-      ) {
+    const result = await Promise.all(
+      dates.map(async (targetDate) => {
         const bookings =
           await this._bookingRepository.getTotalParticipantsForDate(
             activity._id,
             targetDate,
           );
 
-        console.log(
-          "Bookings for",
-          formatInTimeZone(targetDate, "Asia/Kolkata", "yyyy-MM-dd"),
-          ":",
-          bookings,
-        );
-
         const availableSeats = activity.maxCapacity - bookings;
-        result.push({
+
+        return {
           date: formatInTimeZone(targetDate, "Asia/Kolkata", "yyyy-MM-dd"),
           availableSeats: Math.max(0, availableSeats),
-        });
-      }
-    }
+        };
+      }),
+    );
 
     await this._cacheService.set(
       cacheKey,

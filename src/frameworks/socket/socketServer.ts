@@ -1,15 +1,15 @@
-import { IJwtservice } from "entities/serviceInterfaces/jwt-services.interface";
-import { ISocketServices } from "entities/serviceInterfaces/socket.service";
 import { Server as HttpServer } from "http";
-import { config } from "shared/config";
 import { Server, Socket } from "socket.io";
 import { inject, injectable } from "tsyringe";
 import cookie from "cookie";
-import { ISocketUserMapRepository } from "entities/repositoryInterfaces/redis/socket-user.repository";
-import { DirectChatEvents } from "interfaceAdapters/socket/events/direct-chat.events";
-import { CustomSocket } from "shared/types/types";
-import { NotificationEvent } from "interfaceAdapters/socket/events/notificaion.event";
-import { SignallingEvents } from "interfaceAdapters/socket/events/Signalling.events";
+import { ISocketServices } from "../../entities/serviceInterfaces/socket.service";
+import { IJwtservice } from "../../entities/serviceInterfaces/jwt-services.interface";
+import { ISocketUserMapRepository } from "../../entities/repositoryInterfaces/redis/socket-user.repository";
+import { config } from "../../shared/config";
+import { CustomSocket } from "../../shared/types/types";
+import { DirectChatEvents } from "../../interfaceAdapters/socket/events/direct-chat.events";
+import { NotificationEvent } from "../../interfaceAdapters/socket/events/notificaion.event";
+import { SignallingEvents } from "../../interfaceAdapters/socket/events/Signalling.events";
 
 @injectable()
 export class SocketServer {

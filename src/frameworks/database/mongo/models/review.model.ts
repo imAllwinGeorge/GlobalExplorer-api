@@ -1,5 +1,5 @@
-import { IReviewEntity } from "entities/models/review.entity";
 import { Document, model, ObjectId, Schema } from "mongoose";
+import { IReviewEntity } from "../../../../entities/models/review.entity";
 
 export interface IReviewModel extends IReviewEntity, Document {
   _id: ObjectId;

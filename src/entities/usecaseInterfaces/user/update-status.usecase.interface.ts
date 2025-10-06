@@ -1,4 +1,7 @@
-import { HostResponseDTO, UserResponseDTO } from "shared/dtos/response.dto";
+import {
+  HostResponseDTO,
+  UserResponseDTO,
+} from "../../../shared/dtos/response.dto";
 
 export interface IUpdateStatusUsecase {
   execute(

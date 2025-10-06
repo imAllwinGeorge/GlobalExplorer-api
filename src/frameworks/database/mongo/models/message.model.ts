@@ -1,5 +1,5 @@
-import { IMessageEntitiy } from "entities/models/message";
 import { Document, model, ObjectId, Schema, Types } from "mongoose";
+import { IMessageEntitiy } from "../../../../entities/models/message";
 
 export interface IMessageModel extends IMessageEntitiy, Document {
   _id: ObjectId;

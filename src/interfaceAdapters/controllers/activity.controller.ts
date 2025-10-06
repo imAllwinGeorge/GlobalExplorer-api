@@ -1,11 +1,16 @@
-import { IActivityController } from "entities/controllerInterfaces/activity-controller.interface";
-import { IEditActivityUsecase } from "entities/usecaseInterfaces/activity/edit-activity.usecase.interface";
-import { IGetActivityDetailsUsecase } from "entities/usecaseInterfaces/activity/get-activity-details.usecase.interface";
-import { IGetActivityUsecase } from "entities/usecaseInterfaces/activity/get-activity.usecase.interface";
-import { IGetFilteredAcitivityUsecase } from "entities/usecaseInterfaces/activity/get-filtered-activity.usecase.interface";
-import { Request, Response } from "express";
-import { HttpStatusCode } from "shared/constants/constants";
 import { inject, injectable } from "tsyringe";
+import { IActivityController } from "../../entities/controllerInterfaces/activity-controller.interface";
+import { IEditActivityUsecase } from "../../entities/usecaseInterfaces/activity/edit-activity.usecase.interface";
+import { IGetActivityUsecase } from "../../entities/usecaseInterfaces/activity/get-activity.usecase.interface";
+import { IGetActivityDetailsUsecase } from "../../entities/usecaseInterfaces/activity/get-activity-details.usecase.interface";
+import { IGetFilteredAcitivityUsecase } from "../../entities/usecaseInterfaces/activity/get-filtered-activity.usecase.interface";
+import { IGetReviewUsecase } from "../../entities/usecaseInterfaces/review/get-review.interface";
+import { Request, Response } from "express";
+import { HttpStatusCode } from "../../shared/constants/constants";
+import {
+  calculateTotalPages,
+  getPaginationParams,
+} from "../../shared/utils/pagination.helper";
 
 @injectable()
 export class ActivityController implements IActivityController {
@@ -21,6 +26,9 @@ export class ActivityController implements IActivityController {
 
     @inject("IGetFilteredActivityUsecase")
     private _getFilteredActivityUsecase: IGetFilteredAcitivityUsecase,
+
+    @inject("IGetReviewUsecase")
+    private _getReviewUsecase: IGetReviewUsecase,
   ) {}
   async addActivity(req: Request, res: Response): Promise<void> {
     try {
@@ -51,26 +59,9 @@ export class ActivityController implements IActivityController {
         reportingTime,
         location,
       } = req.body;
-      console.log(
-        activityName,
-        itenary,
-        maxCapacity,
-        categoryId,
-        pricePerHead,
-        userId,
-        street,
-        city,
-        district,
-        state,
-        postalCode,
-        country,
-        recurrenceDays,
-        reportingPlace,
-        reportingTime,
-        location,
-      );
-      console.log(id);
+
       let existingImage = req.body.existingImage;
+
       if (typeof existingImage === "string") {
         try {
           existingImage = JSON.parse(existingImage); // will now be a real array
@@ -87,6 +78,7 @@ export class ActivityController implements IActivityController {
 
       const parsedLocation = JSON.parse(location); // [75.1, 10.2]
       const paresedRecurrenceDays = JSON.parse(recurrenceDays);
+
       const activity = await this._editActivityUsecase.execute(id, {
         activityName,
         itenary,
@@ -106,6 +98,7 @@ export class ActivityController implements IActivityController {
         location: parsedLocation,
         images,
       });
+
       res.status(HttpStatusCode.OK).json({ activity });
     } catch (error) {
       console.log(error);
@@ -127,15 +120,16 @@ export class ActivityController implements IActivityController {
     try {
       // const data = {};
       const { data } = req.body || {};
-      const page = parseInt(req.query.page as string) || 1;
-      const limit = parseInt(req.query.limit as string) || 10;
-      const skip = (page - 1) * limit;
+      // const page = parseInt(req.query.page as string) || 1;
+      // const limit = parseInt(req.query.limit as string) || 10;
+      // const skip = (page - 1) * limit;
+      const { limit, skip } = getPaginationParams(req);
       const { items, total } = await this._getActivityUsecase.execute(
         limit,
         skip,
         data,
       );
-      const totalPages = Math.ceil(total / limit);
+      const totalPages = calculateTotalPages(total, limit);
       res.status(HttpStatusCode.OK).json({ activities: items, totalPages });
     } catch (error) {
       console.log(error);
@@ -155,8 +149,14 @@ export class ActivityController implements IActivityController {
         return;
       }
       const result = await this._getActivityDetailsUsecase.execute(id);
+      const reviews = await this._getReviewUsecase.execute(id);
       console.log("actvity details     ", result);
-      res.status(HttpStatusCode.OK).json(result);
+      res.status(HttpStatusCode.OK).json({
+        activity: result.activity,
+        razorpayAccountId: result.razorpayAccountId,
+        availability: result.availability,
+        reviews,
+      });
     } catch (error) {
       console.log(error);
       res
@@ -167,8 +167,10 @@ export class ActivityController implements IActivityController {
 
   async getFilteredActivity(req: Request, res: Response): Promise<void> {
     try {
-      const page = parseInt(req.query.page as string) || 1;
-      const limit = parseInt(req.query.limit as string) || 10;
+      // const page = parseInt(req.query.page as string) || 1;
+      // const limit = parseInt(req.query.limit as string) || 10;
+
+      const { limit, skip } = getPaginationParams(req);
 
       const lat = parseFloat(req.query.lat as string); // ❗ Prefer parseFloat for coordinates
       const lng = parseFloat(req.query.lng as string); // ❗ Same here
@@ -179,7 +181,7 @@ export class ActivityController implements IActivityController {
 
       const { search, category } = req.query;
 
-      const skip = (page - 1) * limit;
+      // const skip = (page - 1) * limit;
 
       const filter = {
         search: search ? String(search) : undefined,

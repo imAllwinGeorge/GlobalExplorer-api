@@ -1,6 +1,6 @@
-import { ISocketUserMapRepository } from "entities/repositoryInterfaces/redis/socket-user.repository";
-import { redisClient } from "frameworks/cache/redis.connect";
 import { injectable } from "tsyringe";
+import { ISocketUserMapRepository } from "../../entities/repositoryInterfaces/redis/socket-user.repository";
+import { redisClient } from "../../frameworks/cache/redis.connect";
 
 @injectable()
 export class RedisSocketUserRepository implements ISocketUserMapRepository {

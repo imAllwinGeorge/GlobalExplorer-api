@@ -1,5 +1,5 @@
-import { ICategoryModel } from "frameworks/database/mongo/models/category.model";
+import { CategoryResponseDTO } from "../../../shared/dtos/response.dto";
 
 export interface IGetCategoryUsecase {
-  execute(filter: object): Promise<ICategoryModel>;
+  execute(filter: object): Promise<CategoryResponseDTO>;
 }

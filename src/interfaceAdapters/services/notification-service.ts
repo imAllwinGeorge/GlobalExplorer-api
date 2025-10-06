@@ -1,7 +1,7 @@
-import { ISocketUserMapRepository } from "entities/repositoryInterfaces/redis/socket-user.repository";
-import { INotificationService } from "entities/serviceInterfaces/notification-service.interface";
-import { ISocketServices } from "entities/serviceInterfaces/socket.service";
 import { inject, injectable } from "tsyringe";
+import { INotificationService } from "../../entities/serviceInterfaces/notification-service.interface";
+import { ISocketUserMapRepository } from "../../entities/repositoryInterfaces/redis/socket-user.repository";
+import { ISocketServices } from "../../entities/serviceInterfaces/socket.service";
 
 @injectable()
 export class NotificationService implements INotificationService {

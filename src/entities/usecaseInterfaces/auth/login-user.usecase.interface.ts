@@ -3,7 +3,7 @@ import {
   AdminResponseDTO,
   HostResponseDTO,
   UserResponseDTO,
-} from "shared/dtos/response.dto";
+} from "../../../shared/dtos/response.dto";
 
 export interface ILoginUser {
   execute(

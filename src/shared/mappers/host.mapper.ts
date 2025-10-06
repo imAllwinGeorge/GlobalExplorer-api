@@ -1,7 +1,7 @@
-import { IHostModel } from "frameworks/database/mongo/models/host.model";
-import { HostSignupDTO } from "shared/dtos/Auth.dto";
-import { HostResponseDTO } from "shared/dtos/response.dto";
 import { injectable } from "tsyringe";
+import { HostSignupDTO } from "../dtos/Auth.dto";
+import { IHostModel } from "../../frameworks/database/mongo/models/host.model";
+import { HostResponseDTO } from "../dtos/response.dto";
 
 @injectable()
 export class HostMapper {

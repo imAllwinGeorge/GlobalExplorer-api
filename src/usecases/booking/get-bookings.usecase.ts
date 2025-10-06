@@ -1,7 +1,9 @@
-import { IBookingRepository } from "entities/repositoryInterfaces/booking/booking-repository.interface";
-import { ICacheService } from "entities/serviceInterfaces/cache-service.interface";
-import { IGetBookedActivityUsecase } from "entities/usecaseInterfaces/booking/get-bookings.usecase.interface";
 import { inject, injectable } from "tsyringe";
+import { IGetBookedActivityUsecase } from "../../entities/usecaseInterfaces/booking/get-bookings.usecase.interface";
+import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/booking-repository.interface";
+import { ICacheService } from "../../entities/serviceInterfaces/cache-service.interface";
+import { BookingMapper } from "../../shared/mappers/booking.mapper";
+import { IBookingModal } from "../../frameworks/database/mongo/models/booking.model";
 
 @injectable()
 export class GetBookedActivityUsecase implements IGetBookedActivityUsecase {
@@ -11,6 +13,9 @@ export class GetBookedActivityUsecase implements IGetBookedActivityUsecase {
 
     @inject("ICacheService")
     private _cacheService: ICacheService,
+
+    @inject(BookingMapper)
+    private _bookingMapper: BookingMapper,
   ) {}
 
   async execute(
@@ -28,6 +33,10 @@ export class GetBookedActivityUsecase implements IGetBookedActivityUsecase {
 
     await this._cacheService.set(cachekey, result, 60);
 
-    return result;
+    const mappedBooking = this._bookingMapper.toDTOs(
+      result.items as IBookingModal[],
+    );
+
+    return { items: mappedBooking, total: result.total };
   }
 }

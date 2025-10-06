@@ -1,10 +1,10 @@
-import { accountNumberSchema } from "shared/validations/accountNumber.validation";
-import { emailValidationSchema } from "shared/validations/email.validation";
-import { ifscSchema } from "shared/validations/ifsc.validation";
-import { nameSchema } from "shared/validations/name.validation";
-import { passwordSchema } from "shared/validations/password.validation";
-import { phoneNumberSchema } from "shared/validations/phone.validation";
 import { z } from "zod";
+import { nameSchema } from "../../../../shared/validations/name.validation";
+import { emailValidationSchema } from "../../../../shared/validations/email.validation";
+import { phoneNumberSchema } from "../../../../shared/validations/phone.validation";
+import { passwordSchema } from "../../../../shared/validations/password.validation";
+import { accountNumberSchema } from "../../../../shared/validations/accountNumber.validation";
+import { ifscSchema } from "../../../../shared/validations/ifsc.validation";
 
 export const hostSchema = z.object({
   firstName: nameSchema,

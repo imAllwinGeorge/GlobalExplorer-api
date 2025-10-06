@@ -1,6 +1,6 @@
-import { IpaymentService } from "entities/serviceInterfaces/razorpay-service.interface";
 import axios from "axios";
-import { config } from "shared/config";
+import { IpaymentService } from "../../entities/serviceInterfaces/razorpay-service.interface";
+import { config } from "../../shared/config";
 
 interface RazorpayTransferItem {
   id: string;

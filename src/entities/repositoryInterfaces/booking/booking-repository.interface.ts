@@ -1,4 +1,4 @@
-import { IBookingModal } from "frameworks/database/mongo/models/booking.model";
+import { IBookingModal } from "../../../frameworks/database/mongo/models/booking.model";
 import { IBaseRepository } from "../IBaseRepository.interface";
 import { ObjectId } from "mongoose";
 

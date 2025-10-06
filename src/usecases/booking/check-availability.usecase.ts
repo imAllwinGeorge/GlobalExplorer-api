@@ -1,8 +1,8 @@
-import { IActivityRepository } from "entities/repositoryInterfaces/activity/activityRepository.interface";
-import { IBookingRepository } from "entities/repositoryInterfaces/booking/booking-repository.interface";
-import { ICheckBookingAvailabiltyUsecase } from "entities/usecaseInterfaces/booking/check-availabilty.usecase.interface";
-import { BookingDTO } from "shared/dtos/Auth.dto";
 import { inject, injectable } from "tsyringe";
+import { ICheckBookingAvailabiltyUsecase } from "../../entities/usecaseInterfaces/booking/check-availabilty.usecase.interface";
+import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/booking-repository.interface";
+import { IActivityRepository } from "../../entities/repositoryInterfaces/activity/activityRepository.interface";
+import { BookingDTO } from "../../shared/dtos/Auth.dto";
 
 @injectable()
 export class CheckBookingAvailabilityUsecase
@@ -22,6 +22,7 @@ export class CheckBookingAvailabilityUsecase
       date: data.date,
       isCancelled: false,
     });
+
     const totalBookingCount = bookings.reduce(
       (acc, curr) => (acc += curr.participantCount),
       0,
@@ -30,8 +31,11 @@ export class CheckBookingAvailabilityUsecase
     const activity = await this._activityRepository.findOne({
       _id: data.activityId,
     });
+
     if (!activity) throw new Error("Activity Not Fount");
+
     const availableCount = activity.maxCapacity - totalBookingCount;
+
     if (availableCount < data.participantCount)
       throw new Error(
         "Not enought seats are availabe, please reduce participant count. or change the date!",

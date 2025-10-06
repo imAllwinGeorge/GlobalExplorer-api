@@ -1,5 +1,5 @@
-import { IBlogEntity } from "entities/models/blog.entity";
 import { Document, model, ObjectId, Schema } from "mongoose";
+import { IBlogEntity } from "../../../../entities/models/blog.entity";
 
 export interface IBlogModel extends IBlogEntity, Document {
   _id: ObjectId;

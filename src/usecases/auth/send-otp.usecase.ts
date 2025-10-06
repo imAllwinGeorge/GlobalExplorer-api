@@ -21,15 +21,17 @@ export class SendOtpUsecase implements ISendOtpUsecase {
       email,
       role,
     );
-    console.log(isEmailExisting);
+
     if (isEmailExisting) throw new Error("Email already exist");
 
     const otp = this._otpService.generateOtp();
+
     this._emailServices.sendOtp(
       email,
       "Verify your email",
       `email verification otp: ${otp}`,
     );
+
     return otp;
   }
 }

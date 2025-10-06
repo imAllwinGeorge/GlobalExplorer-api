@@ -1,9 +1,9 @@
 import { HttpStatusCode } from "axios";
-import { IDashboardController } from "entities/controllerInterfaces/dashboard-controller.interface";
-import { IAdminDashboardUsecase } from "entities/usecaseInterfaces/dashboard/admin-dashboard.interface";
-import { IHostDashboardUsecase } from "entities/usecaseInterfaces/dashboard/host-dashboard.interface";
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
+import { IDashboardController } from "../../entities/controllerInterfaces/dashboard-controller.interface";
+import { IAdminDashboardUsecase } from "../../entities/usecaseInterfaces/dashboard/admin-dashboard.interface";
+import { IHostDashboardUsecase } from "../../entities/usecaseInterfaces/dashboard/host-dashboard.interface";
 
 @injectable()
 export class DashBoardController implements IDashboardController {
@@ -18,6 +18,7 @@ export class DashBoardController implements IDashboardController {
   async adminDashboardController(req: Request, res: Response): Promise<void> {
     try {
       const result = await this._adminDashboardUsecase.execute();
+
       res.status(HttpStatusCode.Ok).json(result);
     } catch (error) {
       console.log(error);
@@ -25,6 +26,7 @@ export class DashBoardController implements IDashboardController {
         res.status(HttpStatusCode.BadRequest).json({ message: error.message });
         return;
       }
+
       res
         .status(HttpStatusCode.InternalServerError)
         .json({ message: "Internal Server Error" });
@@ -34,7 +36,9 @@ export class DashBoardController implements IDashboardController {
   async hostDashboardContrller(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
+
       const result = await this._hostDashboardUsecase.execute(id);
+
       res.status(HttpStatusCode.Ok).json(result);
     } catch (error) {
       console.log(error);
@@ -42,6 +46,7 @@ export class DashBoardController implements IDashboardController {
         res.status(HttpStatusCode.BadRequest).json({ message: error.message });
         return;
       }
+
       res
         .status(HttpStatusCode.InternalServerError)
         .json({ message: "Internal Server Error" });

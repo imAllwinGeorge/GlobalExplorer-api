@@ -10,9 +10,9 @@ import {
   reviewController,
   userController,
 } from "../di/resolver";
-import { verifyToken } from "interfaceAdapters/middleware/auth.middleware";
 import { BaseRoute } from "./base.route";
-import upload from "frameworks/multer/multer";
+import { verifyToken } from "../../interfaceAdapters/middleware/auth.middleware";
+import upload from "../multer/multer";
 
 export class UserRoutes extends BaseRoute {
   constructor() {

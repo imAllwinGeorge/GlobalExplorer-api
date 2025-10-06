@@ -1,10 +1,14 @@
-import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
-import { IUserRepository } from "entities/repositoryInterfaces/users/user-repository.interface";
-import { IGetUserUsecase } from "entities/usecaseInterfaces/user/get-user.usecase.interface";
-import { HostResponseDTO, UserResponseDTO } from "shared/dtos/response.dto";
-import { HostMapper } from "shared/mappers/host.mapper";
-import { UserMapper } from "shared/mappers/user.mapper";
 import { inject, injectable } from "tsyringe";
+import { IGetUserUsecase } from "../../entities/usecaseInterfaces/user/get-user.usecase.interface";
+import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
+import { IHostRepository } from "../../entities/repositoryInterfaces/users/host-repository.interface";
+import { UserMapper } from "../../shared/mappers/user.mapper";
+import { HostMapper } from "../../shared/mappers/host.mapper";
+import {
+  HostResponseDTO,
+  UserResponseDTO,
+} from "../../shared/dtos/response.dto";
+import { ROLE } from "../../shared/constants/constants";
 
 @injectable()
 export class GetUserUsecase implements IGetUserUsecase {
@@ -26,13 +30,18 @@ export class GetUserUsecase implements IGetUserUsecase {
     role: string,
   ): Promise<HostResponseDTO | UserResponseDTO> {
     let user;
-    if (role === "user") {
+
+    if (role === ROLE.USER) {
       user = await this._userRepository.findById({ _id });
+
       if (!user) throw new Error(" User not found!");
+
       return this._userMapper.toDTO(user);
-    } else if (role === "host") {
+    } else if (role === ROLE.HOST) {
       user = await this._hostRepository.findById({ _id });
+
       if (!user) throw new Error("Host not found!");
+
       return this._hostMapper.toDTO(user);
     }
 

@@ -1,5 +1,5 @@
-import { INotificationEntitiy } from "entities/models/notification.entity";
 import { Document, model, ObjectId, Schema } from "mongoose";
+import { INotificationEntitiy } from "../../../../entities/models/notification.entity";
 
 export interface INotificationModel extends INotificationEntitiy, Document {
   _id: ObjectId;

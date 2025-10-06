@@ -1,11 +1,12 @@
 import { HttpStatusCode } from "axios";
-import { IChatController } from "entities/controllerInterfaces/chat-controller.interface";
-import { IGetConversationUsecase } from "entities/usecaseInterfaces/chat/direct-message/get-conversation.usecase.interface";
-import { IGetMessageUsecase } from "entities/usecaseInterfaces/chat/direct-message/get-message.usecase.interface";
-import { IMarkReadMessageUsecase } from "entities/usecaseInterfaces/chat/direct-message/mark-read-message.usecase.interface";
-import { IUserSearchUsecase } from "entities/usecaseInterfaces/chat/direct-message/user-search.usecase.interface";
+
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
+import { IChatController } from "../../entities/controllerInterfaces/chat-controller.interface";
+import { IGetConversationUsecase } from "../../entities/usecaseInterfaces/chat/direct-message/get-conversation.usecase.interface";
+import { IUserSearchUsecase } from "../../entities/usecaseInterfaces/chat/direct-message/user-search.usecase.interface";
+import { IGetMessageUsecase } from "../../entities/usecaseInterfaces/chat/direct-message/get-message.usecase.interface";
+import { IMarkReadMessageUsecase } from "../../entities/usecaseInterfaces/chat/direct-message/mark-read-message.usecase.interface";
 
 @injectable()
 export class ChatController implements IChatController {
@@ -27,12 +28,14 @@ export class ChatController implements IChatController {
       const { id } = req.params;
 
       const conversations = await this._getConversationUsecase.execute(id);
+
       res.status(HttpStatusCode.Ok).json({ conversations });
     } catch (error) {
       if (error instanceof Error) {
         res.status(HttpStatusCode.BadRequest).json({ message: error.message });
         return;
       }
+
       res
         .status(HttpStatusCode.InternalServerError)
         .json({ message: "Internal Server Error" });
@@ -69,6 +72,7 @@ export class ChatController implements IChatController {
         res.status(HttpStatusCode.BadRequest).json({ message: error.message });
         return;
       }
+
       res
         .status(HttpStatusCode.InternalServerError)
         .json({ message: "Internal Server Error." });
@@ -83,6 +87,7 @@ export class ChatController implements IChatController {
         conversationId,
         userId,
       );
+
       res.status(HttpStatusCode.Ok).json({ conversation });
     } catch (error) {
       console.log(error);
@@ -90,6 +95,7 @@ export class ChatController implements IChatController {
         res.status(HttpStatusCode.BadRequest).json({ message: error.message });
         return;
       }
+
       res
         .status(HttpStatusCode.InternalServerError)
         .json({ message: "Internal Server Error" });

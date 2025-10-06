@@ -163,11 +163,12 @@
 
 //..............
 // frameworks/socket/handlers/SignallingHandler.ts
-import { ISocketUserMapRepository } from "entities/repositoryInterfaces/redis/socket-user.repository";
-import { ISignallingHandler } from "entities/socketHandlersInterfaces/ISignalling.handler.interface";
-import { VIDEO_CALL_EVENT } from "shared/constants/constants";
+
 import { Server, Socket } from "socket.io";
 import { inject, injectable } from "tsyringe";
+import { ISignallingHandler } from "../../../entities/socketHandlersInterfaces/ISignalling.handler.interface";
+import { ISocketUserMapRepository } from "../../../entities/repositoryInterfaces/redis/socket-user.repository";
+import { VIDEO_CALL_EVENT } from "../../../shared/constants/constants";
 
 @injectable()
 export class SignallingHandler implements ISignallingHandler {

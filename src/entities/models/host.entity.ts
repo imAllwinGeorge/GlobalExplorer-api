@@ -1,4 +1,6 @@
-export interface IHostEntity {
+import { IBaseEntitiy } from "./base.entity";
+
+export interface IHostEntity extends IBaseEntitiy {
   firstName: string;
   lastName: string;
   email: string;
@@ -21,6 +23,4 @@ export interface IHostEntity {
   isVerified: string;
   reasonForRejection?: string;
   razorpayAccountId?: string;
-  createdAt: Date;
-  updatedAt: Date;
 }

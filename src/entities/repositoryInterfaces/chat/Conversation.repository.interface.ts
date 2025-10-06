@@ -1,4 +1,4 @@
-import { IConversationModel } from "frameworks/database/mongo/models/conversation.model";
+import { IConversationModel } from "../../../frameworks/database/mongo/models/conversation.model";
 import { IBaseRepository } from "../IBaseRepository.interface";
 import { ObjectId } from "mongoose";
 

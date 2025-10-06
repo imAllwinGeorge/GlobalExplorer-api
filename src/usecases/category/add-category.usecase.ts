@@ -1,19 +1,23 @@
-import { ICategoryRepository } from "entities/repositoryInterfaces/category/categoryRepository.interface";
-import { IAddCategoryUsecase } from "entities/usecaseInterfaces/category/add-category.usecase.interface";
-import { ICategoryModel } from "frameworks/database/mongo/models/category.model";
 import { inject, injectable } from "tsyringe";
+import { IAddCategoryUsecase } from "../../entities/usecaseInterfaces/category/add-category.usecase.interface";
+import { ICategoryRepository } from "../../entities/repositoryInterfaces/category/categoryRepository.interface";
+import { CategoryMapper } from "../../shared/mappers/category.mapper";
+import { CategoryResponseDTO } from "../../shared/dtos/response.dto";
 
 @injectable()
 export class AddCategoryUseCase implements IAddCategoryUsecase {
   constructor(
     @inject("ICategoryRepository")
     private _categoryRepository: ICategoryRepository,
+
+    @inject(CategoryMapper)
+    private _categoryMapper: CategoryMapper,
   ) {}
 
   async execute(data: {
     categoryName: string;
     description: string;
-  }): Promise<ICategoryModel> {
+  }): Promise<CategoryResponseDTO> {
     const isExist = await this._categoryRepository.isNameExist(
       "categoryName",
       data.categoryName,
@@ -22,7 +26,9 @@ export class AddCategoryUseCase implements IAddCategoryUsecase {
     if (isExist) {
       throw new Error("Category name already exist!");
     }
+
     const category = await this._categoryRepository.save(data);
-    return category;
+
+    return this._categoryMapper.toDTO(category);
   }
 }

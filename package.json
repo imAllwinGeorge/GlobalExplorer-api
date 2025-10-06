@@ -10,8 +10,8 @@
     "start": "node ./dist/src/server.js",
     "predev": "npm run build",
     "dev": "concurrently \"tsc --watch\" \"nodemon ./dist/server.js\"",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint": "eslint . --ext .ts,.tsx --format stylish",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix --format stylish"
   },
   "author": "",
   "license": "ISC",

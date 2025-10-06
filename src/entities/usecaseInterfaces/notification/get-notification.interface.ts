@@ -1,5 +1,5 @@
-import { INotificationModel } from "frameworks/database/mongo/models/notification.model";
+import { NotificationResponseDTO } from "../../../shared/dtos/response.dto";
 
 export interface IGetNotificationUsecase {
-  execute(userId: string): Promise<INotificationModel[]>;
+  execute(userId: string): Promise<NotificationResponseDTO[]>;
 }

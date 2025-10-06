@@ -1,6 +1,6 @@
-import { IBookingRepository } from "entities/repositoryInterfaces/booking/booking-repository.interface";
-import { ICheckActivityBooking } from "entities/usecaseInterfaces/booking/check.activity-bookings.inteface";
 import { inject, injectable } from "tsyringe";
+import { ICheckActivityBooking } from "../../entities/usecaseInterfaces/booking/check.activity-bookings.inteface";
+import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/booking-repository.interface";
 
 @injectable()
 export class CheckActivityBooking implements ICheckActivityBooking {

@@ -1,5 +1,5 @@
-import { ICategoryEntity } from "entities/models/category.entity";
 import { model, ObjectId, Schema } from "mongoose";
+import { ICategoryEntity } from "../../../../entities/models/category.entity";
 
 export interface ICategoryModel extends ICategoryEntity, Document {
   _id: ObjectId;

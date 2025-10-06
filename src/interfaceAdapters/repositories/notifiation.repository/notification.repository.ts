@@ -1,9 +1,9 @@
+import { INotificationRepository } from "../../../entities/repositoryInterfaces/notification/notificationRepository";
 import {
   INotificationModel,
   NotificationModel,
-} from "frameworks/database/mongo/models/notification.model";
+} from "../../../frameworks/database/mongo/models/notification.model";
 import { BaseRepository } from "../base.repository";
-import { INotificationRepository } from "entities/repositoryInterfaces/notification/notificationRepository";
 import { injectable } from "tsyringe";
 
 @injectable()

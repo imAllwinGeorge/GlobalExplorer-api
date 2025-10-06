@@ -1,9 +1,9 @@
-import { IActivityRepository } from "entities/repositoryInterfaces/activity/activityRepository.interface";
-import { IGetFilteredAcitivityUsecase } from "entities/usecaseInterfaces/activity/get-filtered-activity.usecase.interface";
-import { ActivityResponseDTO } from "shared/dtos/response.dto";
-import { ActivityMapper } from "shared/mappers/activity.mapper";
-import { Filter } from "shared/types/types";
 import { inject, injectable } from "tsyringe";
+import { IGetFilteredAcitivityUsecase } from "../../entities/usecaseInterfaces/activity/get-filtered-activity.usecase.interface";
+import { IActivityRepository } from "../../entities/repositoryInterfaces/activity/activityRepository.interface";
+import { ActivityMapper } from "../../shared/mappers/activity.mapper";
+import { Filter } from "../../shared/types/types";
+import { ActivityResponseDTO } from "../../shared/dtos/response.dto";
 
 @injectable()
 export class GetFilteredActivityUsecase
@@ -22,7 +22,6 @@ export class GetFilteredActivityUsecase
     skip: number,
     filter: Filter,
   ): Promise<{ activities: ActivityResponseDTO[]; totalPages: number }> {
-    console.log("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk", filter);
     const result = await this._activityRepository.FilterActivity(
       limit,
       skip,

@@ -1,5 +1,5 @@
-import { ActivityDTO } from "shared/dtos/Auth.dto";
-import { Filter } from "shared/types/types";
+import { ActivityDTO } from "../../../shared/dtos/Auth.dto";
+import { Filter } from "../../../shared/types/types";
 
 export interface IGetFilteredAcitivityUsecase {
   execute(

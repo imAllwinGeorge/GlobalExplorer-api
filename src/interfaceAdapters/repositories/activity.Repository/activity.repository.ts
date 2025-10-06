@@ -1,12 +1,13 @@
-import { IActivityRepository } from "entities/repositoryInterfaces/activity/activityRepository.interface";
+import { injectable } from "tsyringe";
+import { BaseRepository } from "../base.repository";
+
+import { FilterQuery } from "mongoose";
 import {
   ActivityModel,
   IActivityModel,
-} from "frameworks/database/mongo/models/activity.model";
-import { injectable } from "tsyringe";
-import { BaseRepository } from "../base.repository";
-import { Filter } from "shared/types/types";
-import { FilterQuery } from "mongoose";
+} from "../../../frameworks/database/mongo/models/activity.model";
+import { IActivityRepository } from "../../../entities/repositoryInterfaces/activity/activityRepository.interface";
+import { Filter } from "../../../shared/types/types";
 
 @injectable()
 export class ActivityRepository
@@ -45,7 +46,6 @@ export class ActivityRepository
         $lte: filter.priceRangeMax,
       };
     }
-    console.log("wwwwwwwwwwwwwwwwww   :", query);
     const activities = await this.model.find(query).skip(skip).limit(limit);
     const total = await this.model.countDocuments(query);
 

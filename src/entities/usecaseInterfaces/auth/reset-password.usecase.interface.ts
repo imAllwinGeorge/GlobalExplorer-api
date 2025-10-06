@@ -1,5 +1,8 @@
-import { IAdminModel } from "frameworks/database/mongo/models/admin.model";
-import { HostResponseDTO, UserResponseDTO } from "shared/dtos/response.dto";
+import { IAdminModel } from "../../../frameworks/database/mongo/models/admin.model";
+import {
+  HostResponseDTO,
+  UserResponseDTO,
+} from "../../../shared/dtos/response.dto";
 
 export interface IResetPasswordUseCase {
   execute(

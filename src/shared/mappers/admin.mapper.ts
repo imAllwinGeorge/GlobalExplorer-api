@@ -1,6 +1,6 @@
-import { IAdminModel } from "frameworks/database/mongo/models/admin.model";
-import { AdminResponseDTO } from "shared/dtos/response.dto";
 import { injectable } from "tsyringe";
+import { IAdminModel } from "../../frameworks/database/mongo/models/admin.model";
+import { AdminResponseDTO } from "../dtos/response.dto";
 
 @injectable()
 export class AdminMapper {

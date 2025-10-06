@@ -1,9 +1,9 @@
-import { IBookingRepository } from "entities/repositoryInterfaces/booking/booking-repository.interface";
-import { ICacheService } from "entities/serviceInterfaces/cache-service.interface";
-import { ICreateOrderUsecase } from "entities/usecaseInterfaces/booking/create-order.usecase.interface";
-import { BookingDTO } from "shared/dtos/Auth.dto";
-import { razorpay } from "shared/utils/razorpay";
 import { inject, injectable } from "tsyringe";
+import { razorpay } from "../../shared/utils/razorpay";
+import { ICreateOrderUsecase } from "../../entities/usecaseInterfaces/booking/create-order.usecase.interface";
+import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/booking-repository.interface";
+import { ICacheService } from "../../entities/serviceInterfaces/cache-service.interface";
+import { BookingDTO } from "../../shared/dtos/Auth.dto";
 
 @injectable()
 export class CreateOrderUsecase implements ICreateOrderUsecase {
@@ -16,10 +16,6 @@ export class CreateOrderUsecase implements ICreateOrderUsecase {
   ) {}
 
   async execute(data: BookingDTO): Promise<object> {
-    console.log(
-      "amount     :",
-      data.pricePerParticipant * data.participantCount,
-    );
     const order = await razorpay.orders.create({
       amount: data.pricePerParticipant * data.participantCount * 100,
       currency: "INR",
@@ -28,9 +24,13 @@ export class CreateOrderUsecase implements ICreateOrderUsecase {
         activityId: data.activityId,
       },
     });
+
     data.razporpayOrderId = order.id;
+
     await this._cacheService.delByPattern(`order:*`);
+
     const bookedActivity = await this._bookingRepository.save(data);
+
     return { ...bookedActivity.toObject(), ...order };
   }
 }

@@ -1,7 +1,7 @@
-import { IActivityRepository } from "entities/repositoryInterfaces/activity/activityRepository.interface";
-import { IBookingRepository } from "entities/repositoryInterfaces/booking/booking-repository.interface";
-import { IHostDashboardUsecase } from "entities/usecaseInterfaces/dashboard/host-dashboard.interface";
 import { inject, injectable } from "tsyringe";
+import { IHostDashboardUsecase } from "../../entities/usecaseInterfaces/dashboard/host-dashboard.interface";
+import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/booking-repository.interface";
+import { IActivityRepository } from "../../entities/repositoryInterfaces/activity/activityRepository.interface";
 
 @injectable()
 export class HostDashboardUsecase implements IHostDashboardUsecase {
@@ -23,6 +23,7 @@ export class HostDashboardUsecase implements IHostDashboardUsecase {
       }),
       this._bookingRepository.dashboardData(id),
     ]);
+
     return { activityCount, bookingCount, dashboardData };
   }
 }

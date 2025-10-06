@@ -2,10 +2,10 @@ import "reflect-metadata";
 import "./frameworks/di/container";
 import app from "./frameworks/express/app";
 import { connectDB } from "./lib/db";
-import { connectRedisClient } from "frameworks/cache/redis.connect";
 import { createServer } from "http";
-import { SocketServer } from "frameworks/socket/socketServer";
 import { container } from "tsyringe";
+import { connectRedisClient } from "./frameworks/cache/redis.connect";
+import { SocketServer } from "./frameworks/socket/socketServer";
 
 connectDB();
 connectRedisClient();

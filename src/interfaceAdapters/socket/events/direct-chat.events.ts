@@ -1,7 +1,7 @@
-import { IDirectChatHandler } from "entities/socketHandlersInterfaces/IDirect-chat.handler.interface";
-import { directChantHandler } from "frameworks/di/resolver";
-import { DIRECT_CHAT_EVENTS } from "shared/constants/constants";
 import { Server, Socket } from "socket.io";
+import { IDirectChatHandler } from "../../../entities/socketHandlersInterfaces/IDirect-chat.handler.interface";
+import { directChantHandler } from "../../../frameworks/di/resolver";
+import { DIRECT_CHAT_EVENTS } from "../../../shared/constants/constants";
 
 export class DirectChatEvents {
   private _handler!: IDirectChatHandler;
