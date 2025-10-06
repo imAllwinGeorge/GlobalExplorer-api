@@ -3,9 +3,10 @@ import {
   activityController,
   authController,
   categoryController,
+  dashboardController,
   userController,
 } from "../di/resolver";
-import { verifyToken } from "interfaceAdapters/middleware/auth.middleware";
+import { verifyToken } from "../../interfaceAdapters/middleware/auth.middleware";
 
 export class AdminRoutes {
   public router: Router;
@@ -77,6 +78,14 @@ export class AdminRoutes {
       verifyToken,
       (req: Request, res: Response) => {
         activityController.updateActivity(req, res);
+      },
+    );
+
+    this.router.get(
+      "/dashboard",
+      verifyToken,
+      (req: Request, res: Response) => {
+        dashboardController.adminDashboardController(req, res);
       },
     );
   }

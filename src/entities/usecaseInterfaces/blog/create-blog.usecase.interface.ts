@@ -1,6 +1,6 @@
-import { IBlogModel } from "frameworks/database/mongo/models/blog.model";
-import { BlogDTO } from "shared/dtos/Auth.dto";
+import { BlogDTO } from "../../../shared/dtos/Auth.dto";
+import { BlogResponseDTO } from "../../../shared/dtos/response.dto";
 
 export interface ICreateBlogUsecase {
-  execute(data: BlogDTO): Promise<IBlogModel>;
+  execute(data: BlogDTO): Promise<BlogResponseDTO>;
 }

@@ -1,4 +1,4 @@
-import { IHostModel } from "frameworks/database/mongo/models/host.model";
+import { IHostModel } from "../../../frameworks/database/mongo/models/host.model";
 import { IBaseRepository } from "../IBaseRepository.interface";
 
 // export type IHostRepositoryInterface = IBaseRepositoryInterface<IHostModel>;

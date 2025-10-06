@@ -9,8 +9,9 @@ import { AdminRoutes } from "../routes/admin.route";
 import passport from "passport";
 import "../passport/passport.statergy";
 import path from "path";
-import { UserRoutes } from "frameworks/routes/user.route";
-import { HostRoute } from "frameworks/routes/host.route";
+import { UserRoutes } from "../routes/user.route";
+import { HostRoute } from "../routes/host.route";
+import { config } from "../../shared/config";
 
 dotenv.config();
 
@@ -26,7 +27,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: [config.cors.ALLOWED_ORIGIN!],
     credentials: true,
   }),
 );

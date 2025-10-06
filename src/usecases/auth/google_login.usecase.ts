@@ -3,6 +3,7 @@ import { IGoogleLoginUsecase } from "../../entities/usecaseInterfaces/auth/googl
 import { IUserModel } from "../../frameworks/database/mongo/models/user.model";
 import { GoogleUserDTO } from "../../shared/dtos/Auth.dto";
 import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
+import { ROLE } from "../../shared/constants/constants";
 
 @injectable()
 export class GoogleLoginUsecase implements IGoogleLoginUsecase {
@@ -16,7 +17,7 @@ export class GoogleLoginUsecase implements IGoogleLoginUsecase {
     role: string,
   ): Promise<IUserModel | undefined> {
     let repository;
-    if (role === "user") {
+    if (role === ROLE.USER) {
       repository = this._repository;
     }
 
@@ -25,7 +26,8 @@ export class GoogleLoginUsecase implements IGoogleLoginUsecase {
     if (newUser) {
       return newUser;
     }
-    if (role === "user") {
+
+    if (role === ROLE.USER) {
       user.role = role;
       const savedUser = await repository?.save(user);
       return savedUser;

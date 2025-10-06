@@ -1,8 +1,8 @@
-import { IRefreshTokenRepository } from "entities/repositoryInterfaces/refreshToken/refresh-token.repository.interface";
-import { IJwtservice } from "entities/serviceInterfaces/jwt-services.interface";
-import { IRefreshTokenUsecase } from "entities/usecaseInterfaces/auth/refresh-token.usecase.interface";
 import { JwtPayload } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
+import { IRefreshTokenUsecase } from "../../entities/usecaseInterfaces/auth/refresh-token.usecase.interface";
+import { IRefreshTokenRepository } from "../../entities/repositoryInterfaces/refreshToken/refresh-token.repository.interface";
+import { IJwtservice } from "../../entities/serviceInterfaces/jwt-services.interface";
 
 @injectable()
 export class RefreshTokenUsecase implements IRefreshTokenUsecase {

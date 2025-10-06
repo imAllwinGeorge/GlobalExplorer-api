@@ -1,19 +1,23 @@
-import { ICategoryRepository } from "entities/repositoryInterfaces/category/categoryRepository.interface";
-import { IEditCategoryUsecase } from "entities/usecaseInterfaces/category/edit-category.usecase.interface";
-import { ICategoryModel } from "frameworks/database/mongo/models/category.model";
 import { inject, injectable } from "tsyringe";
+import { IEditCategoryUsecase } from "../../entities/usecaseInterfaces/category/edit-category.usecase.interface";
+import { ICategoryRepository } from "../../entities/repositoryInterfaces/category/categoryRepository.interface";
+import { CategoryMapper } from "../../shared/mappers/category.mapper";
+import { CategoryResponseDTO } from "../../shared/dtos/response.dto";
 
 @injectable()
 export class EditCategoryUsecase implements IEditCategoryUsecase {
   constructor(
     @inject("ICategoryRepository")
     private _categoryRepository: ICategoryRepository,
+
+    @inject(CategoryMapper)
+    private _categoryMapper: CategoryMapper,
   ) {}
 
   async execute(
     _id: string,
     value: { categoryName: string; description: string },
-  ): Promise<ICategoryModel | null> {
+  ): Promise<CategoryResponseDTO | null> {
     const similarCategory = await this._categoryRepository.findExcludingId(
       _id,
       value.categoryName,
@@ -27,11 +31,7 @@ export class EditCategoryUsecase implements IEditCategoryUsecase {
       { _id },
       value,
     );
-    console.log(
-      "sfgnioghiwedgasjkdhgjkasjkdghasdjkgjklasdgjkasdjkfgjksd",
-      category,
-      value,
-    );
-    return category;
+
+    return category ? this._categoryMapper.toDTO(category) : null;
   }
 }

@@ -102,3 +102,17 @@ export interface BookingDTO {
   holdUntilDate: Date;
   paymentStatus?: "pending" | "paid" | "failed" | "refunded";
 }
+
+export interface MessageDTO {
+  senderId: string;
+  receiverId: string;
+  content: string;
+}
+
+export interface ReviewDTO {
+  entityId: string;
+  userId: string;
+  title: string;
+  comment: string;
+  rating: number;
+}

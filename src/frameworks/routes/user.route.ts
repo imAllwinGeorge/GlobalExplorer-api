@@ -5,11 +5,14 @@ import {
   blogController,
   bookingController,
   categoryController,
+  chatController,
+  notificationController,
+  reviewController,
   userController,
 } from "../di/resolver";
-import { verifyToken } from "interfaceAdapters/middleware/auth.middleware";
 import { BaseRoute } from "./base.route";
-import upload from "frameworks/multer/multer";
+import { verifyToken } from "../../interfaceAdapters/middleware/auth.middleware";
+import upload from "../multer/multer";
 
 export class UserRoutes extends BaseRoute {
   constructor() {
@@ -128,6 +131,62 @@ export class UserRoutes extends BaseRoute {
       verifyToken,
       (req: Request, res: Response) => {
         bookingController.cancelBooking(req, res);
+      },
+    );
+
+    this.router.delete(
+      "/blog/delete-blog/:id",
+      verifyToken,
+      (req: Request, res: Response) => {
+        blogController.deleteBlog(req, res);
+      },
+    );
+
+    this.router.get(
+      "/chat/get-conversation/:id",
+      verifyToken,
+      (req: Request, res: Response) => {
+        chatController.getAllConversation(req, res);
+      },
+    );
+
+    this.router.get(
+      "/get-user/:search",
+      // verifyToken,
+      (req: Request, res: Response) => {
+        chatController.userSearch(req, res);
+      },
+    );
+
+    this.router.get(
+      "/get-chat/:conversationId",
+      // verifyToken,
+      (req: Request, res: Response) => {
+        chatController.getMessages(req, res);
+      },
+    );
+
+    this.router.patch(
+      "/mark-read-message/:conversationId/:userId",
+      verifyToken,
+      (req: Request, res: Response) => {
+        chatController.markReadMessage(req, res);
+      },
+    );
+
+    this.router.get(
+      "/get-notification/:userId",
+      // verifyToken,
+      (req: Request, res: Response) => {
+        notificationController.getNotifications(req, res);
+      },
+    );
+
+    this.router.post(
+      "/review/write-review",
+      verifyToken,
+      (req: Request, res: Response) => {
+        reviewController.writeReview(req, res);
       },
     );
   }

@@ -5,4 +5,5 @@ export interface IBlogController {
   getBlogs(req: Request, res: Response): Promise<void>;
   getMyBlogs(req: Request, res: Response): Promise<void>;
   editBlog(req: Request, res: Response): Promise<void>;
+  deleteBlog(req: Request, res: Response): Promise<void>;
 }

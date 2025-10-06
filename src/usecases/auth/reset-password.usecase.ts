@@ -3,11 +3,18 @@ import { IResetPasswordUseCase } from "../../entities/usecaseInterfaces/auth/res
 import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
 import { IJwtservice } from "../../entities/serviceInterfaces/jwt-services.interface";
 import { IBcrypt } from "../../entities/security/bcrypt.interface";
+import { IAdminRepository } from "../../entities/repositoryInterfaces/users/admin-repository.inteface";
+import { IHostRepository } from "../../entities/repositoryInterfaces/users/host-repository.interface";
+import { UserMapper } from "../../shared/mappers/user.mapper";
+import { HostMapper } from "../../shared/mappers/host.mapper";
+import {
+  HostResponseDTO,
+  UserResponseDTO,
+} from "../../shared/dtos/response.dto";
+import { IAdminModel } from "../../frameworks/database/mongo/models/admin.model";
+import { ROLE } from "../../shared/constants/constants";
 import { IUserModel } from "../../frameworks/database/mongo/models/user.model";
-import { IAdminRepository } from "entities/repositoryInterfaces/users/admin-repository.inteface";
-import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
-import { IHostModel } from "frameworks/database/mongo/models/host.model";
-import { IAdminModel } from "frameworks/database/mongo/models/admin.model";
+import { IHostModel } from "../../frameworks/database/mongo/models/host.model";
 
 @injectable()
 export class ResetPasswordUsecase implements IResetPasswordUseCase {
@@ -26,35 +33,56 @@ export class ResetPasswordUsecase implements IResetPasswordUseCase {
 
     @inject("IPasswordBcrypt")
     private _bcryptService: IBcrypt,
+
+    @inject(UserMapper)
+    private _userMapper: UserMapper,
+
+    @inject(HostMapper)
+    private _hostMapper: HostMapper,
   ) {}
   async execute(
     id: string,
     role: string,
     token: string,
     password: string,
-  ): Promise<IUserModel | IHostModel | IAdminModel | null> {
+  ): Promise<UserResponseDTO | HostResponseDTO | IAdminModel | null> {
     let repository;
-    if (role === "user") {
+
+    if (role === ROLE.USER) {
       repository = this._userRepository;
-    } else if (role === "host") {
+    } else if (role === ROLE.HOST) {
       repository = this._hostRepository;
     } else {
       repository = this._adminRepository;
     }
+
     const user = await repository.findOne({ _id: id });
+
     if (!user) {
       throw new Error("invalid user1");
     }
+
     const payload = this._jwtService.verifyToken(token);
-    console.log("1234567890   ", payload);
+
     if (user.email !== payload.email) {
       throw new Error("user validation error");
     }
+
     const hashedPassword = await this._bcryptService.hash(password);
+
     const updatedUser = await repository.findOneAndUpdate(
       { _id: user._id },
       { password: hashedPassword },
     );
+
+    if (updatedUser?.role === "user") {
+      return this._userMapper.toDTO(updatedUser as IUserModel);
+    }
+
+    if (updatedUser?.role === "host") {
+      return this._hostMapper.toDTO(updatedUser as IHostModel);
+    }
+
     return updatedUser;
   }
 }

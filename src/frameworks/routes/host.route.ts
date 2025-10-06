@@ -1,13 +1,15 @@
-import { verifyToken } from "interfaceAdapters/middleware/auth.middleware";
-import { BaseRoute } from "./base.route";
-import { Request, Response } from "express";
+import { verifyToken } from "../../interfaceAdapters/middleware/auth.middleware";
 import {
   activityController,
   bookingController,
   categoryController,
+  chatController,
+  dashboardController,
   hostController,
-} from "frameworks/di/resolver";
-import upload from "frameworks/multer/multer";
+} from "../di/resolver";
+import upload from "../multer/multer";
+import { BaseRoute } from "./base.route";
+import { Request, Response } from "express";
 
 export class HostRoute extends BaseRoute {
   constructor() {
@@ -65,6 +67,30 @@ export class HostRoute extends BaseRoute {
       verifyToken,
       (req: Request, res: Response) => {
         bookingController.getActivityBookings(req, res);
+      },
+    );
+
+    this.router.get(
+      "/dashboard/:id",
+      verifyToken,
+      (req: Request, res: Response) => {
+        dashboardController.hostDashboardContrller(req, res);
+      },
+    );
+
+    this.router.patch(
+      "/mark-read-message/:conversationId/:userId",
+      verifyToken,
+      (req: Request, res: Response) => {
+        chatController.markReadMessage(req, res);
+      },
+    );
+
+    this.router.get(
+      "/chat/get-conversation/:id",
+      verifyToken,
+      (req: Request, res: Response) => {
+        chatController.getAllConversation(req, res);
       },
     );
   }

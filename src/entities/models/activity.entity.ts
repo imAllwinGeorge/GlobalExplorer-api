@@ -1,4 +1,6 @@
-export interface IActivityEntity {
+import { IBaseEntitiy } from "./base.entity";
+
+export interface IActivityEntity extends IBaseEntitiy {
   activityName: string;
   itenary: string;
   maxCapacity: number;
@@ -20,6 +22,4 @@ export interface IActivityEntity {
   reportingPlace: string;
   reportingTime: string;
   isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
 }

@@ -1,5 +1,5 @@
-import { IBookingModal } from "frameworks/database/mongo/models/booking.model";
+import { BookingResponseDTO } from "../../../shared/dtos/response.dto";
 
 export interface ICancelBookingUsecase {
-  execute(id: string, message: string): Promise<IBookingModal>;
+  execute(id: string, message: string): Promise<BookingResponseDTO>;
 }

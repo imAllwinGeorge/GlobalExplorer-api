@@ -1,5 +1,5 @@
-import { IRefreshTokenEntity } from "entities/models/refreshtoken.entity";
 import { model, ObjectId, Schema } from "mongoose";
+import { IRefreshTokenEntity } from "../../../../entities/models/refreshtoken.entity";
 
 export interface IRefreshTokenModel extends IRefreshTokenEntity, Document {
   _id: ObjectId;

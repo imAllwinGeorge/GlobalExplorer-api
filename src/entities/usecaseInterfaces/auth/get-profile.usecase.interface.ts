@@ -1,10 +1,12 @@
-import { IAdminModel } from "frameworks/database/mongo/models/admin.model";
-import { IHostModel } from "frameworks/database/mongo/models/host.model";
-import { IUserModel } from "frameworks/database/mongo/models/user.model";
+import {
+  AdminResponseDTO,
+  HostResponseDTO,
+  UserResponseDTO,
+} from "../../../shared/dtos/response.dto";
 
 export interface IGetProfileUsecase {
   execute(
     id: string,
     role: string,
-  ): Promise<IUserModel | IHostModel | IAdminModel>;
+  ): Promise<UserResponseDTO | HostResponseDTO | AdminResponseDTO>;
 }

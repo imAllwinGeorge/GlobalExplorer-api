@@ -1,5 +1,5 @@
-import { ICategoryModel } from "frameworks/database/mongo/models/category.model";
+import { CategoryResponseDTO } from "../../../shared/dtos/response.dto";
 
 export interface IUpdateCategoryUsecase {
-  execute(_id: string, value: object): Promise<ICategoryModel>;
+  execute(_id: string, value: object): Promise<CategoryResponseDTO>;
 }

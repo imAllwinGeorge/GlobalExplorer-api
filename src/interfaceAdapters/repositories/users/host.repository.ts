@@ -1,10 +1,10 @@
-import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
+import { injectable } from "tsyringe";
+import { BaseRepository } from "../base.repository";
 import {
   HostModel,
   IHostModel,
-} from "frameworks/database/mongo/models/host.model";
-import { injectable } from "tsyringe";
-import { BaseRepository } from "../base.repository";
+} from "../../../frameworks/database/mongo/models/host.model";
+import { IHostRepository } from "../../../entities/repositoryInterfaces/users/host-repository.interface";
 
 @injectable()
 export class HostRepository

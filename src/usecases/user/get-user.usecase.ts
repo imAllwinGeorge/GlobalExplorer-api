@@ -1,9 +1,14 @@
-import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
-import { IUserRepository } from "entities/repositoryInterfaces/users/user-repository.interface";
-import { IGetUserUsecase } from "entities/usecaseInterfaces/user/get-user.usecase.interface";
-import { IHostModel } from "frameworks/database/mongo/models/host.model";
-import { IUserModel } from "frameworks/database/mongo/models/user.model";
 import { inject, injectable } from "tsyringe";
+import { IGetUserUsecase } from "../../entities/usecaseInterfaces/user/get-user.usecase.interface";
+import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
+import { IHostRepository } from "../../entities/repositoryInterfaces/users/host-repository.interface";
+import { UserMapper } from "../../shared/mappers/user.mapper";
+import { HostMapper } from "../../shared/mappers/host.mapper";
+import {
+  HostResponseDTO,
+  UserResponseDTO,
+} from "../../shared/dtos/response.dto";
+import { ROLE } from "../../shared/constants/constants";
 
 @injectable()
 export class GetUserUsecase implements IGetUserUsecase {
@@ -13,19 +18,33 @@ export class GetUserUsecase implements IGetUserUsecase {
 
     @inject("IHostRepository")
     private _hostRepository: IHostRepository,
+
+    @inject(UserMapper)
+    private _userMapper: UserMapper,
+
+    @inject(HostMapper)
+    private _hostMapper: HostMapper,
   ) {}
-  async execute(_id: string, role: string): Promise<IHostModel | IUserModel> {
-    let repository;
-    if (role === "user") {
-      repository = this._userRepository;
-    } else if (role === "host") {
-      repository = this._hostRepository;
-    } else {
-      throw new Error("Invalid request");
+  async execute(
+    _id: string,
+    role: string,
+  ): Promise<HostResponseDTO | UserResponseDTO> {
+    let user;
+
+    if (role === ROLE.USER) {
+      user = await this._userRepository.findById({ _id });
+
+      if (!user) throw new Error(" User not found!");
+
+      return this._userMapper.toDTO(user);
+    } else if (role === ROLE.HOST) {
+      user = await this._hostRepository.findById({ _id });
+
+      if (!user) throw new Error("Host not found!");
+
+      return this._hostMapper.toDTO(user);
     }
 
-    const user = await repository.findById({ _id });
-    if (!user) throw new Error("user not found");
-    return user;
+    throw new Error("Invalid request");
   }
 }

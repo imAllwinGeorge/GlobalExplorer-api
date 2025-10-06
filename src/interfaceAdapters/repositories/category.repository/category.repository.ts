@@ -1,10 +1,10 @@
-import { BaseRepository } from "../base.repository";
-import { injectable } from "tsyringe";
-import { ICategoryRepository } from "entities/repositoryInterfaces/category/categoryRepository.interface";
+import { ICategoryRepository } from "../../../entities/repositoryInterfaces/category/categoryRepository.interface";
 import {
   CategoryModel,
   ICategoryModel,
-} from "frameworks/database/mongo/models/category.model";
+} from "../../../frameworks/database/mongo/models/category.model";
+import { BaseRepository } from "../base.repository";
+import { injectable } from "tsyringe";
 
 @injectable()
 export class CategoryRepository

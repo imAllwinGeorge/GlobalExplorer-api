@@ -1,5 +1,5 @@
-import { IBookingEntitiy } from "entities/models/booking.entity";
 import { Document, model, ObjectId, Schema } from "mongoose";
+import { IBookingEntitiy } from "../../../../entities/models/booking.entity";
 
 export interface IBookingModal extends IBookingEntitiy, Document {
   _id: ObjectId;

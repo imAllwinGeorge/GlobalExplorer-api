@@ -1,5 +1,5 @@
-import { IBookingModal } from "frameworks/database/mongo/models/booking.model";
+import { BookingResponseDTO } from "../../../shared/dtos/response.dto";
 
 export interface IBookActivityUsecase {
-  execute(data: object, id: string): Promise<IBookingModal>;
+  execute(data: object, id: string): Promise<BookingResponseDTO>;
 }

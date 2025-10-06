@@ -15,11 +15,19 @@ import { IGoogleLoginUsecase } from "../../../entities/usecaseInterfaces/auth/go
 import jwt from "jsonwebtoken";
 import { hostSchema } from "./validations/host-signup.validation.schema";
 import { z, ZodError } from "zod";
-import { HttpStatusCode } from "shared/constants/statusCodes";
-import { clearAuthCookies, setAuthCookies } from "shared/utils/cookie.helper";
-import { IRefreshTokenUsecase } from "entities/usecaseInterfaces/auth/refresh-token.usecase.interface";
-import { IRevokeRefreshTokenUsecase } from "entities/usecaseInterfaces/auth/revok-refresh-token.usecase.interface";
-import { IGetProfileUsecase } from "entities/usecaseInterfaces/auth/get-profile.usecase.interface";
+
+import dotenv from "dotenv";
+import { IRefreshTokenUsecase } from "../../../entities/usecaseInterfaces/auth/refresh-token.usecase.interface";
+import { IRevokeRefreshTokenUsecase } from "../../../entities/usecaseInterfaces/auth/revok-refresh-token.usecase.interface";
+import { IGetProfileUsecase } from "../../../entities/usecaseInterfaces/auth/get-profile.usecase.interface";
+import { HttpStatusCode, ROLE } from "../../../shared/constants/constants";
+import {
+  clearAuthCookies,
+  setAuthCookies,
+} from "../../../shared/utils/cookie.helper";
+dotenv.config();
+
+const frontEndUrl = process.env.FRONT_END_URL;
 const { JsonWebTokenError } = jwt;
 
 type UserData = z.infer<typeof userSchema>;
@@ -63,15 +71,13 @@ export class AuthController implements IAuthController {
 
   async send_otp(req: Request, res: Response): Promise<void> {
     try {
-      console.log(req);
       const { role } = req.body;
-      console.log(role);
-      console.log(req.files);
-      console.log("fsowiegiowg9839238497423894283", role);
+
       let userData: UserData | HostData | null = null;
-      if (role === "user") {
+
+      if (role === ROLE.USER) {
         userData = userSchema.parse(req.body);
-      } else if (role === "host") {
+      } else if (role === ROLE.HOST) {
         const parsedData = hostSchema.parse(req.body);
         // Create a mutable copy
         userData = { ...parsedData };
@@ -131,9 +137,7 @@ export class AuthController implements IAuthController {
       res.status(HttpStatusCode.OK).json({ message: "otp sented successful" });
       return;
     } catch (error) {
-      console.log("check this error: ", error);
       if (error instanceof Error && error.message === "Email already exist") {
-        console.log("qwertyu");
         res
           .status(HttpStatusCode.BAD_REQUEST)
           .json({ message: "Email already exists" });
@@ -220,7 +224,7 @@ export class AuthController implements IAuthController {
   async login(req: Request, res: Response): Promise<void> {
     try {
       const { data } = req.body;
-      console.log("login data: ", data);
+
       const validateData = loginShcema.parse(data);
       if (!validateData) {
         res
@@ -272,7 +276,6 @@ export class AuthController implements IAuthController {
   async forgotPassword(req: Request, res: Response): Promise<void> {
     try {
       const { email, role } = req.body;
-      console.log(email);
       const validateEmail = forgotPasswordSchema.parse({ email });
       if (!validateEmail) {
         res
@@ -329,11 +332,11 @@ export class AuthController implements IAuthController {
       let token;
       if (req.cookies.userAccessToken) {
         token = req.cookies.userAccessToken;
-        role = "user";
+        role = ROLE.USER;
         console.log("userAccessToken encountered");
       } else if (req.cookies.adminAccessToken) {
         token = req.cookies.adminAccessToken;
-        role = "admin";
+        role = ROLE.ADMIN;
         console.log("adminAccessToken encountered");
       } else {
         throw new Error("session expired");
@@ -358,11 +361,11 @@ export class AuthController implements IAuthController {
     try {
       const { role } = req.body;
       let token;
-      if (role === "user") {
+      if (role === ROLE.USER) {
         token = req.cookies.userRefreshToken;
-      } else if (role === "host") {
+      } else if (role === ROLE.HOST) {
         token = req.cookies.hostRefreshToken;
-      } else if (role === "admin") {
+      } else if (role === ROLE.ADMIN) {
         token = req.cookies.adminRefreshToken;
       }
 
@@ -431,7 +434,7 @@ export class AuthController implements IAuthController {
         accessTokenName,
         refreshTokenName,
       );
-      res.redirect(`http://localhost:5173/login?user=${userData}`);
+      res.redirect(`${frontEndUrl}/login?user=${userData}`);
     } catch (error) {
       console.log(error);
       res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
@@ -442,14 +445,13 @@ export class AuthController implements IAuthController {
     try {
       const { role } = req.params;
       let refreshToken;
-      if (role === "admin") {
+      if (role === ROLE.ADMIN) {
         refreshToken = req.cookies.adminRefreshToken;
-      } else if (role === "host") {
+      } else if (role === ROLE.HOST) {
         refreshToken = req.cookies.hostRefreshToken;
-      } else if (role === "user") {
+      } else if (role === ROLE.USER) {
         refreshToken = req.cookies.userRefreshToken;
       }
-      console.log("logout role", role);
       const accessTokenName = `${role}AccessToken`;
       const refreshTokenName = `${role}RefreshToken`;
       await this._revokeRefreshTokenUsecase.execute(refreshToken);

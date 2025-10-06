@@ -1,10 +1,12 @@
-import { IHostModel } from "frameworks/database/mongo/models/host.model";
-import { IUserModel } from "../../../frameworks/database/mongo/models/user.model";
+import {
+  HostResponseDTO,
+  UserResponseDTO,
+} from "../../../shared/dtos/response.dto";
 
 export interface IUpdateStatusUsecase {
   execute(
     id: string,
     value: object,
     role: string,
-  ): Promise<IUserModel | IHostModel>;
+  ): Promise<UserResponseDTO | HostResponseDTO>;
 }

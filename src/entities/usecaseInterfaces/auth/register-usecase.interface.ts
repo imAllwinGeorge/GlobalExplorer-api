@@ -1,4 +1,4 @@
-import { IHostModel } from "frameworks/database/mongo/models/host.model";
+import { IHostModel } from "../../../frameworks/database/mongo/models/host.model";
 import { IUserModel } from "../../../frameworks/database/mongo/models/user.model";
 import { HostSignupDTO, SignupDTO } from "../../../shared/dtos/Auth.dto";
 

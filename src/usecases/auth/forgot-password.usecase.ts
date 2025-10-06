@@ -3,8 +3,12 @@ import { IForgotPasswordUsecase } from "../../entities/usecaseInterfaces/auth/fo
 import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
 import { IEmailSevices } from "../../entities/serviceInterfaces/email-services.interface";
 import { IJwtservice } from "../../entities/serviceInterfaces/jwt-services.interface";
-import { IHostRepository } from "entities/repositoryInterfaces/users/host-repository.interface";
-import { IAdminRepository } from "entities/repositoryInterfaces/users/admin-repository.inteface";
+import dotenv from "dotenv";
+import { IHostRepository } from "../../entities/repositoryInterfaces/users/host-repository.interface";
+import { IAdminRepository } from "../../entities/repositoryInterfaces/users/admin-repository.inteface";
+dotenv.config();
+
+const frontEndUrl = process.env.FRONT_END_URL;
 
 @injectable()
 export class ForgotPasswordUsecase implements IForgotPasswordUsecase {
@@ -33,15 +37,21 @@ export class ForgotPasswordUsecase implements IForgotPasswordUsecase {
     } else {
       repository = this._userRepository;
     }
+
     const user = await repository.findOne({ email });
+
     if (!user) throw new Error("User not found. Please enter a valid email.");
+
     const token = this._jwtService.resetToken({ email });
-    const url = `http://localhost:5173/reset-password/${role}/${user._id}/${token}`;
+
+    const url = `${frontEndUrl}/reset-password/${role}/${user._id}/${token}`;
+
     await this._emailService.sendOtp(
       email,
       "Forgot password",
       `click the url to change the password: ${url}`,
     );
+
     return url;
   }
 }

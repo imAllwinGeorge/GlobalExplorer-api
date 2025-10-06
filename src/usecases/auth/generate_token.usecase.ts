@@ -2,7 +2,7 @@ import { Schema } from "mongoose";
 import { IGenerateToken } from "../../entities/usecaseInterfaces/auth/generate_token-usecase.interface";
 import { IJwtservice } from "../../entities/serviceInterfaces/jwt-services.interface";
 import { inject, injectable } from "tsyringe";
-import { IRefreshTokenRepository } from "entities/repositoryInterfaces/refreshToken/refresh-token.repository.interface";
+import { IRefreshTokenRepository } from "../../entities/repositoryInterfaces/refreshToken/refresh-token.repository.interface";
 
 @injectable()
 export class GenerateToken implements IGenerateToken {
@@ -23,8 +23,23 @@ export class GenerateToken implements IGenerateToken {
       email,
       role,
     };
-    const accessToken = this._tokenService.generateAccessToken(payload);
-    const refreshToken = this._tokenService.generateRefreshToken(payload);
+    // const accessToken = this._tokenService.generateAccessToken(payload);
+    // const refreshToken = this._tokenService.generateRefreshToken(payload);
+
+    const accessTokenPromise = Promise.resolve(
+      this._tokenService.generateAccessToken(payload),
+    );
+    const refreshTokenPromise = Promise.resolve(
+      this._tokenService.generateRefreshToken(payload),
+    );
+
+    const [accessToken, refreshToken] = await Promise.all([
+      accessTokenPromise,
+      refreshTokenPromise,
+    ]);
+
+    if (!accessToken) throw new Error("Failed to generate access token!");
+    if (!refreshToken) throw new Error("Failed to generage refresh token!");
 
     await this._refreshTokenRepository.save({
       userId: userId.toString(),

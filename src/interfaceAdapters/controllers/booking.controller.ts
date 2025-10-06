@@ -1,15 +1,18 @@
-import { IBookingController } from "entities/controllerInterfaces/Booking-controller.interface";
-import { IBookActivityUsecase } from "entities/usecaseInterfaces/booking/book.activity.usecase.interface";
-import { Request, Response } from "express";
-import { HttpStatusCode } from "shared/constants/statusCodes";
-// import { razorpay } from "shared/utils/razorpay";
 import { inject, injectable } from "tsyringe";
 import crypto from "crypto";
-import { config } from "shared/config";
-import { ICheckBookingAvailabiltyUsecase } from "entities/usecaseInterfaces/booking/check-availabilty.usecase.interface";
-import { ICreateOrderUsecase } from "entities/usecaseInterfaces/booking/create-order.usecase.interface";
-import { IGetBookedActivityUsecase } from "entities/usecaseInterfaces/booking/get-bookings.usecase.interface";
-import { ICancelBookingUsecase } from "entities/usecaseInterfaces/booking/cancel.booking.usecase.interface";
+import { IBookingController } from "../../entities/controllerInterfaces/Booking-controller.interface";
+import { IBookActivityUsecase } from "../../entities/usecaseInterfaces/booking/book.activity.usecase.interface";
+import { ICheckBookingAvailabiltyUsecase } from "../../entities/usecaseInterfaces/booking/check-availabilty.usecase.interface";
+import { ICreateOrderUsecase } from "../../entities/usecaseInterfaces/booking/create-order.usecase.interface";
+import { IGetBookedActivityUsecase } from "../../entities/usecaseInterfaces/booking/get-bookings.usecase.interface";
+import { ICancelBookingUsecase } from "../../entities/usecaseInterfaces/booking/cancel.booking.usecase.interface";
+import { Request, Response } from "express";
+import {
+  calculateTotalPages,
+  getPaginationParams,
+} from "../../shared/utils/pagination.helper";
+import { HttpStatusCode } from "../../shared/constants/constants";
+import { config } from "../../shared/config";
 
 @injectable()
 export class BookingController implements IBookingController {
@@ -71,7 +74,6 @@ export class BookingController implements IBookingController {
 
     await this._checkAvailabilityUsecase.execute(data);
     const bookedActivity = await this._createOrderUsecase.execute(data);
-
     res.json(bookedActivity);
   }
 
@@ -122,13 +124,14 @@ export class BookingController implements IBookingController {
         participantCount,
         holdUntilDate,
       };
-      console.log(data);
+
       const booking = await this._bookActivityUsecase.execute(data, _id);
+
       res
         .status(HttpStatusCode.CREATED)
         .json({ success: true, paymentId: razorpay_payment_id, booking });
     } catch (error) {
-      console.log("Error while saving the booking details:", error);
+      console.log(error);
       res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
         .json({ message: "Unable to process the payment" });
@@ -138,25 +141,29 @@ export class BookingController implements IBookingController {
   async getBookings(req: Request, res: Response): Promise<void> {
     try {
       const id = req.query.id;
-      const page = parseInt(req.query.page as string);
-      const limit = parseInt(req.query.limit as string);
-      const skip = (page - 1) * limit;
-      console.log(id, page, limit, skip);
+      // const page = parseInt(req.query.page as string);
+      // const limit = parseInt(req.query.limit as string);
+      // const skip = (page - 1) * limit;
+
+      const { limit, skip } = getPaginationParams(req);
+
       const result = await this._getBookedActivityUsecase.execute(
         { userId: id },
         limit,
         skip,
       );
-      const totalPages = Math.ceil(result.total / limit);
+
+      const totalPages = calculateTotalPages(result.total, limit);
+
       res
         .status(HttpStatusCode.OK)
         .json({ bookings: result.items, totalPages });
     } catch (error) {
-      console.log(error);
       if (error instanceof Error) {
         res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
         return;
       }
+
       res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
         .json({ message: "Error fetching booking details" });
@@ -167,14 +174,16 @@ export class BookingController implements IBookingController {
     try {
       const id = req.query.id as string;
       const message = req.query.message as string;
-      console.log(id, message);
+
       const booking = await this._cancelBookingUsecase.execute(id, message);
+
       res.status(HttpStatusCode.OK).json({ message: booking });
     } catch (error) {
       if (error instanceof Error) {
         res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
         return;
       }
+
       res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
         .json({ message: "Internal server error" });
@@ -183,25 +192,29 @@ export class BookingController implements IBookingController {
   async getActivityBookings(req: Request, res: Response): Promise<void> {
     try {
       const id = req.query.id;
-      const page = parseInt(req.query.page as string);
-      const limit = parseInt(req.query.limit as string);
-      const skip = (page - 1) * limit;
-      console.log(id, page, limit, skip);
+      // const page = parseInt(req.query.page as string);
+      // const limit = parseInt(req.query.limit as string);
+      // const skip = (page - 1) * limit;
+
+      const { limit, skip } = getPaginationParams(req);
+
       const result = await this._getBookedActivityUsecase.execute(
         { hostId: id },
         limit,
         skip,
       );
-      const totalPages = Math.ceil(result.total / limit);
+
+      const totalPages = calculateTotalPages(result.total, limit);
+
       res
         .status(HttpStatusCode.OK)
         .json({ bookings: result.items, totalPages });
     } catch (error) {
-      console.log(error);
       if (error instanceof Error) {
         res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
         return;
       }
+
       res
         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
         .json({ message: "Error fetching booking details" });

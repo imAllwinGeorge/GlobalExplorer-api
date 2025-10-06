@@ -1,6 +1,6 @@
-import { IActivityModel } from "frameworks/database/mongo/models/activity.model";
-import { ActivityDTO } from "shared/dtos/Auth.dto";
+import { ActivityDTO } from "../../../shared/dtos/Auth.dto";
+import { ActivityResponseDTO } from "../../../shared/dtos/response.dto";
 
 export interface IAddActivityUsecase {
-  execute(data: ActivityDTO): Promise<IActivityModel>;
+  execute(data: ActivityDTO): Promise<ActivityResponseDTO>;
 }

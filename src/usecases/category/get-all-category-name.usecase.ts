@@ -1,6 +1,6 @@
-import { ICategoryRepository } from "entities/repositoryInterfaces/category/categoryRepository.interface";
-import { IGetAllCategoryNameUsecase } from "entities/usecaseInterfaces/category/get-all-category-names.usecase.interface";
 import { inject, injectable } from "tsyringe";
+import { IGetAllCategoryNameUsecase } from "../../entities/usecaseInterfaces/category/get-all-category-names.usecase.interface";
+import { ICategoryRepository } from "../../entities/repositoryInterfaces/category/categoryRepository.interface";
 
 @injectable()
 export class GetAllCategoryNameUsecase implements IGetAllCategoryNameUsecase {

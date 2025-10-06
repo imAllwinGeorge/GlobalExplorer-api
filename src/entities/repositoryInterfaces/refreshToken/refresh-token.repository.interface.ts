@@ -1,4 +1,4 @@
-import { IRefreshTokenModel } from "frameworks/database/mongo/models/refresh-token.model";
+import { IRefreshTokenModel } from "../../../frameworks/database/mongo/models/refresh-token.model";
 import { IBaseRepository } from "../IBaseRepository.interface";
 
 export type IRefreshTokenRepository = IBaseRepository<IRefreshTokenModel>;

@@ -6,4 +6,4 @@ export interface IUserModel extends IUserEntity, Document {
   _id: ObjectId;
 }
 
-export const UserModel = model<IUserModel>("user", userSchema);
+export const UserModel = model<IUserModel>("User", userSchema);

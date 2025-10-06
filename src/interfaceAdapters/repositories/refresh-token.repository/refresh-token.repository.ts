@@ -1,9 +1,9 @@
+import { IRefreshTokenRepository } from "../../../entities/repositoryInterfaces/refreshToken/refresh-token.repository.interface";
 import {
   IRefreshTokenModel,
   RefreshTokenModel,
-} from "frameworks/database/mongo/models/refresh-token.model";
+} from "../../../frameworks/database/mongo/models/refresh-token.model";
 import { BaseRepository } from "../base.repository";
-import { IRefreshTokenRepository } from "entities/repositoryInterfaces/refreshToken/refresh-token.repository.interface";
 import { injectable } from "tsyringe";
 
 @injectable()
