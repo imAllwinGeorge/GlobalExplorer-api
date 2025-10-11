@@ -3,6 +3,8 @@ import { IMarkReadMessageUsecase } from "../../../entities/usecaseInterfaces/cha
 import { IConversationRepository } from "../../../entities/repositoryInterfaces/chat/Conversation.repository.interface";
 import { ConversationMapper } from "../../../shared/mappers/conversation.mapper";
 import { ConversationResponseDTO } from "../../../shared/dtos/response.dto";
+import { AppError } from "../../../shared/errors/appError";
+import { HttpStatusCode } from "../../../shared/constants/constants";
 
 @injectable()
 export class MarkReadMessageUsecase implements IMarkReadMessageUsecase {
@@ -25,7 +27,11 @@ export class MarkReadMessageUsecase implements IMarkReadMessageUsecase {
       { [updateField]: 0 },
     );
 
-    if (!conversation) throw new Error("Failed to fetch the conversation.");
+    if (!conversation)
+      throw new AppError(
+        "Failed to fetch the conversation.",
+        HttpStatusCode.INTERNAL_SERVER_ERROR,
+      );
 
     return this._conversationMapper.toDTO(conversation);
   }

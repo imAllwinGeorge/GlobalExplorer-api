@@ -3,6 +3,8 @@ import { inject, injectable } from "tsyringe";
 import { IUserExistanceService } from "../../entities/serviceInterfaces/user-existance-service.interface";
 import { IOtpService } from "../../entities/serviceInterfaces/otp-service.interface";
 import { IEmailSevices } from "../../entities/serviceInterfaces/email-services.interface";
+import { AppError } from "../../shared/errors/appError";
+import { HttpStatusCode } from "../../shared/constants/constants";
 
 @injectable()
 export class SendOtpUsecase implements ISendOtpUsecase {
@@ -22,7 +24,8 @@ export class SendOtpUsecase implements ISendOtpUsecase {
       role,
     );
 
-    if (isEmailExisting) throw new Error("Email already exist");
+    if (isEmailExisting)
+      throw new AppError("Email already exist", HttpStatusCode.CONFLICT);
 
     const otp = this._otpService.generateOtp();
 

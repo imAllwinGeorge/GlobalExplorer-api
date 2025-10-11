@@ -18,4 +18,10 @@ export const config = {
   cors: {
     ALLOWED_ORIGIN: process.env.ALLOWED_ORIGIN,
   },
+
+  cloudinary: {
+    CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+    CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+    CLOUDINARY_SECRET: process.env.CLOUDINARY_SECRET,
+  },
 };

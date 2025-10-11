@@ -5,7 +5,7 @@ import { IGetAllBlogUsecase } from "../../entities/usecaseInterfaces/blog/get-al
 import { IGetMyBlogsUsecase } from "../../entities/usecaseInterfaces/blog/get-my-blog.usecase.interface";
 import { IEditBlogUsecase } from "../../entities/usecaseInterfaces/blog/edit-blog.usecase.interface";
 import { IDeleteBlogUsecase } from "../../entities/usecaseInterfaces/blog/delete-blog.usecase.interfac";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { BlogSection } from "../../entities/models/blog.entity";
 import { HttpStatusCode } from "../../shared/constants/constants";
 import {
@@ -32,7 +32,11 @@ export class BlogController implements IBlogController {
     private _deleteBlogUsecase: IDeleteBlogUsecase,
   ) {}
 
-  async createBlog(req: Request, res: Response): Promise<void> {
+  async createBlog(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const files = req.files as Express.Multer.File[];
       const body = req.body;
@@ -90,15 +94,20 @@ export class BlogController implements IBlogController {
 
       res.status(HttpStatusCode.CREATED).json({ blog: newBlog });
     } catch (error) {
-      if (error instanceof Error) {
-        res
-          .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-          .json({ message: error.message });
-      }
+      // if (error instanceof Error) {
+      //   res
+      //     .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      //     .json({ message: error.message });
+      // }
+      next(error);
     }
   }
 
-  async getBlogs(req: Request, res: Response): Promise<void> {
+  async getBlogs(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const data = {};
       const { limit, skip } = getPaginationParams(req);
@@ -111,15 +120,21 @@ export class BlogController implements IBlogController {
       const totalPages = calculateTotalPages(total, limit);
       res.status(HttpStatusCode.OK).json({ blogs: items, totalPages });
     } catch (error) {
-      if (error instanceof Error) {
-        res
-          .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-          .json({ meassage: error.message });
-      }
+      // if (error instanceof Error) {
+      //   res
+      //     .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      //     .json({ meassage: error.message });
+      // }
+
+      next(error);
     }
   }
 
-  async getMyBlogs(req: Request, res: Response): Promise<void> {
+  async getMyBlogs(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const id = req.query.id as string;
       // const page = parseInt(req.query.page as string);
@@ -133,18 +148,24 @@ export class BlogController implements IBlogController {
 
       res.status(HttpStatusCode.OK).json({ blogs: result.items, totalPages });
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
-        return;
-      }
+      // if (error instanceof Error) {
+      //   res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
+      //   return;
+      // }
 
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: "Internal server Error" });
+      // res
+      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      //   .json({ message: "Internal server Error" });
+
+      next(error);
     }
   }
 
-  async editBlog(req: Request, res: Response): Promise<void> {
+  async editBlog(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { id } = req.params;
       const body = req.body;
@@ -202,18 +223,24 @@ export class BlogController implements IBlogController {
 
       res.status(HttpStatusCode.OK).json({ blog });
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
-        return;
-      }
+      // if (error instanceof Error) {
+      //   res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
+      //   return;
+      // }
 
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: "Internal Server Error" });
+      // res
+      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      //   .json({ message: "Internal Server Error" });
+
+      next(error);
     }
   }
 
-  async deleteBlog(req: Request, res: Response): Promise<void> {
+  async deleteBlog(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { id } = req.params;
 
@@ -223,14 +250,16 @@ export class BlogController implements IBlogController {
         .status(HttpStatusCode.OK)
         .json({ message: "Blog Deleted success full" });
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
-        return;
-      }
+      // if (error instanceof Error) {
+      //   res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
+      //   return;
+      // }
 
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: "Internal Server Error" });
+      // res
+      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      //   .json({ message: "Internal Server Error" });
+
+      next(error);
     }
   }
 }

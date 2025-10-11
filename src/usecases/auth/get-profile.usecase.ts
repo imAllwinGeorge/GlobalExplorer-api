@@ -11,7 +11,8 @@ import {
   HostResponseDTO,
   UserResponseDTO,
 } from "../../shared/dtos/response.dto";
-import { ROLE } from "../../shared/constants/constants";
+import { HttpStatusCode, ROLE } from "../../shared/constants/constants";
+import { AppError } from "../../shared/errors/appError";
 
 @injectable()
 export class GetProfileUsecase implements IGetProfileUsecase {
@@ -43,22 +44,25 @@ export class GetProfileUsecase implements IGetProfileUsecase {
 
     if (role === ROLE.USER) {
       profile = await this._userRepository.findOne({ _id: id });
-      if (!profile) throw new Error("Profile not found!");
+      if (!profile)
+        throw new AppError("Profile not found!", HttpStatusCode.NOT_FOUND);
       return this._userMapper.toDTO(profile);
     }
 
     if (role === ROLE.HOST) {
       profile = await this._hostRepository.findOne({ _id: id });
-      if (!profile) throw new Error("Profile not found!");
+      if (!profile)
+        throw new AppError("Profile not found!", HttpStatusCode.NOT_FOUND);
       return this._hostMapper.toDTO(profile);
     }
 
     if (role === ROLE.ADMIN) {
       profile = await this._adminRepository.findOne({ _id: id });
-      if (!profile) throw new Error("Profile not found!");
+      if (!profile)
+        throw new AppError("Profile not found!", HttpStatusCode.NOT_FOUND);
       return this._adminMapper.toDTO(profile);
     }
 
-    throw new Error("Invalid role");
+    throw new AppError("Invalid role", HttpStatusCode.NOT_FOUND);
   }
 }

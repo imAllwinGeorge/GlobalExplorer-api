@@ -4,6 +4,8 @@ import { IBlogRepository } from "../../entities/repositoryInterfaces/Blog/blog-r
 import { BlogMapper } from "../../shared/mappers/blog.mapper";
 import { BlogDTO } from "../../shared/dtos/Auth.dto";
 import { BlogResponseDTO } from "../../shared/dtos/response.dto";
+import { AppError } from "../../shared/errors/appError";
+import { HttpStatusCode } from "../../shared/constants/constants";
 
 @injectable()
 export class CreateBlogUsecase implements ICreateBlogUsecase {
@@ -19,7 +21,10 @@ export class CreateBlogUsecase implements ICreateBlogUsecase {
     const newBlog = await this._blogreporitory.save(data);
 
     if (!newBlog)
-      throw new Error("Currently we are facing some issue please try again.");
+      throw new AppError(
+        "Currently we are facing some issue please try again.",
+        HttpStatusCode.INTERNAL_SERVER_ERROR,
+      );
 
     return this._blogMapper.toDTO(newBlog);
   }

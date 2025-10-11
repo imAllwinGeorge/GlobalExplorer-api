@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { IAuthController } from "../../../entities/controllerInterfaces/users/auth-controller.interface";
 import { IRegisterUsecase } from "../../../entities/usecaseInterfaces/auth/register-usecase.interface";
 import { inject, injectable } from "tsyringe";
@@ -12,10 +12,8 @@ import { IForgotPasswordUsecase } from "../../../entities/usecaseInterfaces/auth
 import { IResetPasswordUseCase } from "../../../entities/usecaseInterfaces/auth/reset-password.usecase.interface";
 import { IVerifyTokenUsecase } from "../../../entities/usecaseInterfaces/auth/verify-token.usecase.interface";
 import { IGoogleLoginUsecase } from "../../../entities/usecaseInterfaces/auth/google_login.usecase.interface";
-import jwt from "jsonwebtoken";
 import { hostSchema } from "./validations/host-signup.validation.schema";
-import { z, ZodError } from "zod";
-
+import { z } from "zod";
 import dotenv from "dotenv";
 import { IRefreshTokenUsecase } from "../../../entities/usecaseInterfaces/auth/refresh-token.usecase.interface";
 import { IRevokeRefreshTokenUsecase } from "../../../entities/usecaseInterfaces/auth/revok-refresh-token.usecase.interface";
@@ -28,7 +26,6 @@ import {
 dotenv.config();
 
 const frontEndUrl = process.env.FRONT_END_URL;
-const { JsonWebTokenError } = jwt;
 
 type UserData = z.infer<typeof userSchema>;
 type HostData = z.infer<typeof hostSchema>;
@@ -69,7 +66,11 @@ export class AuthController implements IAuthController {
     private _getProfileUsecase: IGetProfileUsecase,
   ) {}
 
-  async send_otp(req: Request, res: Response): Promise<void> {
+  async send_otp(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { role } = req.body;
 
@@ -113,7 +114,7 @@ export class AuthController implements IAuthController {
               "insurance",
             ].includes(key)
           ) {
-            (userData as HostData)[key as HostFileFields] = file.filename;
+            (userData as HostData)[key as HostFileFields] = file.path;
           }
         });
       } else {
@@ -137,23 +138,28 @@ export class AuthController implements IAuthController {
       res.status(HttpStatusCode.OK).json({ message: "otp sented successful" });
       return;
     } catch (error) {
-      if (error instanceof Error && error.message === "Email already exist") {
-        res
-          .status(HttpStatusCode.BAD_REQUEST)
-          .json({ message: "Email already exists" });
-      } else if (error instanceof ZodError) {
-        res
-          .status(HttpStatusCode.BAD_REQUEST)
-          .json({ message: error.errors[0].message });
-      } else {
-        res
-          .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-          .json({ message: "Internal server Error." });
-      }
+      next(error);
+      // if (error instanceof Error && error.message === "Email already exist") {
+      //   res
+      //     .status(HttpStatusCode.BAD_REQUEST)
+      //     .json({ message: "Email already exists" });
+      // } else if (error instanceof ZodError) {
+      //   res
+      //     .status(HttpStatusCode.BAD_REQUEST)
+      //     .json({ message: error.errors[0].message });
+      // } else {
+      //   res
+      //     .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      //     .json({ message: "Internal server Error." });
+      // }
     }
   }
 
-  async resend_otp(req: Request, res: Response): Promise<void> {
+  async resend_otp(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { userData } = req.session;
       if (!userData) {
@@ -173,12 +179,17 @@ export class AuthController implements IAuthController {
       res.status(HttpStatusCode.OK).json({ message: "otp sented successful" });
       return;
     } catch (error) {
-      console.log(error);
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json(error);
+      next(error);
+      // console.log(error);
+      // res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json(error);
     }
   }
 
-  async register(req: Request, res: Response): Promise<void> {
+  async register(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { otp } = req.body;
       const { userData } = req.session;
@@ -216,12 +227,13 @@ export class AuthController implements IAuthController {
         .json({ message: "user saved successfully", user });
       return;
     } catch (error) {
-      console.log("user signup error: ", error);
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
+      next(error);
+      // console.log("user signup error: ", error);
+      // res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
     }
   }
 
-  async login(req: Request, res: Response): Promise<void> {
+  async login(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { data } = req.body;
 
@@ -261,19 +273,25 @@ export class AuthController implements IAuthController {
         accessTokenName,
         refreshTokenName,
       );
+      console.log("user login details: ", userData);
       res
         .status(HttpStatusCode.OK)
         .json({ message: "user login successful", user: userData });
     } catch (error) {
-      console.log(error);
+      next(error);
+      // console.log(error);
 
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: "server error" });
+      // res
+      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      //   .json({ message: "server error" });
     }
   }
 
-  async forgotPassword(req: Request, res: Response): Promise<void> {
+  async forgotPassword(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { email, role } = req.body;
       const validateEmail = forgotPasswordSchema.parse({ email });
@@ -289,16 +307,17 @@ export class AuthController implements IAuthController {
         .json({ message: "Recovery link sented to your email", url });
       return;
     } catch (error) {
-      console.log(error);
-      if (error instanceof Error) {
-        res
-          .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-          .json({ message: error.message });
-      }
+      next(error);
+      // console.log(error);
+      // if (error instanceof Error) {
+      //   res
+      //     .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      //     .json({ message: error.message });
+      // }
     }
   }
 
-  async resetPassword(req: Request, res: Response) {
+  async resetPassword(req: Request, res: Response, next: NextFunction) {
     try {
       const { id, token, role } = req.params;
       const { password } = req.body;
@@ -315,18 +334,19 @@ export class AuthController implements IAuthController {
       res.status(HttpStatusCode.OK).json({ message: "password updated" });
       return;
     } catch (error) {
-      console.log("error:", error);
-      if (error instanceof JsonWebTokenError) {
-        res
-          .status(HttpStatusCode.FORBIDDEN)
-          .json({ message: "Token Expired." });
-        return;
-      }
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
+      next(error);
+      // console.log("error:", error);
+      // if (error instanceof JsonWebTokenError) {
+      //   res
+      //     .status(HttpStatusCode.FORBIDDEN)
+      //     .json({ message: "Token Expired." });
+      //   return;
+      // }
+      // res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
     }
   }
 
-  async verifyToken(req: Request, res: Response) {
+  async verifyToken(req: Request, res: Response, next: NextFunction) {
     try {
       let role;
       let token;
@@ -334,6 +354,10 @@ export class AuthController implements IAuthController {
         token = req.cookies.userAccessToken;
         role = ROLE.USER;
         console.log("userAccessToken encountered");
+      } else if (req.cookies.hostAccessToken) {
+        token = req.cookies.hostAccessToken;
+        role = ROLE.HOST;
+        console.log("hostAccessToken encountered");
       } else if (req.cookies.adminAccessToken) {
         token = req.cookies.adminAccessToken;
         role = ROLE.ADMIN;
@@ -352,12 +376,17 @@ export class AuthController implements IAuthController {
 
       res.status(HttpStatusCode.OK).json({ message: "token verified" });
     } catch (error) {
-      console.log(error);
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
+      next(error);
+      // console.log(error);
+      // res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
     }
   }
 
-  async refreshToken(req: Request, res: Response): Promise<void> {
+  async refreshToken(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { role } = req.body;
       let token;
@@ -386,15 +415,20 @@ export class AuthController implements IAuthController {
       );
       res.status(HttpStatusCode.OK).json({ message: "Token validated" });
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(HttpStatusCode.FORBIDDEN).json({ message: error.message });
-        return;
-      }
-      res.status(500).json({ message: "Internal Server Error" });
+      next(error);
+      // if (error instanceof Error) {
+      //   res.status(HttpStatusCode.FORBIDDEN).json({ message: error.message });
+      //   return;
+      // }
+      // res.status(500).json({ message: "Internal Server Error" });
     }
   }
 
-  async googleLogin(req: Request, res: Response): Promise<void> {
+  async googleLogin(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const role = req.query.state;
       const { user } = req;
@@ -436,12 +470,13 @@ export class AuthController implements IAuthController {
       );
       res.redirect(`${frontEndUrl}/login?user=${userData}`);
     } catch (error) {
-      console.log(error);
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
+      next(error);
+      // console.log(error);
+      // res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
     }
   }
 
-  async logout(req: Request, res: Response): Promise<void> {
+  async logout(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { role } = req.params;
       let refreshToken;
@@ -459,27 +494,33 @@ export class AuthController implements IAuthController {
 
       res.status(HttpStatusCode.OK).json({ message: "logout" });
     } catch (error) {
-      console.log("logout Error :", error);
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: "Internal server error" });
+      next(error);
+      // console.log("logout Error :", error);
+      // res
+      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      //   .json({ message: "Internal server error" });
     }
   }
 
-  async getProfile(req: Request, res: Response): Promise<void> {
+  async getProfile(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const id = req.query.id as string;
       const role = req.query.role as string;
       const profile = await this._getProfileUsecase.execute(id, role);
       res.status(HttpStatusCode.OK).json({ user: profile });
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
-        return;
-      }
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: "Internal Server Error" });
+      next(error);
+      // if (error instanceof Error) {
+      //   res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
+      //   return;
+      // }
+      // res
+      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      //   .json({ message: "Internal Server Error" });
     }
   }
 }

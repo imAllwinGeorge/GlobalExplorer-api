@@ -3,6 +3,8 @@ import { inject, injectable } from "tsyringe";
 import { IRefreshTokenUsecase } from "../../entities/usecaseInterfaces/auth/refresh-token.usecase.interface";
 import { IRefreshTokenRepository } from "../../entities/repositoryInterfaces/refreshToken/refresh-token.repository.interface";
 import { IJwtservice } from "../../entities/serviceInterfaces/jwt-services.interface";
+import { AppError } from "../../shared/errors/appError";
+import { HttpStatusCode } from "../../shared/constants/constants";
 
 @injectable()
 export class RefreshTokenUsecase implements IRefreshTokenUsecase {
@@ -19,10 +21,12 @@ export class RefreshTokenUsecase implements IRefreshTokenUsecase {
       refreshToken,
     });
 
-    if (!storedToken) throw new Error("Invalid Token");
+    if (!storedToken)
+      throw new AppError("Invalid Token", HttpStatusCode.UNAUTHORIZED);
 
     const payload = this._jwtService.verifyRefreshToken(refreshToken);
-    if (!payload) throw new Error("Invalid Token");
+    if (!payload)
+      throw new AppError("Invalid Token", HttpStatusCode.UNAUTHORIZED);
 
     await this._refreshTokenRepository.delete({ refreshToken });
 

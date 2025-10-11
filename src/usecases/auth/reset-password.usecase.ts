@@ -12,9 +12,10 @@ import {
   UserResponseDTO,
 } from "../../shared/dtos/response.dto";
 import { IAdminModel } from "../../frameworks/database/mongo/models/admin.model";
-import { ROLE } from "../../shared/constants/constants";
+import { HttpStatusCode, ROLE } from "../../shared/constants/constants";
 import { IUserModel } from "../../frameworks/database/mongo/models/user.model";
 import { IHostModel } from "../../frameworks/database/mongo/models/host.model";
+import { AppError } from "../../shared/errors/appError";
 
 @injectable()
 export class ResetPasswordUsecase implements IResetPasswordUseCase {
@@ -59,13 +60,13 @@ export class ResetPasswordUsecase implements IResetPasswordUseCase {
     const user = await repository.findOne({ _id: id });
 
     if (!user) {
-      throw new Error("invalid user1");
+      throw new AppError("invalid user1", HttpStatusCode.NOT_FOUND);
     }
 
     const payload = this._jwtService.verifyToken(token);
 
     if (user.email !== payload.email) {
-      throw new Error("user validation error");
+      throw new AppError("user validation error", HttpStatusCode.NOT_FOUND);
     }
 
     const hashedPassword = await this._bcryptService.hash(password);
@@ -75,11 +76,11 @@ export class ResetPasswordUsecase implements IResetPasswordUseCase {
       { password: hashedPassword },
     );
 
-    if (updatedUser?.role === "user") {
+    if (updatedUser?.role === ROLE.USER) {
       return this._userMapper.toDTO(updatedUser as IUserModel);
     }
 
-    if (updatedUser?.role === "host") {
+    if (updatedUser?.role === ROLE.HOST) {
       return this._hostMapper.toDTO(updatedUser as IHostModel);
     }
 

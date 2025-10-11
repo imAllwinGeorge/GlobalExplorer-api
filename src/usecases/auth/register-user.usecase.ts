@@ -5,7 +5,8 @@ import { IBcrypt } from "../../entities/security/bcrypt.interface";
 import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
 import { IHostRepository } from "../../entities/repositoryInterfaces/users/host-repository.interface";
 import { HostMapper } from "../../shared/mappers/host.mapper";
-import { ROLE } from "../../shared/constants/constants";
+import { HttpStatusCode, ROLE } from "../../shared/constants/constants";
+import { AppError } from "../../shared/errors/appError";
 
 @injectable()
 export class RegisterUserusecase implements IRegisterUsecase {
@@ -37,7 +38,7 @@ export class RegisterUserusecase implements IRegisterUsecase {
 
       return await this._hostRepository.save(mappedHostData as HostSignupDTO);
     } else {
-      throw new Error("invalid role");
+      throw new AppError("invalid role", HttpStatusCode.NOT_FOUND);
     }
   }
 }

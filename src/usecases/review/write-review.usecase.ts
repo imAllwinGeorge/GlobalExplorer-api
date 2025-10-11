@@ -3,6 +3,8 @@ import { IWriteReviewUsecase } from "../../entities/usecaseInterfaces/review/wri
 import { IReviewRepository } from "../../entities/repositoryInterfaces/review/review-repository.interface";
 import { IReviewModel } from "../../frameworks/database/mongo/models/review.model";
 import { ReviewDTO } from "../../shared/dtos/Auth.dto";
+import { AppError } from "../../shared/errors/appError";
+import { HttpStatusCode } from "../../shared/constants/constants";
 
 @injectable()
 export class WriteReviewUsecase implements IWriteReviewUsecase {
@@ -14,7 +16,11 @@ export class WriteReviewUsecase implements IWriteReviewUsecase {
   async execute(review: ReviewDTO): Promise<IReviewModel> {
     const response = await this._reviewRepository.save(review);
 
-    if (!response) throw new Error("failed to save the review.");
+    if (!response)
+      throw new AppError(
+        "failed to save the review.",
+        HttpStatusCode.INTERNAL_SERVER_ERROR,
+      );
 
     return response;
   }

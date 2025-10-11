@@ -13,7 +13,8 @@ import {
   HostResponseDTO,
   UserResponseDTO,
 } from "../../shared/dtos/response.dto";
-import { ROLE } from "../../shared/constants/constants";
+import { HttpStatusCode, ROLE } from "../../shared/constants/constants";
+import { AppError } from "../../shared/errors/appError";
 
 @injectable()
 export class LoginUsecase implements ILoginUser {
@@ -43,65 +44,75 @@ export class LoginUsecase implements ILoginUser {
   async execute(
     data: LoginUserDTO,
   ): Promise<UserResponseDTO | AdminResponseDTO | HostResponseDTO | undefined> {
-    try {
-      const { role } = data;
+    const { role } = data;
 
-      let user;
+    let user;
 
-      if (role === ROLE.USER) {
-        user = await this._userRepository.findOne({ email: data.email });
+    if (role === ROLE.USER) {
+      user = await this._userRepository.findOne({ email: data.email });
 
-        if (!user) throw new Error("User not found!");
+      if (!user)
+        throw new AppError("User not found!", HttpStatusCode.NOT_FOUND);
 
-        if (user.password) {
-          const isValidPassword = await this._passwordBcrypt.compare(
-            data.password,
-            user.password,
-          );
+      if (user.password) {
+        const isValidPassword = await this._passwordBcrypt.compare(
+          data.password,
+          user.password,
+        );
 
-          if (!isValidPassword) throw new Error("Invalid password");
-        }
-
-        return this._userMapper.toDTO(user);
+        if (!isValidPassword)
+          throw new AppError("Invalid password", HttpStatusCode.UNAUTHORIZED);
       }
 
-      if (role === ROLE.ADMIN) {
-        user = await this._adminRepository.findOne({ email: data.email });
-
-        if (!user) throw new Error("admin not found!");
-
-        if (user.password) {
-          const isValidPassword = await this._passwordBcrypt.compare(
-            data.password,
-            user.password,
-          );
-
-          if (!isValidPassword) throw new Error("Invalid password");
-        }
-
-        return this._adminMapper.toDTO(user);
-      }
-
-      if (role === ROLE.HOST) {
-        user = await this._hostRepository.findOne({ email: data.email });
-
-        if (!user) throw new Error("Host not found!");
-
-        if (user.password) {
-          const isValidPassword = await this._passwordBcrypt.compare(
-            data.password,
-            user.password,
-          );
-
-          if (!isValidPassword) throw new Error("Invalid password");
-        }
-
-        return this._hostMapper.toDTO(user);
-      }
-
-      throw new Error("invalid role");
-    } catch (error) {
-      console.log(error);
+      return this._userMapper.toDTO(user);
     }
+
+    if (role === ROLE.ADMIN) {
+      user = await this._adminRepository.findOne({ email: data.email });
+
+      if (!user)
+        throw new AppError("admin not found!", HttpStatusCode.NOT_FOUND);
+
+      if (user.password) {
+        const isValidPassword = await this._passwordBcrypt.compare(
+          data.password,
+          user.password,
+        );
+
+        if (!isValidPassword)
+          throw new AppError("Invalid password", HttpStatusCode.UNAUTHORIZED);
+      }
+      const mappedUser = this._adminMapper.toDTO(user);
+      console.log("mapped User: ", mappedUser);
+      return mappedUser;
+    }
+
+    if (role === ROLE.HOST) {
+      user = await this._hostRepository.findOne({ email: data.email });
+
+      if (!user)
+        throw new AppError("Host not found!", HttpStatusCode.NOT_FOUND);
+
+      if (user.password) {
+        const isValidPassword = await this._passwordBcrypt.compare(
+          data.password,
+          user.password,
+        );
+
+        if (!isValidPassword)
+          throw new AppError("Invalid password", HttpStatusCode.UNAUTHORIZED);
+      }
+
+      if (!user.isVerified) {
+        throw new AppError(
+          "Verification is pending! please contact admin",
+          HttpStatusCode.UNAUTHORIZED,
+        );
+      }
+
+      return this._hostMapper.toDTO(user);
+    }
+
+    throw new AppError("invalid role", HttpStatusCode.NOT_FOUND);
   }
 }

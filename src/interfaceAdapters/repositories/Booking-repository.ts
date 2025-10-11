@@ -4,7 +4,7 @@ import {
   IBookingModal,
 } from "../../frameworks/database/mongo/models/booking.model";
 import { BaseRepository } from "./base.repository";
-import mongoose, { ObjectId } from "mongoose";
+import mongoose, { FilterQuery, ObjectId } from "mongoose";
 
 export class BookingRepository
   extends BaseRepository<IBookingModal>
@@ -73,10 +73,17 @@ export class BookingRepository
       matchStage.hostId = new mongoose.Types.ObjectId(hostId);
     }
     console.log("match Stage : ", matchStage);
+
     const topFive = await this.model.aggregate([
       { $match: matchStage },
-      { $group: { _id: "$activityId", count: { $sum: 1 } } },
-      { $sort: { count: -1 } },
+      {
+        $group: {
+          _id: "$activityId",
+          count: { $sum: 1 },
+          totalParticipants: { $sum: "$participantCount" },
+        },
+      },
+      { $sort: { totalParticipants: -1 } },
       { $limit: 5 },
       {
         $lookup: {
@@ -88,11 +95,23 @@ export class BookingRepository
       },
       { $unwind: "$activity" },
       {
+        $lookup: {
+          from: "categories",
+          localField: "activity.categoryId",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      { $unwind: "$category" },
+      {
         $project: {
           _id: 1,
           count: 1,
           "activity.activityName": 1,
           "activity.pricePerHead": 1,
+          totalParticipants: 1,
+          "activity.categoryId": 1,
+          "category.categoryName": 1,
         },
       },
     ]);
@@ -106,5 +125,33 @@ export class BookingRepository
       createdAt: Date.now(),
     });
     return bookings as number;
+  }
+
+  async monthlyBookings(
+    id?: string,
+  ): Promise<{ _id: { month: number }; count: number }[]> {
+    const currentYear = new Date().getFullYear();
+    const filter: FilterQuery<IBookingModal> = {
+      date: {
+        $gte: new Date(`${currentYear}-01-01`),
+      },
+      isCancelled: false,
+    };
+    if (id) {
+      filter.hostId = new mongoose.Types.ObjectId(id);
+    }
+    const result = await this.model.aggregate([
+      {
+        $match: filter,
+      },
+      {
+        $group: {
+          _id: { month: { $month: "$date" } },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { "_id.month": 1 } },
+    ]);
+    return result;
   }
 }

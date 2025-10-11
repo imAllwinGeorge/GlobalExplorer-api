@@ -1,6 +1,9 @@
 import { inject, injectable } from "tsyringe";
 import { IDeleteBlogUsecase } from "../../entities/usecaseInterfaces/blog/delete-blog.usecase.interfac";
 import { IBlogRepository } from "../../entities/repositoryInterfaces/Blog/blog-repository.interface";
+import { AppError } from "../../shared/errors/appError";
+import { HttpStatusCode } from "../../shared/constants/constants";
+import logger from "../../infrastructures/logger";
 
 @injectable()
 export class DeleteBlogUsecase implements IDeleteBlogUsecase {
@@ -13,8 +16,11 @@ export class DeleteBlogUsecase implements IDeleteBlogUsecase {
     try {
       await this._blogRepository.delete({ _id: id });
     } catch (err) {
-      console.log(err);
-      throw new Error("Something went wrong while deleting the blog.");
+      logger.error(err);
+      throw new AppError(
+        "Something went wrong while deleting the blog.",
+        HttpStatusCode.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }

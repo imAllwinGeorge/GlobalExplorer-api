@@ -8,6 +8,8 @@ import {
   ConversationResponseDTO,
   MessageResponseDTO,
 } from "../../../shared/dtos/response.dto";
+import { AppError } from "../../../shared/errors/appError";
+import { HttpStatusCode } from "../../../shared/constants/constants";
 
 @injectable()
 export class SendDirectMessageUsecase implements ISendDirectMessageUsecase {
@@ -33,7 +35,8 @@ export class SendDirectMessageUsecase implements ISendDirectMessageUsecase {
     message: MessageResponseDTO;
     conversation: ConversationResponseDTO;
   }> {
-    if (senderId === receiverId) throw new Error("Bad Request");
+    if (senderId === receiverId)
+      throw new AppError("Bad Request", HttpStatusCode.BAD_REQUEST);
 
     const normalized = [senderId, receiverId].sort((a, b) =>
       a.toString().localeCompare(b.toString()),

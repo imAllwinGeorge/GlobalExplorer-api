@@ -8,6 +8,9 @@ import { ICacheService } from "../../entities/serviceInterfaces/cache-service.in
 import { ActivityMapper } from "../../shared/mappers/activity.mapper";
 import { ActivityResponseDTO } from "../../shared/dtos/response.dto";
 import { getNextDaysInTimezone } from "../../shared/utils/date.helper";
+import { AppError } from "../../shared/errors/appError";
+import { HttpStatusCode } from "../../shared/constants/constants";
+import { IAvailabilityRepository } from "../../entities/repositoryInterfaces/availability/availability-repository.interface";
 
 @injectable()
 export class GetActivityDetailsUsecase implements IGetActivityDetailsUsecase {
@@ -24,6 +27,9 @@ export class GetActivityDetailsUsecase implements IGetActivityDetailsUsecase {
     @inject("ICacheService")
     private _cacheService: ICacheService,
 
+    @inject("IAvailabilityRepository")
+    private _availabilityRepository: IAvailabilityRepository,
+
     @inject(ActivityMapper)
     private _activityMapper: ActivityMapper,
   ) {}
@@ -39,7 +45,10 @@ export class GetActivityDetailsUsecase implements IGetActivityDetailsUsecase {
     const activity = await this._activityRepository.findOne({ _id: id });
     let mappedActivity;
     if (!activity) {
-      throw new Error("Failed to fetch activity details");
+      throw new AppError(
+        "Failed to fetch activity details",
+        HttpStatusCode.NOT_FOUND,
+      );
     } else {
       mappedActivity = this._activityMapper.toDTO(activity);
     }
@@ -99,20 +108,44 @@ export class GetActivityDetailsUsecase implements IGetActivityDetailsUsecase {
       activity.recurrenceDays,
     );
 
+    // const result = await Promise.all(
+    //   dates.map(async (targetDate) => {
+    //     const bookings =
+    //       await this._bookingRepository.getTotalParticipantsForDate(
+    //         activity._id,
+    //         targetDate,
+    //       );
+
+    //     const availableSeats = activity.maxCapacity - bookings;
+
+    //     return {
+    //       date: formatInTimeZone(targetDate, "Asia/Kolkata", "yyyy-MM-dd"),
+    //       availableSeats: Math.max(0, availableSeats),
+    //     };
+    //   }),
+    // );
+
     const result = await Promise.all(
       dates.map(async (targetDate) => {
-        const bookings =
-          await this._bookingRepository.getTotalParticipantsForDate(
-            activity._id,
-            targetDate,
-          );
+        const dateStr = formatInTimeZone(
+          targetDate,
+          "Asia/Kolkata",
+          "yyyy-MM-dd",
+        );
 
-        const availableSeats = activity.maxCapacity - bookings;
+        const availability = await this._availabilityRepository.findOrCreateOne(
+          { activityId: activity._id, date: dateStr },
+          {
+            $setOnInsert: {
+              activityId: activity._id,
+              date: dateStr,
+              totalSeats: activity.maxCapacity,
+              availableSeats: activity.maxCapacity,
+            },
+          },
+        );
 
-        return {
-          date: formatInTimeZone(targetDate, "Asia/Kolkata", "yyyy-MM-dd"),
-          availableSeats: Math.max(0, availableSeats),
-        };
+        return { date: dateStr, availableSeats: availability.availableSeats };
       }),
     );
 

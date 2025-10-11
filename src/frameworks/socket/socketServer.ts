@@ -10,6 +10,7 @@ import { CustomSocket } from "../../shared/types/types";
 import { DirectChatEvents } from "../../interfaceAdapters/socket/events/direct-chat.events";
 import { NotificationEvent } from "../../interfaceAdapters/socket/events/notificaion.event";
 import { SignallingEvents } from "../../interfaceAdapters/socket/events/Signalling.events";
+import logger from "../../infrastructures/logger";
 
 @injectable()
 export class SocketServer {
@@ -46,11 +47,11 @@ export class SocketServer {
         }
 
         const payload = this._tokenService.verifyToken(token as string);
-        console.log("payload in socket middleware: ", payload);
+        // console.log("payload in socket middleware: ", payload);
         (socket as CustomSocket).userId = payload.userId;
         return next();
       } catch (error) {
-        console.log("Socket middleware error: ", error);
+        logger.error(error);
         return next(new Error("Unauthorzed socket connection"));
       }
     });
@@ -75,7 +76,7 @@ export class SocketServer {
         userId as string,
       );
       socket.join(userId as string);
-      console.log(
+      logger.info(
         `User ${userId} with socket ${socket.id} has joined room: ${userId}`,
       );
       socket.on("disconnect", async () => {

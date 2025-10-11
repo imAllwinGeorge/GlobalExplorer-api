@@ -7,7 +7,16 @@ import { IUserModel } from "../../frameworks/database/mongo/models/user.model";
 import { IAdminModel } from "../../frameworks/database/mongo/models/admin.model";
 import { IHostRepository } from "../../entities/repositoryInterfaces/users/host-repository.interface";
 import { IHostModel } from "../../frameworks/database/mongo/models/host.model";
-import { ROLE } from "../../shared/constants/constants";
+import { HttpStatusCode, ROLE } from "../../shared/constants/constants";
+import { AppError } from "../../shared/errors/appError";
+import {
+  AdminResponseDTO,
+  HostResponseDTO,
+  UserResponseDTO,
+} from "../../shared/dtos/response.dto";
+import { UserMapper } from "../../shared/mappers/user.mapper";
+import { HostMapper } from "../../shared/mappers/host.mapper";
+import { AdminMapper } from "../../shared/mappers/admin.mapper";
 
 @injectable()
 export class VerifyTokenUsecase implements IVerifyTokenUsecase {
@@ -23,32 +32,38 @@ export class VerifyTokenUsecase implements IVerifyTokenUsecase {
 
     @inject("IHostRepository")
     private _hostRepository: IHostRepository,
+
+    @inject(UserMapper)
+    private _userMapper: UserMapper,
+
+    @inject(HostMapper)
+    private _hostMapper: HostMapper,
+
+    @inject(AdminMapper)
+    private _adminMapper: AdminMapper,
   ) {}
   async execute(
     token: string,
     role: string,
-  ): Promise<IAdminModel | IHostModel | IUserModel> {
+  ): Promise<AdminResponseDTO | HostResponseDTO | UserResponseDTO> {
     const decode = this._tokenService.verifyToken(token);
 
-    let repository;
+    let user;
 
     if (role === ROLE.USER) {
-      repository = this._UserRepository;
+      user = await this._UserRepository.findOne({ email: decode.email });
+
+      return this._userMapper.toDTO(user as unknown as IUserModel);
     } else if (role === ROLE.ADMIN) {
-      repository = this._adminRepository;
+      user = await this._adminRepository.findOne({ email: decode.email });
+
+      return this._adminMapper.toDTO(user as unknown as IAdminModel);
     } else if (role === ROLE.HOST) {
-      repository = this._adminRepository;
+      user = await this._hostRepository.findOne({ email: decode.email });
+
+      return this._hostMapper.toDTO(user as unknown as IHostModel);
     } else {
-      throw new Error("session Expired");
+      throw new AppError("session Expired", HttpStatusCode.UNAUTHORIZED);
     }
-    let user: IUserModel | IAdminModel | null;
-
-    user = await repository.findOne({ email: decode.email });
-
-    if (!user) {
-      throw new Error("authentication Error");
-    }
-
-    return user;
   }
 }

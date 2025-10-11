@@ -4,6 +4,8 @@ import { INotificationRepository } from "../../entities/repositoryInterfaces/not
 import { ISocketUserMapRepository } from "../../entities/repositoryInterfaces/redis/socket-user.repository";
 import { NotificationMapper } from "../../shared/mappers/notification.mapper";
 import { NotificationResponseDTO } from "../../shared/dtos/response.dto";
+import { AppError } from "../../shared/errors/appError";
+import { HttpStatusCode } from "../../shared/constants/constants";
 
 @injectable()
 export class ReadNotificationUsecase implements IReadNotificationUsecase {
@@ -27,11 +29,16 @@ export class ReadNotificationUsecase implements IReadNotificationUsecase {
       { isRead: true },
     );
 
-    if (!notification) throw new Error("Could not find the notification.");
+    if (!notification)
+      throw new AppError(
+        "Could not find the notification.",
+        HttpStatusCode.NOT_FOUND,
+      );
 
     const socketId = await this._socketRepository.getUserSocket(receiverId);
 
-    if (!socketId) throw new Error("Couldn't find socket Id");
+    if (!socketId)
+      throw new AppError("Couldn't find socket Id", HttpStatusCode.NOT_FOUND);
 
     const mappedNotfication = this._notifcationMapper.toDTO(notification);
 

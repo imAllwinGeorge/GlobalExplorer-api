@@ -1,4 +1,4 @@
-import { Request, Response, Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import {
   activityController,
   authController,
@@ -16,76 +16,83 @@ export class AdminRoutes {
   }
 
   private routes() {
-    this.router.post("/login", (req: Request, res: Response) => {
-      authController.login(req, res);
-    });
+    this.router.post(
+      "/login",
+      (req: Request, res: Response, next: NextFunction) => {
+        authController.login(req, res, next);
+      },
+    );
 
     this.router.get(
       "/get-users/:role",
       verifyToken,
-      (req: Request, res: Response) => {
-        userController.getAllUsers(req, res);
+      (req: Request, res: Response, next: NextFunction) => {
+        userController.getAllUsers(req, res, next);
       },
     );
 
     this.router.post(
       "/update-status/:role",
       verifyToken,
-      (req: Request, res: Response) => {
-        userController.updateStatus(req, res);
+      (req: Request, res: Response, next: NextFunction) => {
+        userController.updateStatus(req, res, next);
       },
     );
 
-    this.router.get("/get-user", verifyToken, (req: Request, res: Response) => {
-      userController.getUser(req, res);
-    });
+    this.router.get(
+      "/get-user",
+      verifyToken,
+      (req: Request, res: Response, next: NextFunction) => {
+        userController.getUser(req, res, next);
+      },
+    );
 
     this.router.get(
       "/get-category",
       verifyToken,
-      (req: Request, res: Response) => {
-        categoryController.getCategories(req, res);
+      (req: Request, res: Response, next: NextFunction) => {
+        categoryController.getCategories(req, res, next);
       },
     );
 
     this.router.post(
       "/add-category",
       verifyToken,
-      (req: Request, res: Response) => {
-        categoryController.addCategory(req, res);
+      (req: Request, res: Response, next: NextFunction) => {
+        categoryController.addCategory(req, res, next);
       },
     );
 
     this.router
       .route("/edit-category")
-      .put(verifyToken, (req: Request, res: Response) => {
-        categoryController.editCategory(req, res);
+      .put(verifyToken, (req: Request, res: Response, next: NextFunction) => {
+        categoryController.editCategory(req, res, next);
       })
-      .patch(verifyToken, (req: Request, res: Response) => {
-        categoryController.updateCategoryStatus(req, res);
+      .patch(verifyToken, (req: Request, res: Response, next: NextFunction) => {
+        categoryController.updateCategoryStatus(req, res, next);
       });
 
     this.router.get(
       "/get-activities",
       verifyToken,
-      (req: Request, res: Response) => {
-        activityController.getAllActivities(req, res);
+      (req: Request, res: Response, next: NextFunction) => {
+        activityController.getAllActivities(req, res, next);
       },
     );
 
     this.router.patch(
       `/activity/status/:id`,
       verifyToken,
-      (req: Request, res: Response) => {
-        activityController.updateActivity(req, res);
+      (req: Request, res: Response, next: NextFunction) => {
+        activityController.updateActivity(req, res, next);
       },
     );
 
     this.router.get(
       "/dashboard",
       verifyToken,
-      (req: Request, res: Response) => {
-        dashboardController.adminDashboardController(req, res);
+      (req: Request, res: Response, next: NextFunction) => {
+        dashboardController.adminDashboardController(req, res, next);
       },
     );
   }

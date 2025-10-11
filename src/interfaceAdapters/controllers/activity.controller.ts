@@ -5,12 +5,13 @@ import { IGetActivityUsecase } from "../../entities/usecaseInterfaces/activity/g
 import { IGetActivityDetailsUsecase } from "../../entities/usecaseInterfaces/activity/get-activity-details.usecase.interface";
 import { IGetFilteredAcitivityUsecase } from "../../entities/usecaseInterfaces/activity/get-filtered-activity.usecase.interface";
 import { IGetReviewUsecase } from "../../entities/usecaseInterfaces/review/get-review.interface";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { HttpStatusCode } from "../../shared/constants/constants";
 import {
   calculateTotalPages,
   getPaginationParams,
 } from "../../shared/utils/pagination.helper";
+import logger from "../../infrastructures/logger";
 
 @injectable()
 export class ActivityController implements IActivityController {
@@ -38,7 +39,11 @@ export class ActivityController implements IActivityController {
     }
   }
 
-  async editActivity(req: Request, res: Response): Promise<void> {
+  async editActivity(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { id } = req.params;
       const {
@@ -66,7 +71,7 @@ export class ActivityController implements IActivityController {
         try {
           existingImage = JSON.parse(existingImage); // will now be a real array
         } catch (error) {
-          console.warn("Failed to parse existingImage:", error);
+          logger.warn("Failed to parse existingImage:", error);
           existingImage = []; // fallback
         }
       }
@@ -101,22 +106,31 @@ export class ActivityController implements IActivityController {
 
       res.status(HttpStatusCode.OK).json({ activity });
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 
-  async updateActivity(req: Request, res: Response): Promise<void> {
+  async updateActivity(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { id } = req.params;
       const { data } = req.body;
       const activity = await this._editActivityUsecase.execute(id, data);
       res.status(HttpStatusCode.OK).json({ activity });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
+      next(error);
     }
   }
 
-  async getAllActivities(req: Request, res: Response): Promise<void> {
+  async getAllActivities(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       // const data = {};
       const { data } = req.body || {};
@@ -132,14 +146,19 @@ export class ActivityController implements IActivityController {
       const totalPages = calculateTotalPages(total, limit);
       res.status(HttpStatusCode.OK).json({ activities: items, totalPages });
     } catch (error) {
-      console.log(error);
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: "Internal Server Error" });
+      // console.log(error);
+      // res
+      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      //   .json({ message: "Internal Server Error" });
+      next(error);
     }
   }
 
-  async getActivityDetails(req: Request, res: Response): Promise<void> {
+  async getActivityDetails(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { id } = req.params;
       if (!id) {
@@ -150,7 +169,6 @@ export class ActivityController implements IActivityController {
       }
       const result = await this._getActivityDetailsUsecase.execute(id);
       const reviews = await this._getReviewUsecase.execute(id);
-      console.log("actvity details     ", result);
       res.status(HttpStatusCode.OK).json({
         activity: result.activity,
         razorpayAccountId: result.razorpayAccountId,
@@ -158,14 +176,19 @@ export class ActivityController implements IActivityController {
         reviews,
       });
     } catch (error) {
-      console.log(error);
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: "Internal Server Error" });
+      // console.log(error);
+      // res
+      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      //   .json({ message: "Internal Server Error" });
+      next(error);
     }
   }
 
-  async getFilteredActivity(req: Request, res: Response): Promise<void> {
+  async getFilteredActivity(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       // const page = parseInt(req.query.page as string) || 1;
       // const limit = parseInt(req.query.limit as string) || 10;
@@ -200,13 +223,14 @@ export class ActivityController implements IActivityController {
       );
       res.status(HttpStatusCode.OK).json(result);
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
-        return;
-      }
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: "Internal Server Error" });
+      // if (error instanceof Error) {
+      //   res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
+      //   return;
+      // }
+      // res
+      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      //   .json({ message: "Internal Server Error" });
+      next(error);
     }
   }
 }

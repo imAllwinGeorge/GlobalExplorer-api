@@ -8,7 +8,8 @@ import {
   HostResponseDTO,
   UserResponseDTO,
 } from "../../shared/dtos/response.dto";
-import { ROLE } from "../../shared/constants/constants";
+import { HttpStatusCode, ROLE } from "../../shared/constants/constants";
+import { AppError } from "../../shared/errors/appError";
 
 @injectable()
 export class GetUserUsecase implements IGetUserUsecase {
@@ -34,17 +35,19 @@ export class GetUserUsecase implements IGetUserUsecase {
     if (role === ROLE.USER) {
       user = await this._userRepository.findById({ _id });
 
-      if (!user) throw new Error(" User not found!");
+      if (!user)
+        throw new AppError(" User not found!", HttpStatusCode.NOT_FOUND);
 
       return this._userMapper.toDTO(user);
     } else if (role === ROLE.HOST) {
       user = await this._hostRepository.findById({ _id });
 
-      if (!user) throw new Error("Host not found!");
+      if (!user)
+        throw new AppError("Host not found!", HttpStatusCode.NOT_FOUND);
 
       return this._hostMapper.toDTO(user);
     }
 
-    throw new Error("Invalid request");
+    throw new AppError("Invalid request", HttpStatusCode.NOT_FOUND);
   }
 }

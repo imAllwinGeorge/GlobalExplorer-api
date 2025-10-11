@@ -21,41 +21,59 @@ export class AuthRoutes extends BaseRoute {
         console.log("sfnslkbnsbnsnkld");
         next();
       },
-      (req: Request, res: Response) => {
-        authController.send_otp(req, res);
+      (req: Request, res: Response, next: NextFunction) => {
+        authController.send_otp(req, res, next);
       },
     );
 
-    this.router.post("/resend-otp", (req: Request, res: Response) => {
-      authController.resend_otp(req, res);
-    });
+    this.router.post(
+      "/resend-otp",
+      (req: Request, res: Response, next: NextFunction) => {
+        authController.resend_otp(req, res, next);
+      },
+    );
 
-    this.router.post("/register", (req: Request, res: Response) => {
-      authController.register(req, res);
-    });
+    this.router.post(
+      "/register",
+      (req: Request, res: Response, next: NextFunction) => {
+        authController.register(req, res, next);
+      },
+    );
 
-    this.router.post("/login", (req: Request, res: Response) => {
-      authController.login(req, res);
-    });
+    this.router.post(
+      "/login",
+      (req: Request, res: Response, next: NextFunction) => {
+        authController.login(req, res, next);
+      },
+    );
 
-    this.router.post("/forgot-password", (req: Request, res: Response) => {
-      authController.forgotPassword(req, res);
-    });
+    this.router.post(
+      "/forgot-password",
+      (req: Request, res: Response, next: NextFunction) => {
+        authController.forgotPassword(req, res, next);
+      },
+    );
 
     this.router.patch(
       "/reset-password/:role/:id/:token",
-      (req: Request, res: Response) => {
-        authController.resetPassword(req, res);
+      (req: Request, res: Response, next: NextFunction) => {
+        authController.resetPassword(req, res, next);
       },
     );
 
-    this.router.post("/verify-token", (req: Request, res: Response) => {
-      authController.verifyToken(req, res);
-    });
+    this.router.post(
+      "/verify-token",
+      (req: Request, res: Response, next: NextFunction) => {
+        authController.verifyToken(req, res, next);
+      },
+    );
 
-    this.router.post("/auth/refresh-token", (req: Request, res: Response) => {
-      authController.refreshToken(req, res);
-    });
+    this.router.post(
+      "/auth/refresh-token",
+      (req: Request, res: Response, next: NextFunction) => {
+        authController.refreshToken(req, res, next);
+      },
+    );
 
     this.router.get("/auth/google", (req: Request, res: Response, next) => {
       console.log("google route end hit");
@@ -71,17 +89,23 @@ export class AuthRoutes extends BaseRoute {
       "/auth/google/callback",
       passport.authenticate("google", { failureRedirect: "/login" }),
 
-      function (req: Request, res: Response) {
-        authController.googleLogin(req, res);
+      function (req: Request, res: Response, next: NextFunction) {
+        authController.googleLogin(req, res, next);
       },
     );
 
-    this.router.post("/logout/:role", (req: Request, res: Response) => {
-      authController.logout(req, res);
-    });
+    this.router.post(
+      "/logout/:role",
+      (req: Request, res: Response, next: NextFunction) => {
+        authController.logout(req, res, next);
+      },
+    );
 
-    this.router.get("/get-profile", (req: Request, res: Response) => {
-      authController.getProfile(req, res);
-    });
+    this.router.get(
+      "/get-profile",
+      (req: Request, res: Response, next: NextFunction) => {
+        authController.getProfile(req, res, next);
+      },
+    );
   }
 }

@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 import { ICategoryController } from "../../entities/controllerInterfaces/category-controller.interface";
 import { IGetAllCategoryUsecase } from "../../entities/usecaseInterfaces/category/get-all-category.usecase.interface";
@@ -32,7 +32,11 @@ export class CategoryController implements ICategoryController {
     private _getAllCategoryNameUsecase: IGetAllCategoryNameUsecase,
   ) {}
 
-  async getCategories(req: Request, res: Response): Promise<void> {
+  async getCategories(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       // const page = parseInt(req.query.page as string);
       // const limit = parseInt(req.query.limit as string);
@@ -46,14 +50,20 @@ export class CategoryController implements ICategoryController {
         .json({ categories: result.items, totalPages });
       return;
     } catch (error) {
-      console.log(error);
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: "Internal Server Error" });
+      // console.log(error);
+      // res
+      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      //   .json({ message: "Internal Server Error" });
+
+      next(error);
     }
   }
 
-  async addCategory(req: Request, res: Response): Promise<void> {
+  async addCategory(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { data } = req.body;
 
@@ -77,23 +87,29 @@ export class CategoryController implements ICategoryController {
         .status(HttpStatusCode.BAD_REQUEST)
         .json({ message: "Ivalid Request" });
     } catch (error) {
-      console.log(error);
-      if (error instanceof Error) {
-        if (error.message === "Category name already exist!") {
-          res
-            .status(HttpStatusCode.BAD_REQUEST)
-            .json({ message: "Category name already exist!" });
-        }
-        return;
-      }
+      // console.log(error);
+      // if (error instanceof Error) {
+      //   if (error.message === "Category name already exist!") {
+      //     res
+      //       .status(HttpStatusCode.BAD_REQUEST)
+      //       .json({ message: "Category name already exist!" });
+      //   }
+      //   return;
+      // }
 
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: "Internal sever error" });
+      // res
+      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      //   .json({ message: "Internal sever error" });
+
+      next(error);
     }
   }
 
-  async editCategory(req: Request, res: Response): Promise<void> {
+  async editCategory(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { _id, value } = req.body;
       const validateData = categorySchema.parse(value);
@@ -112,43 +128,55 @@ export class CategoryController implements ICategoryController {
 
       res.status(HttpStatusCode.OK).json({ category });
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 
-  async updateCategoryStatus(req: Request, res: Response): Promise<void> {
+  async updateCategoryStatus(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { _id, value } = req.body;
       const category = await this._updateStatusCategory.execute(_id, value);
       res.status(HttpStatusCode.OK).json({ category });
       return;
     } catch (error) {
-      console.log(error);
-      if (error instanceof Error) {
-        res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
-        return;
-      }
+      // console.log(error);
+      // if (error instanceof Error) {
+      //   res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
+      //   return;
+      // }
 
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: "Internal server Error!" });
+      // res
+      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      //   .json({ message: "Internal server Error!" });
+
+      next(error);
     }
   }
 
-  async getCategoryNames(req: Request, res: Response): Promise<void> {
+  async getCategoryNames(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const categories = await this._getAllCategoryNameUsecase.execute();
 
       res.status(HttpStatusCode.OK).json({ categories });
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
-        return;
-      }
+      // if (error instanceof Error) {
+      //   res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
+      //   return;
+      // }
 
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: "Internal Server Error" });
+      // res
+      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      //   .json({ message: "Internal Server Error" });
+
+      next(error);
     }
   }
 }

@@ -18,14 +18,41 @@ export class AdminDashboardUsecase implements IAdminDashboardUsecase {
   ) {}
 
   async execute(): Promise<Record<string, number | object>> {
-    const [userCount, hostCount, bookingCount, dashboardData] =
-      await Promise.all([
-        this._userRepository.countDocuments({}),
-        this._hostRepository.countDocuments({}),
-        this._bookingRepository.countDocuments({}),
-        this._bookingRepository.dashboardData(),
-      ]);
+    const [
+      userCount,
+      hostCount,
+      bookingCount,
+      cancelledBooking,
+      upCommingBooking,
+      completedBooking,
+      dashboardData,
+      monthlyBookings,
+    ] = await Promise.all([
+      this._userRepository.countDocuments({}),
+      this._hostRepository.countDocuments({}),
+      this._bookingRepository.countDocuments({}),
+      this._bookingRepository.countDocuments({ isCancelled: true }),
+      this._bookingRepository.countDocuments({
+        date: { $gte: new Date() },
+        isCancelled: false,
+      }),
+      this._bookingRepository.countDocuments({
+        date: { $lt: new Date() },
+        isCancelled: false,
+      }),
+      this._bookingRepository.dashboardData(),
+      this._bookingRepository.monthlyBookings(),
+    ]);
 
-    return { userCount, hostCount, bookingCount, dashboardData };
+    return {
+      userCount,
+      hostCount,
+      bookingCount,
+      cancelledBooking,
+      upCommingBooking,
+      completedBooking,
+      dashboardData,
+      monthlyBookings,
+    };
   }
 }

@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
 import { inject, injectable } from "tsyringe";
 import { INotificationController } from "../../entities/controllerInterfaces/notification-controller.interface";
@@ -12,7 +12,11 @@ export class NotificationController implements INotificationController {
     private _getNotificationUsecase: IGetNotificationUsecase,
   ) {}
 
-  async getNotifications(req: Request, res: Response): Promise<void> {
+  async getNotifications(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { userId } = req.params;
 
@@ -20,15 +24,17 @@ export class NotificationController implements INotificationController {
 
       res.status(HttpStatusCode.OK).json({ notifications });
     } catch (error) {
-      console.log(error);
-      if (error instanceof Error) {
-        res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
-        return;
-      }
+      // console.log(error);
+      // if (error instanceof Error) {
+      //   res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
+      //   return;
+      // }
 
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: "Internal Server Error" });
+      // res
+      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      //   .json({ message: "Internal Server Error" });
+
+      next(error);
     }
   }
 }

@@ -26,7 +26,6 @@ export class GetActivityUsecase implements IGetActivityUsecase {
   ): Promise<{ items: ActivityResponseDTO[]; total: number }> {
     const cacheKey = `activity:${skip / limit + 1}:${limit}`;
     const cached = await this._cacheService.get(cacheKey);
-    console.log("cached result", cached);
 
     if (cached)
       return cached as { items: ActivityResponseDTO[]; total: number };
@@ -39,8 +38,6 @@ export class GetActivityUsecase implements IGetActivityUsecase {
     const mappedActivity = this._activityMapper.toDTOs(
       activities.items as IActivityModel[],
     );
-
-    console.log("foingionwoowgbgsogosj,", value);
 
     await this._cacheService.set(cacheKey, activities, 120);
 

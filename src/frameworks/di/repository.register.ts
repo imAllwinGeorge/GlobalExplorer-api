@@ -25,6 +25,10 @@ import { INotificationRepository } from "../../entities/repositoryInterfaces/not
 import { NotificationRepository } from "../../interfaceAdapters/repositories/notifiation.repository/notification.repository";
 import { IReviewRepository } from "../../entities/repositoryInterfaces/review/review-repository.interface";
 import { ReviewRepository } from "../../interfaceAdapters/repositories/review.repository/review.repository";
+import { IReservationRepository } from "../../entities/repositoryInterfaces/reservation/reservation-repository.interface";
+import { ReservationRepository } from "../../interfaceAdapters/repositories/reservation.repository/reservation-repository";
+import { IAvailabilityRepository } from "../../entities/repositoryInterfaces/availability/availability-repository.interface";
+import { AvailabilityRepository } from "../../interfaceAdapters/repositories/availability.repository/availability.repository";
 
 export class RepositoryRegistry {
   static registerRepositories(): void {
@@ -78,6 +82,14 @@ export class RepositoryRegistry {
 
     container.register<IReviewRepository>("IReviewRepository", {
       useClass: ReviewRepository,
+    });
+
+    container.register<IReservationRepository>("IReservationRepository", {
+      useClass: ReservationRepository,
+    });
+
+    container.register<IAvailabilityRepository>("IAvailabilityRepository", {
+      useClass: AvailabilityRepository,
     });
   }
 }

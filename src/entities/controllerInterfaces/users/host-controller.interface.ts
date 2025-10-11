@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
 export interface IHostController {
-  editProfile(req: Request, res: Response): Promise<void>;
-  getActivity(req: Request, res: Response): Promise<void>;
-  getCategories(req: Request, res: Response): Promise<void>;
-  addActivity(req: Request, res: Response): Promise<void>;
+  editProfile(req: Request, res: Response, next: NextFunction): Promise<void>;
+  getActivity(req: Request, res: Response, next: NextFunction): Promise<void>;
+  getCategories(req: Request, res: Response, next: NextFunction): Promise<void>;
+  addActivity(req: Request, res: Response, next: NextFunction): Promise<void>;
 }

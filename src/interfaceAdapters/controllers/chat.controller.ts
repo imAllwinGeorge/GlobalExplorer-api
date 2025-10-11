@@ -1,6 +1,6 @@
 import { HttpStatusCode } from "axios";
 
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 import { IChatController } from "../../entities/controllerInterfaces/chat-controller.interface";
 import { IGetConversationUsecase } from "../../entities/usecaseInterfaces/chat/direct-message/get-conversation.usecase.interface";
@@ -23,7 +23,11 @@ export class ChatController implements IChatController {
     @inject("IMarkReadMessageUsecase")
     private _markReadMessageUsecase: IMarkReadMessageUsecase,
   ) {}
-  async getAllConversation(req: Request, res: Response): Promise<void> {
+  async getAllConversation(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { id } = req.params;
 
@@ -31,18 +35,24 @@ export class ChatController implements IChatController {
 
       res.status(HttpStatusCode.Ok).json({ conversations });
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(HttpStatusCode.BadRequest).json({ message: error.message });
-        return;
-      }
+      // if (error instanceof Error) {
+      //   res.status(HttpStatusCode.BadRequest).json({ message: error.message });
+      //   return;
+      // }
 
-      res
-        .status(HttpStatusCode.InternalServerError)
-        .json({ message: "Internal Server Error" });
+      // res
+      //   .status(HttpStatusCode.InternalServerError)
+      //   .json({ message: "Internal Server Error" });
+
+      next(error);
     }
   }
 
-  async userSearch(req: Request, res: Response): Promise<void> {
+  async userSearch(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { search } = req.params;
 
@@ -50,36 +60,48 @@ export class ChatController implements IChatController {
 
       res.status(HttpStatusCode.Ok).json({ userSearch });
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(HttpStatusCode.BadRequest).json({ message: error.message });
-        return;
-      }
+      // if (error instanceof Error) {
+      //   res.status(HttpStatusCode.BadRequest).json({ message: error.message });
+      //   return;
+      // }
 
-      res
-        .status(HttpStatusCode.InternalServerError)
-        .json({ message: "Internal Server Error." });
+      // res
+      //   .status(HttpStatusCode.InternalServerError)
+      //   .json({ message: "Internal Server Error." });
+
+      next(error);
     }
   }
 
-  async getMessages(req: Request, res: Response): Promise<void> {
+  async getMessages(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { conversationId } = req.params;
       const messages = await this._getMessageUsecase.execute(conversationId);
 
       res.status(HttpStatusCode.Ok).json({ messages });
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(HttpStatusCode.BadRequest).json({ message: error.message });
-        return;
-      }
+      // if (error instanceof Error) {
+      //   res.status(HttpStatusCode.BadRequest).json({ message: error.message });
+      //   return;
+      // }
 
-      res
-        .status(HttpStatusCode.InternalServerError)
-        .json({ message: "Internal Server Error." });
+      // res
+      //   .status(HttpStatusCode.InternalServerError)
+      //   .json({ message: "Internal Server Error." });
+
+      next(error);
     }
   }
 
-  async markReadMessage(req: Request, res: Response): Promise<void> {
+  async markReadMessage(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { userId, conversationId } = req.params;
 
@@ -90,15 +112,17 @@ export class ChatController implements IChatController {
 
       res.status(HttpStatusCode.Ok).json({ conversation });
     } catch (error) {
-      console.log(error);
-      if (error instanceof Error) {
-        res.status(HttpStatusCode.BadRequest).json({ message: error.message });
-        return;
-      }
+      // console.log(error);
+      // if (error instanceof Error) {
+      //   res.status(HttpStatusCode.BadRequest).json({ message: error.message });
+      //   return;
+      // }
 
-      res
-        .status(HttpStatusCode.InternalServerError)
-        .json({ message: "Internal Server Error" });
+      // res
+      //   .status(HttpStatusCode.InternalServerError)
+      //   .json({ message: "Internal Server Error" });
+
+      next(error);
     }
   }
 }

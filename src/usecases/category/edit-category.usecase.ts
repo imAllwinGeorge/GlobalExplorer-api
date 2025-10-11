@@ -3,6 +3,8 @@ import { IEditCategoryUsecase } from "../../entities/usecaseInterfaces/category/
 import { ICategoryRepository } from "../../entities/repositoryInterfaces/category/categoryRepository.interface";
 import { CategoryMapper } from "../../shared/mappers/category.mapper";
 import { CategoryResponseDTO } from "../../shared/dtos/response.dto";
+import { AppError } from "../../shared/errors/appError";
+import { HttpStatusCode } from "../../shared/constants/constants";
 
 @injectable()
 export class EditCategoryUsecase implements IEditCategoryUsecase {
@@ -24,7 +26,10 @@ export class EditCategoryUsecase implements IEditCategoryUsecase {
     );
 
     if (similarCategory) {
-      throw new Error("Category with same Name already exists");
+      throw new AppError(
+        "Category with same Name already exists",
+        HttpStatusCode.CONFLICT,
+      );
     }
 
     const category = await this._categoryRepository.findOneAndUpdate(

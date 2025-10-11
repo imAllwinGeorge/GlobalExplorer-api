@@ -4,9 +4,10 @@ import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-
 import { IHostRepository } from "../../entities/repositoryInterfaces/users/host-repository.interface";
 import { UserMapper } from "../../shared/mappers/user.mapper";
 import { HostMapper } from "../../shared/mappers/host.mapper";
-import { ROLE } from "../../shared/constants/constants";
+import { HttpStatusCode, ROLE } from "../../shared/constants/constants";
 import { IUserModel } from "../../frameworks/database/mongo/models/user.model";
 import { IHostModel } from "../../frameworks/database/mongo/models/host.model";
+import { AppError } from "../../shared/errors/appError";
 
 @injectable()
 export class GetAllUsersUsecase implements IGetAllUsersUsecase {
@@ -46,7 +47,10 @@ export class GetAllUsersUsecase implements IGetAllUsersUsecase {
     }
 
     if (!result) {
-      throw new Error("failed to fetch users");
+      throw new AppError(
+        "failed to fetch users",
+        HttpStatusCode.INTERNAL_SERVER_ERROR,
+      );
     }
 
     return result;
