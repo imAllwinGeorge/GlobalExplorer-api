@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
 export interface IUserController {
-  getAllUsers(req: Request, res: Response): Promise<void>;
-  updateStatus(req: Request, res: Response): Promise<void>;
-  getUser(req: Request, res: Response): Promise<void>;
+  getAllUsers(req: Request, res: Response, next: NextFunction): Promise<void>;
+  updateStatus(req: Request, res: Response, next: NextFunction): Promise<void>;
+  getUser(req: Request, res: Response, next: NextFunction): Promise<void>;
 }

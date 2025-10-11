@@ -3,6 +3,8 @@ import { IUpdateCategoryUsecase } from "../../entities/usecaseInterfaces/categor
 import { ICategoryRepository } from "../../entities/repositoryInterfaces/category/categoryRepository.interface";
 import { CategoryMapper } from "../../shared/mappers/category.mapper";
 import { CategoryResponseDTO } from "../../shared/dtos/response.dto";
+import { AppError } from "../../shared/errors/appError";
+import { HttpStatusCode } from "../../shared/constants/constants";
 
 @injectable()
 export class UpdateStatusCategoryUsecase implements IUpdateCategoryUsecase {
@@ -20,7 +22,11 @@ export class UpdateStatusCategoryUsecase implements IUpdateCategoryUsecase {
       value,
     );
 
-    if (!category) throw new Error("could not find the category!");
+    if (!category)
+      throw new AppError(
+        "could not find the category!",
+        HttpStatusCode.INTERNAL_SERVER_ERROR,
+      );
 
     return this._categoryMapper.toDTO(category);
   }

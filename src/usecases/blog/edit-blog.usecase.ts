@@ -5,6 +5,8 @@ import { ICacheService } from "../../entities/serviceInterfaces/cache-service.in
 import { BlogMapper } from "../../shared/mappers/blog.mapper";
 import { IBlogModel } from "../../frameworks/database/mongo/models/blog.model";
 import { BlogResponseDTO } from "../../shared/dtos/response.dto";
+import { AppError } from "../../shared/errors/appError";
+import { HttpStatusCode } from "../../shared/constants/constants";
 
 @injectable()
 export class EditBlogUsecase implements IEditBlogUsecase {
@@ -26,7 +28,10 @@ export class EditBlogUsecase implements IEditBlogUsecase {
     );
 
     if (!editedBlog)
-      throw new Error("Could not find the blog... Please try again");
+      throw new AppError(
+        "Could not find the blog... Please try again",
+        HttpStatusCode.NOT_FOUND,
+      );
 
     await this._cacheService.delByPattern(`activity:*`);
 

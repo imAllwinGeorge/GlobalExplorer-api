@@ -3,6 +3,8 @@ import { IGetAllCategoryUsecase } from "../../entities/usecaseInterfaces/categor
 import { ICategoryRepository } from "../../entities/repositoryInterfaces/category/categoryRepository.interface";
 import { CategoryMapper } from "../../shared/mappers/category.mapper";
 import { ICategoryModel } from "../../frameworks/database/mongo/models/category.model";
+import { AppError } from "../../shared/errors/appError";
+import { HttpStatusCode } from "../../shared/constants/constants";
 
 @injectable()
 export class GetAllCategoryUsecase implements IGetAllCategoryUsecase {
@@ -21,7 +23,10 @@ export class GetAllCategoryUsecase implements IGetAllCategoryUsecase {
     const result = await this._categoryRepository.findAll(limit, skip, {});
 
     if (!result)
-      throw new Error("We can not process the request... Please try again.");
+      throw new AppError(
+        "We can not process the request... Please try again.",
+        HttpStatusCode.INTERNAL_SERVER_ERROR,
+      );
 
     const mappedCategory = this._categoryMapper.toDTOs(
       result.items as ICategoryModel[],

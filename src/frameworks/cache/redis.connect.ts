@@ -1,5 +1,6 @@
 import { createClient } from "redis";
 import { config } from "../../shared/config";
+import logger from "../../infrastructures/logger";
 
 export const redisClient = createClient({
   username: config.redis.REDIS_USERNAME || "default",
@@ -15,9 +16,9 @@ redisClient.on("error", (err) => console.log("Redis clientError", err));
 export const connectRedisClient = async () => {
   try {
     await redisClient.connect();
-    console.log("Redis Connected Successfully!");
+    logger.info("Redis Connected Successfully!");
   } catch (error) {
-    console.log("Redis Connectio failed: ", error);
+    logger.error("Redis Connectio failed: ", error);
     process.exit(1);
   }
 };

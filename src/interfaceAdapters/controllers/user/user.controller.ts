@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import { IUserController } from "../../../entities/controllerInterfaces/users/user-controller.interface";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { IGetAllUsersUsecase } from "../../../entities/usecaseInterfaces/user/get-all-user.usecase.interface";
 import { IUpdateStatusUsecase } from "../../../entities/usecaseInterfaces/user/update-status.usecase.interface";
 import { IGetUserUsecase } from "../../../entities/usecaseInterfaces/user/get-user.usecase.interface";
@@ -23,7 +23,11 @@ export class UserController implements IUserController {
     private _getUserUsecase: IGetUserUsecase,
   ) {}
 
-  async getAllUsers(req: Request, res: Response): Promise<void> {
+  async getAllUsers(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { role } = req.params;
       const { limit, skip } = getPaginationParams(req);
@@ -32,11 +36,16 @@ export class UserController implements IUserController {
       res.status(HttpStatusCode.OK).json({ users: result.items, totalPages });
       return;
     } catch (error) {
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
+      // res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
+      next(error);
     }
   }
 
-  async updateStatus(req: Request, res: Response): Promise<void> {
+  async updateStatus(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { _id, value } = req.body;
       const { role } = req.params;
@@ -46,11 +55,16 @@ export class UserController implements IUserController {
         message: `${user.firstName} is ${user.isBlocked ? "Blocked" : "UnBlocked"}`,
       });
     } catch (error) {
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
+      // res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
+      next(error);
     }
   }
 
-  async getUser(req: Request, res: Response): Promise<void> {
+  async getUser(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { _id, role } = req.query;
       const user = await this._getUserUsecase.execute(
@@ -59,8 +73,9 @@ export class UserController implements IUserController {
       );
       res.status(HttpStatusCode.OK).json({ user });
     } catch (error) {
-      console.log("get user details", error);
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ messge: error });
+      // console.log("get user details", error);
+      // res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ messge: error });
+      next(error);
     }
   }
 }

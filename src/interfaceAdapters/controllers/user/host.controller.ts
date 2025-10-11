@@ -6,7 +6,7 @@ import { IGetActivityUsecase } from "../../../entities/usecaseInterfaces/activit
 import { IAddActivityUsecase } from "../../../entities/usecaseInterfaces/activity/add-activity.usecase.interface";
 import { IGetAllCategoryNameUsecase } from "../../../entities/usecaseInterfaces/category/get-all-category-names.usecase.interface";
 import { IUpdateStatusUsecase } from "../../../entities/usecaseInterfaces/user/update-status.usecase.interface";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import {
   calculateTotalPages,
   getPaginationParams,
@@ -35,7 +35,11 @@ export class HostController implements IHostController {
     private _updateUserUsecase: IUpdateStatusUsecase,
   ) {}
 
-  async getActivity(req: Request, res: Response): Promise<void> {
+  async getActivity(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { id } = req.params;
       const { limit, skip } = getPaginationParams(req);
@@ -47,20 +51,28 @@ export class HostController implements IHostController {
         .status(HttpStatusCode.OK)
         .json({ activities: result.items, totalPages });
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 
-  async getCategories(req: Request, res: Response): Promise<void> {
+  async getCategories(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const categories = await this._getAllCategoryNameUsecase.execute();
       res.status(HttpStatusCode.OK).json({ categories });
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 
-  async addActivity(req: Request, res: Response): Promise<void> {
+  async addActivity(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const {
         activityName,
@@ -82,8 +94,8 @@ export class HostController implements IHostController {
       } = req.body;
       let images = [];
       const files = req.files as Express.Multer.File[];
-
-      images = files.map((images) => images.filename);
+      console.log("cloudinary return data: ", files);
+      images = files.map((images) => images.path);
 
       const parsedLocation = JSON.parse(location); // [75.1, 10.2]
       const paresedRecurrenceDays = JSON.parse(recurrenceDays);
@@ -112,11 +124,15 @@ export class HostController implements IHostController {
         return;
       }
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 
-  async editProfile(req: Request, res: Response): Promise<void> {
+  async editProfile(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
     try {
       const { id } = req.params;
       const parsedData = hostSchema.parse(req.body);
@@ -155,14 +171,15 @@ export class HostController implements IHostController {
       );
       res.status(HttpStatusCode.OK).json({ user: updatedProfile });
     } catch (error) {
-      console.log(error);
-      if (error instanceof Error) {
-        res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
-        return;
-      }
-      res
-        .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-        .json({ message: "Internal server error" });
+      next(error);
+      // console.log(error);
+      // if (error instanceof Error) {
+      //   res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
+      //   return;
+      // }
+      // res
+      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      //   .json({ message: "Internal server error" });
     }
   }
 }

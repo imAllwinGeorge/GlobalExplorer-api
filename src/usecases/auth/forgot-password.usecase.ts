@@ -6,6 +6,8 @@ import { IJwtservice } from "../../entities/serviceInterfaces/jwt-services.inter
 import dotenv from "dotenv";
 import { IHostRepository } from "../../entities/repositoryInterfaces/users/host-repository.interface";
 import { IAdminRepository } from "../../entities/repositoryInterfaces/users/admin-repository.inteface";
+import { AppError } from "../../shared/errors/appError";
+import { HttpStatusCode } from "../../shared/constants/constants";
 dotenv.config();
 
 const frontEndUrl = process.env.FRONT_END_URL;
@@ -40,7 +42,11 @@ export class ForgotPasswordUsecase implements IForgotPasswordUsecase {
 
     const user = await repository.findOne({ email });
 
-    if (!user) throw new Error("User not found. Please enter a valid email.");
+    if (!user)
+      throw new AppError(
+        "User not found. Please enter a valid email.",
+        HttpStatusCode.NOT_FOUND,
+      );
 
     const token = this._jwtService.resetToken({ email });
 

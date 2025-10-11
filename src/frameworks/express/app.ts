@@ -12,6 +12,7 @@ import path from "path";
 import { UserRoutes } from "../routes/user.route";
 import { HostRoute } from "../routes/host.route";
 import { config } from "../../shared/config";
+import { errorHandler } from "../../interfaceAdapters/middleware/errorHandler";
 
 dotenv.config();
 
@@ -52,5 +53,7 @@ app.use("/api", authRoutes.router);
 app.use("/api/admin", adminRoutes.router);
 app.use("/api/user", userRoutes.router);
 app.use("/api/host", hostRoute.router);
+
+app.use(errorHandler);
 
 export default app;

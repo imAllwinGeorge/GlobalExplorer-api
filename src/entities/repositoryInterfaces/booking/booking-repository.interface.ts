@@ -11,4 +11,11 @@ export interface IBookingRepository extends IBaseRepository<IBookingModal> {
   dashboardData(hostId?: string): Promise<object>;
 
   checkBookings(userId: string): Promise<number>;
+
+  monthlyBookings(id?: string): Promise<
+    {
+      _id: { month: number };
+      count: number;
+    }[]
+  >;
 }

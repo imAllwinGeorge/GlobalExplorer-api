@@ -74,6 +74,8 @@ export interface HostResponseDTO {
 
 export interface AdminResponseDTO {
   _id: ObjectId;
+  firstName: string;
+  lastName: string;
   email: string;
   role: "user" | "admin" | "host";
   isBlocked: boolean;

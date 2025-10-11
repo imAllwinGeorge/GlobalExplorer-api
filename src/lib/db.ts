@@ -1,12 +1,15 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import logger from "../infrastructures/logger";
+import { startReservationWatcher } from "../frameworks/workers/reservationWatcher";
 dotenv.config();
 
 export const connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGODB_URI as string);
-    console.log(`mongoDB connected: ${conn.connection.host}`);
+    logger.info(`mongoDB connected: ${conn.connection.host}`);
+    startReservationWatcher();
   } catch (error) {
-    console.log(`mongoose connection error: ${error}`);
+    logger.error(`mongoose connection error: ${error}`);
   }
 };

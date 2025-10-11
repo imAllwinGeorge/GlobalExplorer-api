@@ -117,6 +117,8 @@ import { CategoryMapper } from "../../shared/mappers/category.mapper";
 import { ConversationMapper } from "../../shared/mappers/conversation.mapper";
 import { MessageMapper } from "../../shared/mappers/message.mapper";
 import { NotificationMapper } from "../../shared/mappers/notification.mapper";
+import { IGetBookingUsecase } from "../../entities/usecaseInterfaces/booking/get-booking.usecase.interface";
+import { GetBookingUsecase } from "../../usecases/booking/get-booking.usecase";
 
 export class UsecaseRegistery {
   static registerUsecases(): void {
@@ -349,6 +351,10 @@ export class UsecaseRegistery {
 
     container.register<IGetReviewUsecase>("IGetReviewUsecase", {
       useClass: GetReviewUsecase,
+    });
+
+    container.register<IGetBookingUsecase>("IGetBookingUsecase", {
+      useClass: GetBookingUsecase,
     });
 
     //   mappers....

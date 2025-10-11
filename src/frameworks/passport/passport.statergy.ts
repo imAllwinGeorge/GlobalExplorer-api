@@ -1,6 +1,7 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import dotenv from "dotenv";
+import logger from "../../infrastructures/logger";
 dotenv.config();
 
 passport.use(
@@ -23,7 +24,7 @@ passport.use(
         };
         return cb(null, user);
       } catch (error) {
-        console.log("passport error", error);
+        logger.error("passport error", error);
         return cb(error, undefined);
       }
     },

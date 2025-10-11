@@ -14,16 +14,45 @@ export class HostDashboardUsecase implements IHostDashboardUsecase {
   ) {}
 
   async execute(id: string): Promise<Record<string, number | object>> {
-    const [activityCount, bookingCount, dashboardData] = await Promise.all([
+    const [
+      activityCount,
+      bookingCount,
+      dashboardData,
+      upCommingBooking,
+      completedBooking,
+      cancelledBooking,
+      monthlyBookings,
+    ] = await Promise.all([
       this._activityRepository.countDocuments({ userId: id }),
       this._bookingRepository.countDocuments({
         hostId: id,
-        isCancelled: false,
-        paymentStatus: "paid",
       }),
       this._bookingRepository.dashboardData(id),
+      this._bookingRepository.countDocuments({
+        hostId: id,
+        date: { $gte: new Date() },
+        isCancelled: false,
+      }),
+      this._bookingRepository.countDocuments({
+        hostId: id,
+        date: { $lt: new Date() },
+        isCancelled: false,
+      }),
+      this._bookingRepository.countDocuments({
+        hostId: id,
+        isCancelled: true,
+      }),
+      this._bookingRepository.monthlyBookings(id),
     ]);
 
-    return { activityCount, bookingCount, dashboardData };
+    return {
+      activityCount,
+      bookingCount,
+      dashboardData,
+      upCommingBooking,
+      completedBooking,
+      cancelledBooking,
+      monthlyBookings,
+    };
   }
 }

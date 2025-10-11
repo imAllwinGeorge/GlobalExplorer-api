@@ -10,9 +10,10 @@ import {
   HostResponseDTO,
   UserResponseDTO,
 } from "../../shared/dtos/response.dto";
-import { ROLE } from "../../shared/constants/constants";
+import { HttpStatusCode, ROLE } from "../../shared/constants/constants";
 import { IUserModel } from "../../frameworks/database/mongo/models/user.model";
 import { IHostModel } from "../../frameworks/database/mongo/models/host.model";
+import { AppError } from "../../shared/errors/appError";
 
 @injectable()
 export class UpdateStatusUsecase implements IUpdateStatusUsecase {
@@ -51,7 +52,8 @@ export class UpdateStatusUsecase implements IUpdateStatusUsecase {
     console.log("before operation:   ", value);
     const user = await repository?.findOneAndUpdate({ _id }, value);
 
-    if (!user) throw new Error("Invalid request!");
+    if (!user)
+      throw new AppError("Invalid request!", HttpStatusCode.BAD_REQUEST);
 
     if (user.isBlocked === true) {
       console.log(" after cheking the user is blocked or not:  ", user);

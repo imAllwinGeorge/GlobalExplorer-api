@@ -6,6 +6,7 @@ import { createServer } from "http";
 import { container } from "tsyringe";
 import { connectRedisClient } from "./frameworks/cache/redis.connect";
 import { SocketServer } from "./frameworks/socket/socketServer";
+import logger from "./infrastructures/logger";
 
 connectDB();
 connectRedisClient();
@@ -27,6 +28,16 @@ socketServer.onConnection((socket) => {
   console.log("socket server connecte successfull: ", socket.id);
 });
 
+process.on("uncaughtException", (err) => {
+  logger.error("UNCAUGHT EXCEPTION 🔥", err);
+  process.exit(1);
+});
+
+process.on("unhandledRejection", (reason) => {
+  logger.error("UNHANDLED REJECTION 🔥", reason);
+  process.exit(1);
+});
+
 httpServer.listen(3000, () => {
-  console.log(" server is running, http://localhost:3000");
+  logger.info(" server is running, http://localhost:3000");
 });
