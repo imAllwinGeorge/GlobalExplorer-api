@@ -53,19 +53,19 @@ export class GetActivityDetailsUsecase implements IGetActivityDetailsUsecase {
       mappedActivity = this._activityMapper.toDTO(activity);
     }
 
-    const cacheKey = `activity:${id}`;
+    // const cacheKey = `activity:${id}`;
 
-    const cached = await this._cacheService.get(cacheKey);
+    // const cached = await this._cacheService.get(cacheKey);
 
-    if (cached)
-      return cached as {
-        activity: ActivityResponseDTO;
-        razorpayAccountId: string;
-        availability: {
-          date: string;
-          availableSeats: number;
-        }[];
-      };
+    // if (cached)
+    //   return cached as {
+    //     activity: ActivityResponseDTO;
+    //     razorpayAccountId: string;
+    //     availability: {
+    //       date: string;
+    //       availableSeats: number;
+    //     }[];
+    //   };
 
     const razorpayAccountId = await this._hostRepository.getRazorpayAccountId(
       activity.userId,
@@ -149,11 +149,11 @@ export class GetActivityDetailsUsecase implements IGetActivityDetailsUsecase {
       }),
     );
 
-    await this._cacheService.set(
-      cacheKey,
-      { activity: mappedActivity, razorpayAccountId, availability: result },
-      120,
-    );
+    // await this._cacheService.set(
+    //   cacheKey,
+    //   { activity: mappedActivity, razorpayAccountId, availability: result },
+    //   120,
+    // );
 
     return {
       activity: mappedActivity,

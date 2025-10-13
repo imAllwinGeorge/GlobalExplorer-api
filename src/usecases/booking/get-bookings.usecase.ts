@@ -23,15 +23,15 @@ export class GetBookedActivityUsecase implements IGetBookedActivityUsecase {
     limit: number,
     skip: number,
   ): Promise<{ items: object[]; total: number }> {
-    const cachekey = `order:${skip / limit + 1}:${limit}`;
+    // const cachekey = `order:${skip / limit + 1}:${limit}`;
 
-    const cached = await this._cacheService.get(cachekey);
+    // const cached = await this._cacheService.get(cachekey);
 
-    if (cached) return cached as { items: object[]; total: number };
+    // if (cached) return cached as { items: object[]; total: number };
 
     const result = await this._bookingRepository.findAll(limit, skip, data);
 
-    await this._cacheService.set(cachekey, result, 60);
+    // await this._cacheService.set(cachekey, result, 60);
 
     const mappedBooking = this._bookingMapper.toDTOs(
       result.items as IBookingModal[],

@@ -4,6 +4,7 @@ import {
   authController,
   categoryController,
   dashboardController,
+  salesController,
   userController,
 } from "../di/resolver";
 import { verifyToken } from "../../interfaceAdapters/middleware/auth.middleware";
@@ -93,6 +94,14 @@ export class AdminRoutes {
       verifyToken,
       (req: Request, res: Response, next: NextFunction) => {
         dashboardController.adminDashboardController(req, res, next);
+      },
+    );
+
+    this.router.get(
+      "/sales",
+      verifyToken,
+      (req: Request, res: Response, next: NextFunction) => {
+        salesController.generateSalesReport(req, res, next);
       },
     );
   }

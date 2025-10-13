@@ -30,8 +30,14 @@ export class UserController implements IUserController {
   ): Promise<void> {
     try {
       const { role } = req.params;
+      const { search } = req.query;
       const { limit, skip } = getPaginationParams(req);
-      const result = await this._getAllUsersUsecase.execute(limit, skip, role);
+      const result = await this._getAllUsersUsecase.execute(
+        limit,
+        skip,
+        role,
+        search as string,
+      );
       const totalPages = calculateTotalPages(result.total, limit);
       res.status(HttpStatusCode.OK).json({ users: result.items, totalPages });
       return;

@@ -28,6 +28,8 @@ import { IDashboardController } from "../../entities/controllerInterfaces/dashbo
 import { DashBoardController } from "../../interfaceAdapters/controllers/dashboard.controller";
 import { IReviewController } from "../../entities/controllerInterfaces/review-controller.interface";
 import { ReviewController } from "../../interfaceAdapters/controllers/review.controller";
+import { ISalesController } from "../../entities/controllerInterfaces/sales-controller.interface";
+import { SalesController } from "../../interfaceAdapters/controllers/sales.controller";
 
 DependancyInjection.registerAll();
 
@@ -72,3 +74,6 @@ export const dashboardController =
 
 export const reviewController =
   container.resolve<IReviewController>(ReviewController);
+
+export const salesController =
+  container.resolve<ISalesController>(SalesController);

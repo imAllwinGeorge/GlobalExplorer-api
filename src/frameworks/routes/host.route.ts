@@ -6,6 +6,7 @@ import {
   chatController,
   dashboardController,
   hostController,
+  salesController,
 } from "../di/resolver";
 import upload from "../multer/multer";
 import { BaseRoute } from "./base.route";
@@ -95,6 +96,14 @@ export class HostRoute extends BaseRoute {
       verifyToken,
       (req: Request, res: Response, next: NextFunction) => {
         chatController.getAllConversation(req, res, next);
+      },
+    );
+
+    this.router.get(
+      "/sales/:id",
+      verifyToken,
+      (req: Request, res: Response, next: NextFunction) => {
+        salesController.generateHostSalesReport(req, res, next);
       },
     );
   }

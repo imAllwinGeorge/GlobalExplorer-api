@@ -42,7 +42,12 @@ export class CategoryController implements ICategoryController {
       // const limit = parseInt(req.query.limit as string);
       // const skip = (page - 1) * limit;
       const { limit, skip } = getPaginationParams(req);
-      const result = await this._getAllCategoryUsecase.execute(limit, skip);
+      const { search } = req.query;
+      const result = await this._getAllCategoryUsecase.execute(
+        limit,
+        skip,
+        search as string,
+      );
       const totalPages = calculateTotalPages(result.total, limit);
 
       res

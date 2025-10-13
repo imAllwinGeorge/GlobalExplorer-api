@@ -154,4 +154,36 @@ export class BookingRepository
     ]);
     return result;
   }
+
+  async yearlySales(
+    year: number,
+    id?: string,
+  ): Promise<{ _id: { month: number }; count: number }[]> {
+    const filter: FilterQuery<object> = {
+      isCancelled: false,
+      createdAt: {
+        $gte: new Date(`${year}-01-01`),
+        $lt: new Date(`${year + 1}-01-01`),
+      },
+    };
+
+    if (id) {
+      filter.hostId = new mongoose.Types.ObjectId(id);
+    }
+    const result = await this.model.aggregate([
+      {
+        $match: filter,
+      },
+      {
+        $group: {
+          _id: { month: { $month: "$createdAt" } },
+          totalSales: { $sum: "$participantCount" }, // or use $count if you just want count
+          bookingCount: { $sum: 1 },
+        },
+      },
+      { $sort: { "_id.month": 1 } },
+    ]);
+
+    return result;
+  }
 }

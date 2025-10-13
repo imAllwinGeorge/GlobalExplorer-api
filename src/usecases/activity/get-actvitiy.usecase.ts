@@ -5,6 +5,7 @@ import { ICacheService } from "../../entities/serviceInterfaces/cache-service.in
 import { ActivityMapper } from "../../shared/mappers/activity.mapper";
 import { ActivityResponseDTO } from "../../shared/dtos/response.dto";
 import { IActivityModel } from "../../frameworks/database/mongo/models/activity.model";
+import mongoose, { FilterQuery } from "mongoose";
 
 @injectable()
 export class GetActivityUsecase implements IGetActivityUsecase {
@@ -22,24 +23,32 @@ export class GetActivityUsecase implements IGetActivityUsecase {
   async execute(
     limit: number,
     skip: number,
-    value: object,
+    search: string,
+    id?: string,
   ): Promise<{ items: ActivityResponseDTO[]; total: number }> {
-    const cacheKey = `activity:${skip / limit + 1}:${limit}`;
-    const cached = await this._cacheService.get(cacheKey);
+    const filter: FilterQuery<object> = {};
+    // const cacheKey = `activity:${skip / limit + 1}:${limit}:${search}`;
+    // const cached = await this._cacheService.get(cacheKey);
+    if (search.trim().length > 0) {
+      filter.activityName = { $regex: search, $options: "i" };
+    }
 
-    if (cached)
-      return cached as { items: ActivityResponseDTO[]; total: number };
+    if (id) {
+      filter.userId = new mongoose.Types.ObjectId(id);
+    }
+    // if (cached)
+    //   return cached as { items: ActivityResponseDTO[]; total: number };
     const activities = await this._activityRepository.findAll(
       limit,
       skip,
-      value,
+      filter,
     );
 
     const mappedActivity = this._activityMapper.toDTOs(
       activities.items as IActivityModel[],
     );
 
-    await this._cacheService.set(cacheKey, activities, 120);
+    // await this._cacheService.set(cacheKey, activities, 120);
 
     return { items: mappedActivity, total: activities.total };
   }

@@ -5,6 +5,7 @@ import { CategoryMapper } from "../../shared/mappers/category.mapper";
 import { ICategoryModel } from "../../frameworks/database/mongo/models/category.model";
 import { AppError } from "../../shared/errors/appError";
 import { HttpStatusCode } from "../../shared/constants/constants";
+import { FilterQuery } from "mongoose";
 
 @injectable()
 export class GetAllCategoryUsecase implements IGetAllCategoryUsecase {
@@ -19,8 +20,13 @@ export class GetAllCategoryUsecase implements IGetAllCategoryUsecase {
   async execute(
     limit: number,
     skip: number,
+    search: string,
   ): Promise<{ items: object[]; total: number }> {
-    const result = await this._categoryRepository.findAll(limit, skip, {});
+    const filter: FilterQuery<object> = {};
+    if (search.trim().length > 0) {
+      filter.categoryName = { $regex: search, $options: "i" };
+    }
+    const result = await this._categoryRepository.findAll(limit, skip, filter);
 
     if (!result)
       throw new AppError(

@@ -14,6 +14,7 @@ import {
 import { HttpStatusCode } from "../../shared/constants/constants";
 import { config } from "../../shared/config";
 import { IGetBookingUsecase } from "../../entities/usecaseInterfaces/booking/get-booking.usecase.interface";
+import { FilterQuery } from "mongoose";
 
 @injectable()
 export class BookingController implements IBookingController {
@@ -223,15 +224,23 @@ export class BookingController implements IBookingController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const id = req.query.id;
+      const { id, search } = req.query;
       // const page = parseInt(req.query.page as string);
       // const limit = parseInt(req.query.limit as string);
       // const skip = (page - 1) * limit;
 
       const { limit, skip } = getPaginationParams(req);
 
+      const filter: FilterQuery<object> = {
+        hostId: id,
+      };
+
+      if ((search as string).trim().length > 0) {
+        filter.activityTitle = { $regex: search, $options: "i" };
+      }
+
       const result = await this._getBookedActivityUsecase.execute(
-        { hostId: id },
+        filter,
         limit,
         skip,
       );

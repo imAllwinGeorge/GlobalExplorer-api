@@ -122,10 +122,9 @@ export class CreateOrderUsecase implements ICreateOrderUsecase {
       await session.abortTransaction();
       session.endSession();
       logger.error(error);
-      throw new AppError(
-        "failed to place the order!",
-        HttpStatusCode.INTERNAL_SERVER_ERROR,
-      );
+      const message =
+        error instanceof AppError ? error.message : "Failed to place the order";
+      throw new AppError(message, HttpStatusCode.INTERNAL_SERVER_ERROR);
     } finally {
       await this._cacheService.delByPattern(`order:*`);
     }

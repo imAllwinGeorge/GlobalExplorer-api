@@ -18,4 +18,9 @@ export interface IBookingRepository extends IBaseRepository<IBookingModal> {
       count: number;
     }[]
   >;
+
+  yearlySales(
+    year: number,
+    id?: string,
+  ): Promise<{ _id: { month: number }; count: number }[]>;
 }

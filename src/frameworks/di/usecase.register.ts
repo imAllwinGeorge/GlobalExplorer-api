@@ -119,6 +119,10 @@ import { MessageMapper } from "../../shared/mappers/message.mapper";
 import { NotificationMapper } from "../../shared/mappers/notification.mapper";
 import { IGetBookingUsecase } from "../../entities/usecaseInterfaces/booking/get-booking.usecase.interface";
 import { GetBookingUsecase } from "../../usecases/booking/get-booking.usecase";
+import { IAdminSalesReportUsecase } from "../../entities/usecaseInterfaces/sales/admin-salesReport.interface";
+import { AdminSalesReportUsecase } from "../../usecases/sales/admin-salesReport.usecase";
+import { IHostSalesReportUsecase } from "../../entities/usecaseInterfaces/sales/host-salesReport.interface";
+import { HostSalesReportUsecase } from "../../usecases/sales/host-salesReport.usecase";
 
 export class UsecaseRegistery {
   static registerUsecases(): void {
@@ -355,6 +359,14 @@ export class UsecaseRegistery {
 
     container.register<IGetBookingUsecase>("IGetBookingUsecase", {
       useClass: GetBookingUsecase,
+    });
+
+    container.register<IAdminSalesReportUsecase>("IAdminSalesReportUsecase", {
+      useClass: AdminSalesReportUsecase,
+    });
+
+    container.register<IHostSalesReportUsecase>("IHostSalesReportUsecase", {
+      useClass: HostSalesReportUsecase,
     });
 
     //   mappers....

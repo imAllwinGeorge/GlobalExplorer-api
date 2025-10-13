@@ -11,7 +11,6 @@ import {
   calculateTotalPages,
   getPaginationParams,
 } from "../../../shared/utils/pagination.helper";
-import { Types } from "mongoose";
 import { HttpStatusCode } from "../../../shared/constants/constants";
 import { z } from "zod";
 
@@ -43,9 +42,14 @@ export class HostController implements IHostController {
     try {
       const { id } = req.params;
       const { limit, skip } = getPaginationParams(req);
-      const result = await this._getActivityUsecase.execute(limit, skip, {
-        userId: new Types.ObjectId(id),
-      });
+      const { search } = req.query;
+
+      const result = await this._getActivityUsecase.execute(
+        limit,
+        skip,
+        search as string,
+        id,
+      );
       const totalPages = calculateTotalPages(result.total, limit);
       res
         .status(HttpStatusCode.OK)

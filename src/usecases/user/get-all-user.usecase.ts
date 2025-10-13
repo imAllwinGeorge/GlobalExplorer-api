@@ -8,6 +8,7 @@ import { HttpStatusCode, ROLE } from "../../shared/constants/constants";
 import { IUserModel } from "../../frameworks/database/mongo/models/user.model";
 import { IHostModel } from "../../frameworks/database/mongo/models/host.model";
 import { AppError } from "../../shared/errors/appError";
+import { FilterQuery } from "mongoose";
 
 @injectable()
 export class GetAllUsersUsecase implements IGetAllUsersUsecase {
@@ -29,17 +30,28 @@ export class GetAllUsersUsecase implements IGetAllUsersUsecase {
     limit: number,
     skip: number,
     role: string,
+    search: string,
   ): Promise<{ items: object[]; total: number }> {
     let result;
+    const filter: FilterQuery<object> = { role };
+
+    if (search?.trim().length > 0) {
+      // ✅ Case-insensitive partial match on firstName or email
+      filter.$or = [
+        { firstName: { $regex: search, $options: "i" } },
+        { lastName: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+      ];
+    }
 
     if (role === ROLE.USER) {
-      result = await this._userRepository.findAll(limit, skip, { role });
+      result = await this._userRepository.findAll(limit, skip, filter);
 
       const users = this._userMapper.toDTOs(result.items as IUserModel[]);
 
       return { items: users, total: result.total };
     } else if (role === ROLE.HOST) {
-      result = await this._hostRepository.findAll(limit, skip, { role });
+      result = await this._hostRepository.findAll(limit, skip, filter);
 
       const users = this._hostMapper.toDTOs(result.items as IHostModel[]);
 
