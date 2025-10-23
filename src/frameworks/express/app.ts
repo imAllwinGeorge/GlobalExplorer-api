@@ -49,6 +49,11 @@ app.use("/uploads", express.static("uploads"));
 app.use(passport.initialize());
 app.use(passport.session());
 
+// backend/src/server.ts or app.ts
+app.get("/api/test", (req, res) => {
+  res.json({ message: "Backend is working!" });
+});
+
 app.use("/api", authRoutes.router);
 app.use("/api/admin", adminRoutes.router);
 app.use("/api/user", userRoutes.router);
