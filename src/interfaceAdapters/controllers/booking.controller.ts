@@ -218,29 +218,39 @@ export class BookingController implements IBookingController {
       next(error);
     }
   }
+
   async getActivityBookings(
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { id, search } = req.query;
+      const { id, search, filter } = req.query;
       // const page = parseInt(req.query.page as string);
       // const limit = parseInt(req.query.limit as string);
       // const skip = (page - 1) * limit;
 
       const { limit, skip } = getPaginationParams(req);
+      let query;
+      if (filter === "upcomming") {
+        query = { date: { $gt: new Date() } };
+      } else if (filter === "completed") {
+        query = { date: { $lt: new Date() } };
+      } else {
+        query = { isCancelled: true };
+      }
 
-      const filter: FilterQuery<object> = {
+      const filterObject: FilterQuery<object> = {
         hostId: id,
+        ...query,
       };
 
       if ((search as string).trim().length > 0) {
-        filter.activityTitle = { $regex: search, $options: "i" };
+        filterObject.activityTitle = { $regex: search, $options: "i" };
       }
 
       const result = await this._getBookedActivityUsecase.execute(
-        filter,
+        filterObject,
         limit,
         skip,
       );

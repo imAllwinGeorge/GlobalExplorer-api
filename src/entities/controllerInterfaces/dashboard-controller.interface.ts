@@ -11,4 +11,10 @@ export interface IDashboardController {
     res: Response,
     next: NextFunction,
   ): Promise<void>;
+
+  userImageGallery(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void>;
 }

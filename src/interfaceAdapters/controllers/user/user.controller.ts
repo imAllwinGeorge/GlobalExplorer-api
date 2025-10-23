@@ -8,7 +8,8 @@ import {
   calculateTotalPages,
   getPaginationParams,
 } from "../../../shared/utils/pagination.helper";
-import { HttpStatusCode } from "../../../shared/constants/constants";
+import { HttpStatusCode, ROLE } from "../../../shared/constants/constants";
+import { userEditSchema } from "../auth/validations/user-signup.validatiion.schema";
 
 @injectable()
 export class UserController implements IUserController {
@@ -30,13 +31,14 @@ export class UserController implements IUserController {
   ): Promise<void> {
     try {
       const { role } = req.params;
-      const { search } = req.query;
+      const { search, filter } = req.query;
       const { limit, skip } = getPaginationParams(req);
       const result = await this._getAllUsersUsecase.execute(
         limit,
         skip,
         role,
         search as string,
+        filter as string,
       );
       const totalPages = calculateTotalPages(result.total, limit);
       res.status(HttpStatusCode.OK).json({ users: result.items, totalPages });
@@ -47,6 +49,27 @@ export class UserController implements IUserController {
     }
   }
 
+  async editProfile(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { id } = req.params;
+      console.log("edit profile: ", req.body, id);
+      const parsedData = userEditSchema.parse(req.body);
+
+      const updatedUser = await this._updateStatusUsecase.execute(
+        id,
+        parsedData,
+        ROLE.USER,
+      );
+
+      res.status(HttpStatusCode.OK).json({ user: updatedUser });
+    } catch (error) {
+      next(error);
+    }
+  }
   async updateStatus(
     req: Request,
     res: Response,

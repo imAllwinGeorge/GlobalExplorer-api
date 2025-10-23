@@ -27,8 +27,8 @@ export class JwtService implements IJwtservice {
   }
 
   verifyToken(token: string): { email: string; userId: string } {
-    const payload = jwt.verify(token, process.env.RESET_TOKEN_SECRET!);
-    if (!payload) throw new Error("session Expired!");
+    const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET!);
+    if (!payload) throw new Error("Token Expired.");
     console.log("jsonwebtoken verify token:  ", payload);
     return payload as { email: string; userId: string };
   }

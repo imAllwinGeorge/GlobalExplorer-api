@@ -27,3 +27,5 @@ export const hostSchema = z.object({
   license: z.string().optional(),
   insurance: z.string().optional(),
 });
+
+export const hostEditSchema = hostSchema.partial().omit({ password: true });

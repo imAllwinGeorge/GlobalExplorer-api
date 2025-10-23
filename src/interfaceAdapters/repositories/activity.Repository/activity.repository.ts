@@ -7,7 +7,7 @@ import {
   IActivityModel,
 } from "../../../frameworks/database/mongo/models/activity.model";
 import { IActivityRepository } from "../../../entities/repositoryInterfaces/activity/activityRepository.interface";
-import { Filter } from "../../../shared/types/types";
+import { Filter, ImageGallery } from "../../../shared/types/types";
 
 @injectable()
 export class ActivityRepository
@@ -46,9 +46,31 @@ export class ActivityRepository
         $lte: filter.priceRangeMax,
       };
     }
-    const activities = await this.model.find(query).skip(skip).limit(limit);
+    const activities = await this.model
+      .find(query)
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 });
     const total = await this.model.countDocuments(query);
 
     return { activities, totalPages: Math.ceil(total / limit) };
+  }
+
+  async galleryImages(): Promise<ImageGallery[]> {
+    return await this.model.aggregate([
+      {
+        $match: { isActive: true }, // optional filter
+      },
+      {
+        $project: {
+          _id: 1,
+          activityName: 1,
+          image: { $arrayElemAt: ["$images", 0] }, // take only first image
+        },
+      },
+      {
+        $limit: 6,
+      },
+    ]);
   }
 }

@@ -189,6 +189,7 @@ export class SignallingHandler implements ISignallingHandler {
     const receiverSocketId =
       await this._socketUserMapRepository.getUserSocket(userId);
     if (receiverSocketId) {
+      console.log(userId + "  :  " + receiverSocketId);
       this._io.to(receiverSocketId).emit(event, data);
     } else {
       console.warn(`User ${userId} offline, cannot send ${event}`);

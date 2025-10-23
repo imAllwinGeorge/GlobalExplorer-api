@@ -24,24 +24,27 @@ export class GetActivityUsecase implements IGetActivityUsecase {
     limit: number,
     skip: number,
     search: string,
+    filter: string,
     id?: string,
   ): Promise<{ items: ActivityResponseDTO[]; total: number }> {
-    const filter: FilterQuery<object> = {};
+    const filterObject: FilterQuery<object> = {
+      isActive: filter,
+    };
     // const cacheKey = `activity:${skip / limit + 1}:${limit}:${search}`;
     // const cached = await this._cacheService.get(cacheKey);
     if (search.trim().length > 0) {
-      filter.activityName = { $regex: search, $options: "i" };
+      filterObject.activityName = { $regex: search, $options: "i" };
     }
 
     if (id) {
-      filter.userId = new mongoose.Types.ObjectId(id);
+      filterObject.userId = new mongoose.Types.ObjectId(id);
     }
     // if (cached)
     //   return cached as { items: ActivityResponseDTO[]; total: number };
     const activities = await this._activityRepository.findAll(
       limit,
       skip,
-      filter,
+      filterObject,
     );
 
     const mappedActivity = this._activityMapper.toDTOs(

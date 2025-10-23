@@ -4,6 +4,7 @@ import { inject, injectable } from "tsyringe";
 import { IDashboardController } from "../../entities/controllerInterfaces/dashboard-controller.interface";
 import { IAdminDashboardUsecase } from "../../entities/usecaseInterfaces/dashboard/admin-dashboard.interface";
 import { IHostDashboardUsecase } from "../../entities/usecaseInterfaces/dashboard/host-dashboard.interface";
+import { IGalleryUsecase } from "../../entities/usecaseInterfaces/dashboard/Image-gallery.interface";
 
 @injectable()
 export class DashBoardController implements IDashboardController {
@@ -13,6 +14,9 @@ export class DashBoardController implements IDashboardController {
 
     @inject("IHostDashboardUsecase")
     private _hostDashboardUsecase: IHostDashboardUsecase,
+
+    @inject("IGalleryUsecase")
+    private _gallerUsecase: IGalleryUsecase,
   ) {}
 
   async adminDashboardController(
@@ -60,6 +64,19 @@ export class DashBoardController implements IDashboardController {
       // res
       //   .status(HttpStatusCode.InternalServerError)
       //   .json({ message: "Internal Server Error" });
+      next(error);
+    }
+  }
+
+  async userImageGallery(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const result = await this._gallerUsecase.execute();
+      res.status(HttpStatusCode.Ok).json({ images: result });
+    } catch (error) {
       next(error);
     }
   }

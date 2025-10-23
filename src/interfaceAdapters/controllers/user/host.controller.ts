@@ -1,5 +1,8 @@
 import { inject, injectable } from "tsyringe";
-import { hostSchema } from "../auth/validations/host-signup.validation.schema";
+import {
+  hostEditSchema,
+  hostSchema,
+} from "../auth/validations/host-signup.validation.schema";
 import { IHostController } from "../../../entities/controllerInterfaces/users/host-controller.interface";
 import { IGetAllCategoryUsecase } from "../../../entities/usecaseInterfaces/category/get-all-category.usecase.interface";
 import { IGetActivityUsecase } from "../../../entities/usecaseInterfaces/activity/get-activity.usecase.interface";
@@ -42,12 +45,13 @@ export class HostController implements IHostController {
     try {
       const { id } = req.params;
       const { limit, skip } = getPaginationParams(req);
-      const { search } = req.query;
+      const { search, filter } = req.query;
 
       const result = await this._getActivityUsecase.execute(
         limit,
         skip,
         search as string,
+        filter as string,
         id,
       );
       const totalPages = calculateTotalPages(result.total, limit);
@@ -139,7 +143,7 @@ export class HostController implements IHostController {
   ): Promise<void> {
     try {
       const { id } = req.params;
-      const parsedData = hostSchema.parse(req.body);
+      const parsedData = hostEditSchema.parse(req.body);
       const files = req.files as Express.Multer.File[];
       console.log(parsedData, files);
       type HostFileFields =
@@ -171,7 +175,7 @@ export class HostController implements IHostController {
       const updatedProfile = await this._updateUserUsecase.execute(
         id,
         parsedData,
-        parsedData.role,
+        parsedData.role as string,
       );
       res.status(HttpStatusCode.OK).json({ user: updatedProfile });
     } catch (error) {

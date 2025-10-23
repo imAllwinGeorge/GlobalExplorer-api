@@ -4,4 +4,5 @@ export interface IUserController {
   getAllUsers(req: Request, res: Response, next: NextFunction): Promise<void>;
   updateStatus(req: Request, res: Response, next: NextFunction): Promise<void>;
   getUser(req: Request, res: Response, next: NextFunction): Promise<void>;
+  editProfile(req: Request, res: Response, next: NextFunction): Promise<void>;
 }

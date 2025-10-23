@@ -14,3 +14,5 @@ export const userSchema = z.object({
     message: "Invalid role",
   }),
 });
+
+export const userEditSchema = userSchema.partial().omit({ password: true });

@@ -1,5 +1,6 @@
 import { Socket } from "socket.io";
 import { IConversationModel } from "../../frameworks/database/mongo/models/conversation.model";
+import { ObjectId } from "mongoose";
 
 export interface Filter {
   search: string | undefined;
@@ -19,4 +20,11 @@ export interface ConversationResponse extends IConversationModel {
 
 export interface CustomSocket extends Socket {
   userId?: string;
+}
+
+export interface ImageGallery {
+  _id: ObjectId;
+  image: string;
+  title: string;
+  url?: string;
 }

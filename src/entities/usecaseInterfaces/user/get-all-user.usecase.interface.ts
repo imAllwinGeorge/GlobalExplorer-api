@@ -4,5 +4,6 @@ export interface IGetAllUsersUsecase {
     skip: number,
     role: string,
     search: string,
+    filter: string,
   ): Promise<{ items: object[]; total: number }>;
 }

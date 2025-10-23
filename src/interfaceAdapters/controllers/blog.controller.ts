@@ -12,6 +12,7 @@ import {
   calculateTotalPages,
   getPaginationParams,
 } from "../../shared/utils/pagination.helper";
+import { IGetBlogUsecase } from "../../entities/usecaseInterfaces/blog/get-blog.usecase.interface";
 
 @injectable()
 export class BlogController implements IBlogController {
@@ -24,6 +25,9 @@ export class BlogController implements IBlogController {
 
     @inject("IGetMyBlogUsecase")
     private _getMyBlogUsecase: IGetMyBlogsUsecase,
+
+    @inject("IGetBlogUsecase")
+    private _getBlogUsecase: IGetBlogUsecase,
 
     @inject("IEditBlogUsecase")
     private _editBlogUsecase: IEditBlogUsecase,
@@ -126,6 +130,22 @@ export class BlogController implements IBlogController {
       //     .json({ meassage: error.message });
       // }
 
+      next(error);
+    }
+  }
+
+  async getBlog(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { id } = req.params;
+      console.log("get blog user profile : blog id: ", id);
+      const blog = await this._getBlogUsecase.execute(id);
+
+      res.status(HttpStatusCode.OK).json({ blog });
+    } catch (error) {
       next(error);
     }
   }

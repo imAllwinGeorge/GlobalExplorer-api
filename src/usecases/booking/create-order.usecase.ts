@@ -105,7 +105,7 @@ export class CreateOrderUsecase implements ICreateOrderUsecase {
           activityId: data.activityId,
           date: data.date.toString(),
           seats: data.participantCount,
-          expiresAt: new Date(Date.now() + 10 * 60 * 1000),
+          expiresAt: new Date(Date.now() + 1 * 60 * 1000),
         },
         session,
       );

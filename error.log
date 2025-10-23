@@ -1,0 +1,9 @@
+info 2025-10-16T12:23:52.318Z    server is running, http://localhost:3000
+info 2025-10-16T12:23:52.340Z   Redis Connected Successfully!
+info 2025-10-16T12:23:53.364Z   mongoDB connected: cluster0-shard-00-01.fmkfg.mongodb.net
+info 2025-10-16T12:24:15.761Z    server is running, http://localhost:3000
+info 2025-10-16T12:24:15.845Z   Redis Connected Successfully!
+info 2025-10-16T12:24:16.447Z   mongoDB connected: cluster0-shard-00-01.fmkfg.mongodb.net
+info 2025-10-16T12:54:34.648Z   User 68408d0750fe22eaac47d496 with socket a4hrlfotCpJCwTpNAAAC has joined room: 68408d0750fe22eaac47d496
+info 2025-10-16T12:55:43.490Z   User 68408d0750fe22eaac47d496 with socket W50GVFH9qtstF2GPAAAF has joined room: 68408d0750fe22eaac47d496
+info 2025-10-16T13:00:04.380Z   User 68408d0750fe22eaac47d496 with socket Y1VZiW884kooc4gpAAAI has joined room: 68408d0750fe22eaac47d496

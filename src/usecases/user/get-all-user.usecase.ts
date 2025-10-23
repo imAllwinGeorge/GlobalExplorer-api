@@ -31,13 +31,19 @@ export class GetAllUsersUsecase implements IGetAllUsersUsecase {
     skip: number,
     role: string,
     search: string,
+    filter: string,
   ): Promise<{ items: object[]; total: number }> {
     let result;
-    const filter: FilterQuery<object> = { role };
+    const filterObject: FilterQuery<object> = { role };
+    if (role === ROLE.USER) {
+      filterObject.isBlocked = filter;
+    } else {
+      filterObject.isVerified = filter;
+    }
 
     if (search?.trim().length > 0) {
       // ✅ Case-insensitive partial match on firstName or email
-      filter.$or = [
+      filterObject.$or = [
         { firstName: { $regex: search, $options: "i" } },
         { lastName: { $regex: search, $options: "i" } },
         { email: { $regex: search, $options: "i" } },
@@ -45,13 +51,13 @@ export class GetAllUsersUsecase implements IGetAllUsersUsecase {
     }
 
     if (role === ROLE.USER) {
-      result = await this._userRepository.findAll(limit, skip, filter);
+      result = await this._userRepository.findAll(limit, skip, filterObject);
 
       const users = this._userMapper.toDTOs(result.items as IUserModel[]);
 
       return { items: users, total: result.total };
     } else if (role === ROLE.HOST) {
-      result = await this._hostRepository.findAll(limit, skip, filter);
+      result = await this._hostRepository.findAll(limit, skip, filterObject);
 
       const users = this._hostMapper.toDTOs(result.items as IHostModel[]);
 

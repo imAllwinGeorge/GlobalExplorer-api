@@ -5,6 +5,7 @@ export interface IGetActivityUsecase {
     limit: number,
     skip: number,
     search: string,
+    filter: string,
     id?: string,
   ): Promise<{ items: ActivityResponseDTO[]; total: number }>;
 }

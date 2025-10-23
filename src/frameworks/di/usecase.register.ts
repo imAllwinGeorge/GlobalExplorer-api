@@ -123,6 +123,10 @@ import { IAdminSalesReportUsecase } from "../../entities/usecaseInterfaces/sales
 import { AdminSalesReportUsecase } from "../../usecases/sales/admin-salesReport.usecase";
 import { IHostSalesReportUsecase } from "../../entities/usecaseInterfaces/sales/host-salesReport.interface";
 import { HostSalesReportUsecase } from "../../usecases/sales/host-salesReport.usecase";
+import { GetBlogUsecase } from "../../usecases/blog/get-blog.usecase";
+import { IGetBlogUsecase } from "../../entities/usecaseInterfaces/blog/get-blog.usecase.interface";
+import { IGalleryUsecase } from "../../entities/usecaseInterfaces/dashboard/Image-gallery.interface";
+import { GalleryUsecase } from "../../usecases/dashboard/image-gallery.usecase";
 
 export class UsecaseRegistery {
   static registerUsecases(): void {
@@ -292,6 +296,10 @@ export class UsecaseRegistery {
       useClass: CancelBookingUsecase,
     });
 
+    container.register<IGetBlogUsecase>("IGetBlogUsecase", {
+      useClass: GetBlogUsecase,
+    });
+
     container.register<IGetMyBlogsUsecase>("IGetMyBlogUsecase", {
       useClass: GetMyBlogsUsecase,
     });
@@ -367,6 +375,10 @@ export class UsecaseRegistery {
 
     container.register<IHostSalesReportUsecase>("IHostSalesReportUsecase", {
       useClass: HostSalesReportUsecase,
+    });
+
+    container.register<IGalleryUsecase>("IGalleryUsecase", {
+      useClass: GalleryUsecase,
     });
 
     //   mappers....

@@ -137,12 +137,13 @@ export class ActivityController implements IActivityController {
       // const limit = parseInt(req.query.limit as string) || 10;
       // const skip = (page - 1) * limit;
       const { limit, skip } = getPaginationParams(req);
-      const { search } = req.query;
+      const { search, filter } = req.query;
 
       const { items, total } = await this._getActivityUsecase.execute(
         limit,
         skip,
         search as string,
+        filter as string,
       );
       const totalPages = calculateTotalPages(total, limit);
       res.status(HttpStatusCode.OK).json({ activities: items, totalPages });

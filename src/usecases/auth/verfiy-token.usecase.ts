@@ -47,7 +47,7 @@ export class VerifyTokenUsecase implements IVerifyTokenUsecase {
     role: string,
   ): Promise<AdminResponseDTO | HostResponseDTO | UserResponseDTO> {
     const decode = this._tokenService.verifyToken(token);
-
+    console.log(decode);
     let user;
 
     if (role === ROLE.USER) {
