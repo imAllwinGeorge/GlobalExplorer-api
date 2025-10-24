@@ -25,7 +25,7 @@ const hostRoute = new HostRoute();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
-
+console.log(config.cors.ALLOWED_ORIGIN);
 app.use(
   cors({
     origin: [config.cors.ALLOWED_ORIGIN!],
