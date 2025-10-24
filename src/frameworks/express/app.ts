@@ -28,7 +28,7 @@ app.use(cookieParser());
 console.log(config.cors.ALLOWED_ORIGIN);
 app.use(
   cors({
-    origin: [config.cors.ALLOWED_ORIGIN!],
+    origin: config.cors.ALLOWED_ORIGIN!.split(","),
     credentials: true,
   }),
 );
