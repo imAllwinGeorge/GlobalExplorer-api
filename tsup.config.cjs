@@ -6,7 +6,7 @@ export default defineConfig({
   splitting: false,
   sourcemap: true,
   clean: true,
-  outDir: "dist",
+  outDir: "dist/src",
   dts: false,
   shims: true, // required for __dirname, __filename
   target: "node18",
