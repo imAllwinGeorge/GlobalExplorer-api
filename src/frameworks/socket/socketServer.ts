@@ -30,7 +30,7 @@ export class SocketServer {
   public initialize(httpServer: HttpServer): void {
     this._io = new Server(httpServer, {
       cors: {
-        origin: config.cors.ALLOWED_ORIGIN,
+        origin: config.cors.ALLOWED_ORIGIN?.split(","),
         credentials: true,
       },
     });
