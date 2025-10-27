@@ -1,18 +1,3 @@
-# FROM node:22
-
-# WORKDIR /app
-
-# COPY package*.json .
-
-# RUN npm install
-
-# EXPOSE 3000
-
-# COPY . .
-
-# CMD ["npm", "run", "dev"]
-
-
 FROM node:22-alpine AS build
 
 WORKDIR /app
