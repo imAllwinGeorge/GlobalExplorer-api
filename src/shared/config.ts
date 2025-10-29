@@ -24,4 +24,8 @@ export const config = {
     CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
     CLOUDINARY_SECRET: process.env.CLOUDINARY_SECRET,
   },
+
+  node: {
+    NODE_ENV: process.env.NODE_ENV
+  }
 };

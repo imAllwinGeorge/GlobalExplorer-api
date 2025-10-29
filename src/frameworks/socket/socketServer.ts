@@ -28,6 +28,7 @@ export class SocketServer {
   ) {}
 
   public initialize(httpServer: HttpServer): void {
+    console.log("socker server initialize");
     this._io = new Server(httpServer, {
       cors: {
         origin: config.cors.ALLOWED_ORIGIN?.split(","),
