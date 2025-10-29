@@ -6,8 +6,9 @@ export const redisClient = createClient({
   username: config.redis.REDIS_USERNAME || "default",
   password: config.redis.REDIS_PASS,
   socket: {
-    host: config.redis.REDIS_HOST,
+    host: config.redis.REDIS_HOST as string,
     port: parseInt(config.redis.REDIS_PORT),
+    tls: true,
   },
 });
 
