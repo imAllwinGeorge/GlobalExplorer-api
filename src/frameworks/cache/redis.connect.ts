@@ -3,9 +3,8 @@ import { config } from "../../shared/config";
 import logger from "../../infrastructures/logger";
 
 export const redisClient = createClient({
-  username: config.redis.REDIS_USERNAME || undefined,
-  password:
-    config.node.NODE_ENV === "production" ? undefined : config.redis.REDIS_PASS,
+  username: config.redis.REDIS_USERNAME || "default",
+  password: config.redis.REDIS_PASS,
   socket: {
     host: config.redis.REDIS_HOST,
     port: parseInt(config.redis.REDIS_PORT),
