@@ -2,14 +2,10 @@ import { createClient } from "redis";
 import { config } from "../../shared/config";
 import logger from "../../infrastructures/logger";
 
+const redisUrl = `rediss://${config.redis.REDIS_USERNAME}:${config.redis.REDIS_PASS}:${config.redis.REDIS_PORT}`
+console.log(redisUrl);
 export const redisClient = createClient({
-  username: config.redis.REDIS_USERNAME || "default",
-  password: config.redis.REDIS_PASS,
-  socket: {
-    host: config.redis.REDIS_HOST as string,
-    port: parseInt(config.redis.REDIS_PORT),
-    tls: true,
-  },
+  url: redisUrl
 });
 
 redisClient.on("error", (err) => console.log("Redis clientError", err));
