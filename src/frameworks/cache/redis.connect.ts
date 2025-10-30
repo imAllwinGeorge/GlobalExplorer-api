@@ -2,7 +2,7 @@ import { createClient } from "redis";
 import { config } from "../../shared/config";
 import logger from "../../infrastructures/logger";
 
-const redisUrl = `rediss://:${config.redis.REDIS_PASS}@${config.redis.REDIS_HOST}:${config.redis.REDIS_PORT}`;
+const redisUrl = `rediss://default:${config.redis.REDIS_HOST}`;
 console.log(redisUrl);
 export const redisClient = createClient({
   url: redisUrl,
