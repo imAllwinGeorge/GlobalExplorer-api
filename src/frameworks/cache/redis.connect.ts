@@ -7,7 +7,6 @@ console.log(redisUrl);
 export const redisClient = createClient({
   url: redisUrl,
   socket: {
-    host: config.redis.REDIS_HOST as string,
     tls: true,
     rejectUnauthorized: config.node.NODE_ENV !== "development",
   },
