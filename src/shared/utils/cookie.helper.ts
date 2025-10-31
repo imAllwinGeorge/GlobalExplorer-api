@@ -8,21 +8,17 @@ export const setAuthCookies = (
   accessTokenName: string,
   refreshTokenName: string,
 ) => {
-  const isProd = config.node.NODE_ENV === "production";
-  const cookieDomain = isProd ? "globalexplorer.allwingeorge.me" : undefined;
   res.cookie(accessTokenName, accessToken, {
     httpOnly: true,
-    sameSite: isProd ? "none" : "lax",
-    secure: isProd,
+    sameSite: "strict",
+    secure: config.node.NODE_ENV === "production",
     maxAge: 24 * 60 * 60 * 1000,
-    domain: cookieDomain,
   });
   res.cookie(refreshTokenName, refreshToken, {
     httpOnly: true,
-    sameSite: isProd ? "none" : "lax",
-    secure: isProd,
+    sameSite: "strict",
+    secure: config.node.NODE_ENV === "production",
     maxAge: 15 * 24 * 60 * 60 * 1000,
-    domain: cookieDomain,
   });
 };
 
