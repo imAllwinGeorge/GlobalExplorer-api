@@ -4,7 +4,8 @@ import { inject, injectable } from "tsyringe";
 import { IDashboardController } from "../../entities/controllerInterfaces/dashboard-controller.interface";
 import { IAdminDashboardUsecase } from "../../entities/usecaseInterfaces/dashboard/admin-dashboard.interface";
 import { IHostDashboardUsecase } from "../../entities/usecaseInterfaces/dashboard/host-dashboard.interface";
-import { IGalleryUsecase } from "../../entities/usecaseInterfaces/dashboard/Image-gallery.interface";
+import { IUserHomeUsecase } from "../../entities/usecaseInterfaces/dashboard/user-home.interface";
+import { getPaginationParams } from "../../shared/utils/pagination.helper";
 
 @injectable()
 export class DashBoardController implements IDashboardController {
@@ -15,8 +16,8 @@ export class DashBoardController implements IDashboardController {
     @inject("IHostDashboardUsecase")
     private _hostDashboardUsecase: IHostDashboardUsecase,
 
-    @inject("IGalleryUsecase")
-    private _gallerUsecase: IGalleryUsecase,
+    @inject("IUserHomeUsecase")
+    private _userHomeUsecase: IUserHomeUsecase,
   ) {}
 
   async adminDashboardController(
@@ -68,14 +69,15 @@ export class DashBoardController implements IDashboardController {
     }
   }
 
-  async userImageGallery(
+  async homeData(
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> {
     try {
-      const result = await this._gallerUsecase.execute();
-      res.status(HttpStatusCode.Ok).json({ images: result });
+      const { limit, skip } = getPaginationParams(req);
+      const result = await this._userHomeUsecase.execute(limit, skip);
+      res.status(HttpStatusCode.Ok).json(result);
     } catch (error) {
       next(error);
     }

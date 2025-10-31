@@ -169,7 +169,7 @@ export class HostController implements IHostController {
             "insurance",
           ].includes(key)
         ) {
-          (parsedData as HostData)[key as HostFileFields] = file.filename;
+          (parsedData as HostData)[key as HostFileFields] = file.path;
         }
       });
       const updatedProfile = await this._updateUserUsecase.execute(

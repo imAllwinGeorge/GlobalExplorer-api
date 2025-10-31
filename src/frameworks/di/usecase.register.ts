@@ -125,8 +125,8 @@ import { IHostSalesReportUsecase } from "../../entities/usecaseInterfaces/sales/
 import { HostSalesReportUsecase } from "../../usecases/sales/host-salesReport.usecase";
 import { GetBlogUsecase } from "../../usecases/blog/get-blog.usecase";
 import { IGetBlogUsecase } from "../../entities/usecaseInterfaces/blog/get-blog.usecase.interface";
-import { IGalleryUsecase } from "../../entities/usecaseInterfaces/dashboard/Image-gallery.interface";
-import { GalleryUsecase } from "../../usecases/dashboard/image-gallery.usecase";
+import { IUserHomeUsecase } from "../../entities/usecaseInterfaces/dashboard/user-home.interface";
+import { UserHomeUsecase } from "../../usecases/dashboard/user-home.usecase";
 
 export class UsecaseRegistery {
   static registerUsecases(): void {
@@ -377,8 +377,8 @@ export class UsecaseRegistery {
       useClass: HostSalesReportUsecase,
     });
 
-    container.register<IGalleryUsecase>("IGalleryUsecase", {
-      useClass: GalleryUsecase,
+    container.register<IUserHomeUsecase>("IUserHomeUsecase", {
+      useClass: UserHomeUsecase,
     });
 
     //   mappers....

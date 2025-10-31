@@ -78,7 +78,7 @@ export class ActivityController implements IActivityController {
 
       const files = req.files as Express.Multer.File[];
 
-      const uploadedImages = files.map((images) => images.filename);
+      const uploadedImages = files.map((images) => images.path);
       const images = [...existingImage, ...uploadedImages];
 
       const parsedLocation = JSON.parse(location); // [75.1, 10.2]

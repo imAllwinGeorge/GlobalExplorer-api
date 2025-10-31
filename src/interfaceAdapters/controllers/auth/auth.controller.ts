@@ -99,7 +99,7 @@ export class AuthController implements IAuthController {
 
           if (key === "role") {
             // Optional: You can decide if you actually want to do this
-            (userData as HostData).role = file.filename as
+            (userData as HostData).role = file.path as
               | "user"
               | "host"
               | "admin";

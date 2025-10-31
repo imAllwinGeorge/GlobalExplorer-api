@@ -230,9 +230,9 @@ export class UserRoutes extends BaseRoute {
     );
 
     this.router.get(
-      "/get-images",
+      "/get-homeData",
       (req: Request, res: Response, next: NextFunction) => {
-        dashboardController.userImageGallery(req, res, next);
+        dashboardController.homeData(req, res, next);
       },
     );
   }

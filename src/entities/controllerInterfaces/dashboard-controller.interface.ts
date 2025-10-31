@@ -12,9 +12,5 @@ export interface IDashboardController {
     next: NextFunction,
   ): Promise<void>;
 
-  userImageGallery(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void>;
+  homeData(req: Request, res: Response, next: NextFunction): Promise<void>;
 }

@@ -32,13 +32,13 @@ export class AdminRoutes {
       },
     );
 
-    this.router.post(
-      "/update-status/:role",
-      verifyToken,
-      (req: Request, res: Response, next: NextFunction) => {
-        userController.getAllUsers(req, res, next);
-      },
-    );
+    // this.router.post(
+    //   "/update-status/:role",
+    //   verifyToken,
+    //   (req: Request, res: Response, next: NextFunction) => {
+    //     userController.getAllUsers(req, res, next);
+    //   },
+    // );
 
     this.router.post(
       "/update-status/:role",

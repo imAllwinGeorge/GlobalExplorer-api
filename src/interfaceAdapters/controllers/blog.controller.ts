@@ -78,9 +78,9 @@ export class BlogController implements IBlogController {
         if (file.fieldname.startsWith("section-image-")) {
           const index = parseInt(file.fieldname.split("section-image-")[1]);
           if (!sections[index]) sections[index] = {};
-          sections[index].image = file.filename;
+          sections[index].image = file.path;
         } else if (file.fieldname === "coverImage") {
-          blog.image = file.filename;
+          blog.image = file.path;
         }
       });
 
@@ -225,12 +225,12 @@ export class BlogController implements IBlogController {
       if (files && files.length) {
         files.forEach((file) => {
           if (file.fieldname === "mainImage") {
-            body.image = file.filename;
+            body.image = file.path;
           } else if (!isNaN(Number(file.fieldname))) {
             // This is a section image
             const sectionIndex = parseInt(file.fieldname);
             if (parsedSections[sectionIndex]) {
-              parsedSections[sectionIndex].image = file.filename;
+              parsedSections[sectionIndex].image = file.path;
             }
           }
         });
