@@ -23,4 +23,6 @@ export interface IBookingRepository extends IBaseRepository<IBookingModal> {
     year: number,
     id?: string,
   ): Promise<{ _id: { month: number }; count: number }[]>;
+
+  checkPreviousBooking(userId: string): Promise<boolean>;
 }

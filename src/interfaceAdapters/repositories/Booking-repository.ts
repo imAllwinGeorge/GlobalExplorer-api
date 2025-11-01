@@ -186,4 +186,8 @@ export class BookingRepository
 
     return result;
   }
+
+  checkPreviousBooking(userId: string): Promise<boolean> {
+    const result = this.model.find({ userId, createdAt: [$gt: Date.now()-]})
+  }
 }

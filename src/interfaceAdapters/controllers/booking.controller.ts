@@ -83,6 +83,7 @@ export class BookingController implements IBookingController {
       };
       console.log(" user: sented data: for create order   :", data);
       // await this._checkAvailabilityUsecase.execute(data);
+      
       const bookedActivity = await this._createOrderUsecase.execute(data);
       res.json(bookedActivity);
     } catch (error) {
