@@ -23,7 +23,7 @@ export class GetAllCategoryUsecase implements IGetAllCategoryUsecase {
     search: string,
   ): Promise<{ items: object[]; total: number }> {
     const filter: FilterQuery<object> = {};
-    if (search.trim().length > 0) {
+    if (search.length > 0) {
       filter.categoryName = { $regex: search, $options: "i" };
     }
     const result = await this._categoryRepository.findAll(limit, skip, filter);
