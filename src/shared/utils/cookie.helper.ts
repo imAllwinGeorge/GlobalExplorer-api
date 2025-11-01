@@ -1,4 +1,5 @@
 import { Response } from "express";
+import { config } from "../config";
 
 export const setAuthCookies = (
   res: Response,
@@ -10,13 +11,13 @@ export const setAuthCookies = (
   res.cookie(accessTokenName, accessToken, {
     httpOnly: true,
     sameSite: "strict",
-    secure: process.env.NODE_ENV === "production",
+    secure: config.node.NODE_ENV === "production",
     maxAge: 24 * 60 * 60 * 1000,
   });
   res.cookie(refreshTokenName, refreshToken, {
     httpOnly: true,
     sameSite: "strict",
-    secure: process.env.NODE_ENV === "production",
+    secure: config.node.NODE_ENV === "production",
     maxAge: 15 * 24 * 60 * 60 * 1000,
   });
 };
