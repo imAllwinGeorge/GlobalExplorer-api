@@ -45,7 +45,7 @@ export class ActivityController implements IActivityController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { id } = req.params;
+      const activityId = req.params.id;
       const {
         activityName,
         itenary,
@@ -84,7 +84,7 @@ export class ActivityController implements IActivityController {
       const parsedLocation = JSON.parse(location); // [75.1, 10.2]
       const paresedRecurrenceDays = JSON.parse(recurrenceDays);
 
-      const activity = await this._editActivityUsecase.execute(id, {
+      const activity = await this._editActivityUsecase.execute(activityId, {
         activityName,
         itenary,
         maxCapacity,
@@ -116,9 +116,12 @@ export class ActivityController implements IActivityController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { id } = req.params;
+      const activityId = req.params.id;
       const { data } = req.body;
-      const activity = await this._editActivityUsecase.execute(id, data);
+      const activity = await this._editActivityUsecase.execute(
+        activityId,
+        data,
+      );
       res.status(HttpStatusCode.OK).json({ activity });
     } catch (error) {
       // console.log(error);
@@ -162,15 +165,15 @@ export class ActivityController implements IActivityController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { id } = req.params;
-      if (!id) {
+      const activityId = req.params.id;
+      if (!activityId) {
         res
           .status(HttpStatusCode.BAD_REQUEST)
           .json({ message: "Activity id is missing." });
         return;
       }
-      const result = await this._getActivityDetailsUsecase.execute(id);
-      const reviews = await this._getReviewUsecase.execute(id);
+      const result = await this._getActivityDetailsUsecase.execute(activityId);
+      const reviews = await this._getReviewUsecase.execute(activityId);
       res.status(HttpStatusCode.OK).json({
         activity: result.activity,
         razorpayAccountId: result.razorpayAccountId,

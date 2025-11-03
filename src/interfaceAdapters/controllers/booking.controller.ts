@@ -161,7 +161,7 @@ export class BookingController implements IBookingController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const id = req.query.id;
+      const userId = req.query.id;
       // const page = parseInt(req.query.page as string);
       // const limit = parseInt(req.query.limit as string);
       // const skip = (page - 1) * limit;
@@ -169,7 +169,7 @@ export class BookingController implements IBookingController {
       const { limit, skip } = getPaginationParams(req);
 
       const result = await this._getBookedActivityUsecase.execute(
-        { userId: id },
+        { userId },
         limit,
         skip,
       );
@@ -199,10 +199,13 @@ export class BookingController implements IBookingController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const id = req.query.id as string;
+      const bookingId = req.query.id as string;
       const message = req.query.message as string;
 
-      const booking = await this._cancelBookingUsecase.execute(id, message);
+      const booking = await this._cancelBookingUsecase.execute(
+        bookingId,
+        message,
+      );
 
       res.status(HttpStatusCode.OK).json({ message: booking });
     } catch (error) {
@@ -225,7 +228,7 @@ export class BookingController implements IBookingController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { id, search, filter } = req.query;
+      const { hostId, search, filter } = req.query;
       // const page = parseInt(req.query.page as string);
       // const limit = parseInt(req.query.limit as string);
       // const skip = (page - 1) * limit;
@@ -241,7 +244,7 @@ export class BookingController implements IBookingController {
       }
 
       const filterObject: FilterQuery<object> = {
-        hostId: id,
+        hostId,
         ...query,
       };
 

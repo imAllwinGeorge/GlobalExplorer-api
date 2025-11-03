@@ -15,13 +15,6 @@ export class CategoryRepository
     super(CategoryModel);
   }
 
-  async findExcludingId(
-    excludeId: string,
-    value: string,
-  ): Promise<ICategoryModel | null> {
-    return this.model.findOne({ _id: { $ne: excludeId }, CategoryName: value });
-  }
-
   async findAllCategoryNames(): Promise<
     { _id: string; categoryName: string }[]
   > {

@@ -1,9 +1,9 @@
-import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/booking-repository.interface";
+import { IBookingRepository } from "../../../entities/repositoryInterfaces/booking/booking-repository.interface";
 import {
   BookingModel,
   IBookingModal,
-} from "../../frameworks/database/mongo/models/booking.model";
-import { BaseRepository } from "./base.repository";
+} from "../../../frameworks/database/mongo/models/booking.model";
+import { BaseRepository } from "../base.repository";
 import mongoose, { FilterQuery, ObjectId } from "mongoose";
 
 export class BookingRepository

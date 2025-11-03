@@ -35,8 +35,8 @@ export class SalesController implements ISalesController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { id } = req.params;
-      const result = await this._hostSalesReportUsecase.execute(id);
+      const hostId = req.params.id;
+      const result = await this._hostSalesReportUsecase.execute(hostId);
 
       res.status(HttpStatusCode.OK).json(result);
     } catch (error) {

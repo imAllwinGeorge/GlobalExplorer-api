@@ -5,7 +5,10 @@ import { IDashboardController } from "../../entities/controllerInterfaces/dashbo
 import { IAdminDashboardUsecase } from "../../entities/usecaseInterfaces/dashboard/admin-dashboard.interface";
 import { IHostDashboardUsecase } from "../../entities/usecaseInterfaces/dashboard/host-dashboard.interface";
 import { IUserHomeUsecase } from "../../entities/usecaseInterfaces/dashboard/user-home.interface";
-import { calculateTotalPages, getPaginationParams } from "../../shared/utils/pagination.helper";
+import {
+  calculateTotalPages,
+  getPaginationParams,
+} from "../../shared/utils/pagination.helper";
 
 @injectable()
 export class DashBoardController implements IDashboardController {
@@ -50,9 +53,9 @@ export class DashBoardController implements IDashboardController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { id } = req.params;
+      const hostId = req.params.id;
 
-      const result = await this._hostDashboardUsecase.execute(id);
+      const result = await this._hostDashboardUsecase.execute(hostId);
 
       res.status(HttpStatusCode.Ok).json(result);
     } catch (error) {

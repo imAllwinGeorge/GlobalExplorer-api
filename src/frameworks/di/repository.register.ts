@@ -14,7 +14,7 @@ import { BlogRepository } from "../../interfaceAdapters/repositories/blog.reposi
 import { IRefreshTokenRepository } from "../../entities/repositoryInterfaces/refreshToken/refresh-token.repository.interface";
 import { RefreshTokenRepository } from "../../interfaceAdapters/repositories/refresh-token.repository/refresh-token.repository";
 import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/booking-repository.interface";
-import { BookingRepository } from "../../interfaceAdapters/repositories/Booking-repository";
+import { BookingRepository } from "../../interfaceAdapters/repositories/booking.repository/Booking-repository";
 import { IMessageRepository } from "../../entities/repositoryInterfaces/chat/IMessage.repository.interface";
 import { MessageRepository } from "../../interfaceAdapters/repositories/chat.Repository/message.repository";
 import { IConversationRepository } from "../../entities/repositoryInterfaces/chat/Conversation.repository.interface";

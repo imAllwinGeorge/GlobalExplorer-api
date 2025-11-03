@@ -55,7 +55,7 @@ export class AuthRoutes extends BaseRoute {
     );
 
     this.router.patch(
-      "/reset-password/:role/:id/:token",
+      "/reset-password/:role/:userId/:token",
       (req: Request, res: Response, next: NextFunction) => {
         authController.resetPassword(req, res, next);
       },

@@ -116,10 +116,10 @@ export class CategoryController implements ICategoryController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { _id, value } = req.body;
+      const { categoryId, value } = req.body;
       const validateData = categorySchema.parse(value);
 
-      if (!_id || !validateData) {
+      if (!categoryId || !validateData) {
         res
           .status(HttpStatusCode.BAD_REQUEST)
           .json({ message: "Bad request, Missing data" });
@@ -127,7 +127,7 @@ export class CategoryController implements ICategoryController {
       }
 
       const category = await this._editCategoryUsecase.execute(
-        _id,
+        categoryId,
         validateData,
       );
 
@@ -143,8 +143,11 @@ export class CategoryController implements ICategoryController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { _id, value } = req.body;
-      const category = await this._updateStatusCategory.execute(_id, value);
+      const { categoryId, value } = req.body;
+      const category = await this._updateStatusCategory.execute(
+        categoryId,
+        value,
+      );
       res.status(HttpStatusCode.OK).json({ category });
       return;
     } catch (error) {

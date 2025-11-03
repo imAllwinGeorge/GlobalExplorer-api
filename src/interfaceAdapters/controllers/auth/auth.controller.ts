@@ -319,10 +319,10 @@ export class AuthController implements IAuthController {
 
   async resetPassword(req: Request, res: Response, next: NextFunction) {
     try {
-      const { id, token, role } = req.params;
+      const { userId, token, role } = req.params;
       const { password } = req.body;
       const user = await this._resetPasswordUsecase.execute(
-        id,
+        userId,
         role,
         token,
         password,
@@ -508,9 +508,9 @@ export class AuthController implements IAuthController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const id = req.query.id as string;
+      const userId = req.query.id as string;
       const role = req.query.role as string;
-      const profile = await this._getProfileUsecase.execute(id, role);
+      const profile = await this._getProfileUsecase.execute(userId, role);
       res.status(HttpStatusCode.OK).json({ user: profile });
     } catch (error) {
       next(error);

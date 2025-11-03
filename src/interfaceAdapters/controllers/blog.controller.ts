@@ -140,9 +140,9 @@ export class BlogController implements IBlogController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { id } = req.params;
-      console.log("get blog user profile : blog id: ", id);
-      const blog = await this._getBlogUsecase.execute(id);
+      const blogId = req.params.id;
+      console.log("get blog user profile : blog id: ", blogId);
+      const blog = await this._getBlogUsecase.execute(blogId);
 
       res.status(HttpStatusCode.OK).json({ blog });
     } catch (error) {
@@ -156,14 +156,14 @@ export class BlogController implements IBlogController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const id = req.query.id as string;
+      const userId = req.query.id as string;
       // const page = parseInt(req.query.page as string);
       // const limit = parseInt(req.query.limit as string);
       // const skip = (page - 1) * limit;
 
       const { limit, skip } = getPaginationParams(req);
 
-      const result = await this._getMyBlogUsecase.execute(id, limit, skip);
+      const result = await this._getMyBlogUsecase.execute(userId, limit, skip);
       const totalPages = calculateTotalPages(result.total, limit);
 
       res.status(HttpStatusCode.OK).json({ blogs: result.items, totalPages });
@@ -187,10 +187,10 @@ export class BlogController implements IBlogController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { id } = req.params;
+      const blogId = req.params.id;
       const body = req.body;
       const files = req.files as Express.Multer.File[];
-      console.log(id);
+      console.log(blogId);
       // if(files){
       //   files.forEach((file) => {
       //     if(file.fieldname === "mainImage"){
@@ -262,9 +262,9 @@ export class BlogController implements IBlogController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { id } = req.params;
+      const { blogId } = req.params;
 
-      this._deleteBlogUsecase.execute(id);
+      this._deleteBlogUsecase.execute(blogId);
 
       res
         .status(HttpStatusCode.OK)

@@ -29,9 +29,9 @@ export class ChatController implements IChatController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { id } = req.params;
+      const userId = req.params.id;
 
-      const conversations = await this._getConversationUsecase.execute(id);
+      const conversations = await this._getConversationUsecase.execute(userId);
 
       res.status(HttpStatusCode.Ok).json({ conversations });
     } catch (error) {

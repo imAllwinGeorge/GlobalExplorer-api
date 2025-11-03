@@ -6,13 +6,13 @@ const redisUrl = `${config.redis.REDIS_HOST}`;
 console.log(redisUrl);
 export const redisClient = createClient({
   url: redisUrl,
-  socket: config.node.NODE_ENV === "production"
-  ? {
-      tls: true,
-      rejectUnauthorized: true,
-    }
-  : undefined,
-
+  socket:
+    config.node.NODE_ENV === "production"
+      ? {
+          tls: true,
+          rejectUnauthorized: true,
+        }
+      : undefined,
 });
 
 redisClient.on("error", (err) => console.log("Redis clientError", err));

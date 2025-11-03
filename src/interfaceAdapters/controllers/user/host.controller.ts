@@ -142,7 +142,7 @@ export class HostController implements IHostController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { id } = req.params;
+      const hostId = req.params.id;
       const parsedData = hostEditSchema.parse(req.body);
       const files = req.files as Express.Multer.File[];
       console.log(parsedData, files);
@@ -173,7 +173,7 @@ export class HostController implements IHostController {
         }
       });
       const updatedProfile = await this._updateUserUsecase.execute(
-        id,
+        hostId,
         parsedData,
         parsedData.role as string,
       );

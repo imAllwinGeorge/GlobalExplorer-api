@@ -55,12 +55,11 @@ export class UserController implements IUserController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { id } = req.params;
-      console.log("edit profile: ", req.body, id);
+      const userId = req.params.id;
       const parsedData = userEditSchema.parse(req.body);
 
       const updatedUser = await this._updateStatusUsecase.execute(
-        id,
+        userId,
         parsedData,
         ROLE.USER,
       );
@@ -76,9 +75,9 @@ export class UserController implements IUserController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { _id, value } = req.body;
+      const { userId, value } = req.body;
       const { role } = req.params;
-      const user = await this._updateStatusUsecase.execute(_id, value, role);
+      const user = await this._updateStatusUsecase.execute(userId, value, role);
       res.status(HttpStatusCode.OK).json({
         user,
         message: `${user.firstName} is ${user.isBlocked ? "Blocked" : "UnBlocked"}`,
@@ -95,9 +94,9 @@ export class UserController implements IUserController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { _id, role } = req.query;
+      const { userId, role } = req.query;
       const user = await this._getUserUsecase.execute(
-        _id as string,
+        userId as string,
         role as string,
       );
       res.status(HttpStatusCode.OK).json({ user });
