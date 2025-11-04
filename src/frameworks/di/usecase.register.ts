@@ -400,7 +400,7 @@ export class UsecaseRegistery {
 
     container.register("ICategoryMapper", { useClass: CategoryMapper });
 
-    container.register("IConversation", { useClass: ConversationMapper });
+    container.register("IConversationMapper", { useClass: ConversationMapper });
 
     container.register("IMessageMapper", { useClass: MessageMapper });
 
