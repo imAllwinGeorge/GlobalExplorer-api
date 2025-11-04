@@ -35,7 +35,6 @@ process.on("uncaughtException", (err) => {
 
 process.on("unhandledRejection", (reason) => {
   logger.error("UNHANDLED REJECTION 🔥", reason);
-  process.exit(1);
 });
 
 httpServer.listen(3000, () => {

@@ -3,6 +3,7 @@ import { IGetNotificationUsecase } from "../../entities/usecaseInterfaces/notifi
 import { INotificationRepository } from "../../entities/repositoryInterfaces/notification/notificationRepository";
 import { NotificationResponseDTO } from "../../shared/dtos/response.dto";
 import { INotificationMapper } from "../../entities/mapperInterfaces/notification-mapper.interface";
+import { INotificationModel } from "../../frameworks/database/mongo/models/notification.model";
 
 @injectable()
 export class GetNotificationUsecase implements IGetNotificationUsecase {
@@ -14,9 +15,21 @@ export class GetNotificationUsecase implements IGetNotificationUsecase {
     private _notificationMapper: INotificationMapper,
   ) {}
 
-  async execute(userId: string): Promise<NotificationResponseDTO[]> {
-    const notifications = await this._notificationRepository.find({ userId });
+  async execute(
+    limit: number,
+    skip: number,
+    userId: string,
+  ): Promise<NotificationResponseDTO[]> {
+    const notifications = await this._notificationRepository.findAll(
+      limit,
+      skip,
+      {
+        userId,
+      },
+    );
 
-    return this._notificationMapper.toDTOs(notifications);
+    return this._notificationMapper.toDTOs(
+      notifications.items as INotificationModel[],
+    );
   }
 }

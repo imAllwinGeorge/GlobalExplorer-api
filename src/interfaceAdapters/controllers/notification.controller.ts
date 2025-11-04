@@ -4,6 +4,7 @@ import { inject, injectable } from "tsyringe";
 import { INotificationController } from "../../entities/controllerInterfaces/notification-controller.interface";
 import { IGetNotificationUsecase } from "../../entities/usecaseInterfaces/notification/get-notification.interface";
 import { HttpStatusCode } from "../../shared/constants/constants";
+import { getPaginationParams } from "../../shared/utils/pagination.helper";
 
 @injectable()
 export class NotificationController implements INotificationController {
@@ -19,8 +20,13 @@ export class NotificationController implements INotificationController {
   ): Promise<void> {
     try {
       const { userId } = req.params;
+      const { limit, skip } = getPaginationParams(req);
 
-      const notifications = await this._getNotificationUsecase.execute(userId);
+      const notifications = await this._getNotificationUsecase.execute(
+        limit,
+        skip,
+        userId,
+      );
 
       res.status(HttpStatusCode.OK).json({ notifications });
     } catch (error) {

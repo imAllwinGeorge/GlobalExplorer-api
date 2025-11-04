@@ -44,8 +44,10 @@ export class CancelBookingUsecase implements ICancelBookingUsecase {
 
   async execute(id: string, message: string): Promise<BookingResponseDTO> {
     const session = await mongoose.startSession();
-    session.startTransaction();
+
     try {
+      session.startTransaction();
+
       await this._cacheService.delByPattern(`order:*`);
 
       const booking = await this._bookingRepository.findById(
@@ -117,8 +119,7 @@ export class CancelBookingUsecase implements ICancelBookingUsecase {
         session,
       );
 
-      session.commitTransaction();
-      session.endSession();
+      await session.commitTransaction();
 
       await this._notificationService.emitNotification(
         booking.userId,
@@ -136,8 +137,9 @@ export class CancelBookingUsecase implements ICancelBookingUsecase {
     } catch (error) {
       logger.error(error);
 
-      await session.abortTransaction();
-      session.endSession();
+      if (session.inTransaction()) {
+        await session.abortTransaction();
+      }
 
       if (error instanceof AppError) {
         throw new AppError(
@@ -149,6 +151,8 @@ export class CancelBookingUsecase implements ICancelBookingUsecase {
         "Cancellation failed",
         HttpStatusCode.INTERNAL_SERVER_ERROR,
       );
+    } finally {
+      session.endSession();
     }
   }
 }
