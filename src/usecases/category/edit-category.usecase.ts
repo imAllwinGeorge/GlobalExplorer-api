@@ -22,7 +22,8 @@ export class EditCategoryUsecase implements IEditCategoryUsecase {
   ): Promise<CategoryResponseDTO | null> {
     const sameCategoryName = await this._categoryRepository.findExcludingId(
       _id,
-      { categoryName: value.categoryName },
+      "categoryName",
+      value.categoryName,
     );
 
     if (sameCategoryName) {

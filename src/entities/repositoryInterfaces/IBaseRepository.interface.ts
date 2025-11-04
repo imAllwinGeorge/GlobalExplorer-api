@@ -36,5 +36,9 @@ export interface IBaseRepository<T> {
     name: string,
     session?: ClientSession,
   ): Promise<boolean>;
-  findExcludingId(excludeId: string, value: object): Promise<T | null>;
+  findExcludingId(
+    excludeId: string,
+    field: keyof T,
+    value: string,
+  ): Promise<T | null>;
 }

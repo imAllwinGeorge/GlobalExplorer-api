@@ -25,9 +25,11 @@ export class EditActivityUsecase implements IEditActivityUsecase {
     id: string,
     data: EditActivityDTO,
   ): Promise<ActivityResponseDTO> {
-    const sameActivityName = await this._actvityRepository.findExcludingId(id, {
-      activityName: data.activityName,
-    });
+    const sameActivityName = await this._actvityRepository.findExcludingId(
+      id,
+      "activityName",
+      data.activityName,
+    );
 
     if (sameActivityName) {
       throw new AppError(
