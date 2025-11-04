@@ -2,10 +2,11 @@ import { inject, injectable } from "tsyringe";
 import { IEditActivityUsecase } from "../../entities/usecaseInterfaces/activity/edit-activity.usecase.interface";
 import { IActivityRepository } from "../../entities/repositoryInterfaces/activity/activityRepository.interface";
 import { ICacheService } from "../../entities/serviceInterfaces/cache-service.interface";
-import { ActivityMapper } from "../../shared/mappers/activity.mapper";
 import { ActivityResponseDTO } from "../../shared/dtos/response.dto";
 import { AppError } from "../../shared/errors/appError";
 import { HttpStatusCode } from "../../shared/constants/constants";
+import { EditActivityDTO } from "../../shared/dtos/edit.dto";
+import { IActivityMapper } from "../../entities/mapperInterfaces/activitiy-mapper.interface";
 
 @injectable()
 export class EditActivityUsecase implements IEditActivityUsecase {
@@ -16,11 +17,25 @@ export class EditActivityUsecase implements IEditActivityUsecase {
     @inject("ICacheService")
     private _cacheService: ICacheService,
 
-    @inject(ActivityMapper)
-    private _activityMapper: ActivityMapper,
+    @inject("IActivityMapper")
+    private _activityMapper: IActivityMapper,
   ) {}
 
-  async execute(id: string, data: object): Promise<ActivityResponseDTO> {
+  async execute(
+    id: string,
+    data: EditActivityDTO,
+  ): Promise<ActivityResponseDTO> {
+    const sameActivityName = await this._actvityRepository.findExcludingId(id, {
+      activityName: data.activityName,
+    });
+
+    if (sameActivityName) {
+      throw new AppError(
+        "Activity with same Name already exists",
+        HttpStatusCode.CONFLICT,
+      );
+    }
+
     const activity = await this._actvityRepository.findOneAndUpdate(
       { _id: id },
       data,

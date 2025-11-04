@@ -110,7 +110,7 @@ export class BaseRepository<T> implements IBaseRepository<T> {
     return !!result;
   }
 
-  async findExcludingId(excludeId: string, value: string): Promise<T | null> {
+  async findExcludingId(excludeId: string, value: object): Promise<T | null> {
     return this.model.findOne({
       _id: { $ne: excludeId },
       categoryName: { $regex: new RegExp(`^${value}$`, "i") },

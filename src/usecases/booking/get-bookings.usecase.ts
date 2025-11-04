@@ -2,8 +2,8 @@ import { inject, injectable } from "tsyringe";
 import { IGetBookedActivityUsecase } from "../../entities/usecaseInterfaces/booking/get-bookings.usecase.interface";
 import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/booking-repository.interface";
 import { ICacheService } from "../../entities/serviceInterfaces/cache-service.interface";
-import { BookingMapper } from "../../shared/mappers/booking.mapper";
 import { IBookingModal } from "../../frameworks/database/mongo/models/booking.model";
+import { IBookingMapper } from "../../entities/mapperInterfaces/booking-mapper.interface";
 
 @injectable()
 export class GetBookedActivityUsecase implements IGetBookedActivityUsecase {
@@ -14,8 +14,8 @@ export class GetBookedActivityUsecase implements IGetBookedActivityUsecase {
     @inject("ICacheService")
     private _cacheService: ICacheService,
 
-    @inject(BookingMapper)
-    private _bookingMapper: BookingMapper,
+    @inject("IBookingMapper")
+    private _bookingMapper: IBookingMapper,
   ) {}
 
   async execute(

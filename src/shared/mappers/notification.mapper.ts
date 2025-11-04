@@ -1,7 +1,8 @@
+import { INotificationMapper } from "../../entities/mapperInterfaces/notification-mapper.interface";
 import { INotificationModel } from "../../frameworks/database/mongo/models/notification.model";
 import { NotificationResponseDTO } from "../dtos/response.dto";
 
-export class NotificationMapper {
+export class NotificationMapper implements INotificationMapper {
   toDTO(notifiction: INotificationModel): NotificationResponseDTO {
     return {
       _id: notifiction._id,

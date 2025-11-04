@@ -4,9 +4,9 @@ import { HostSignupDTO, SignupDTO } from "../../shared/dtos/Auth.dto";
 import { IBcrypt } from "../../entities/security/bcrypt.interface";
 import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
 import { IHostRepository } from "../../entities/repositoryInterfaces/users/host-repository.interface";
-import { HostMapper } from "../../shared/mappers/host.mapper";
 import { HttpStatusCode, ROLE } from "../../shared/constants/constants";
 import { AppError } from "../../shared/errors/appError";
+import { IHostMapper } from "../../entities/mapperInterfaces/host-mapper.interface";
 
 @injectable()
 export class RegisterUserusecase implements IRegisterUsecase {
@@ -20,8 +20,8 @@ export class RegisterUserusecase implements IRegisterUsecase {
     @inject("IHostRepository")
     private _hostRepository: IHostRepository,
 
-    @inject(HostMapper)
-    private _hostMapper: HostMapper,
+    @inject("IHostMapper")
+    private _hostMapper: IHostMapper,
   ) {}
 
   async execute(userData: SignupDTO | HostSignupDTO) {

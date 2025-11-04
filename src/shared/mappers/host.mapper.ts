@@ -2,9 +2,10 @@ import { injectable } from "tsyringe";
 import { HostSignupDTO } from "../dtos/Auth.dto";
 import { IHostModel } from "../../frameworks/database/mongo/models/host.model";
 import { HostResponseDTO } from "../dtos/response.dto";
+import { IHostMapper } from "../../entities/mapperInterfaces/host-mapper.interface";
 
 @injectable()
-export class HostMapper {
+export class HostMapper implements IHostMapper {
   toEntity(dto: HostSignupDTO): Partial<IHostModel> {
     return {
       firstName: dto.firstName,

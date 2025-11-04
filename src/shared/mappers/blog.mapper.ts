@@ -1,7 +1,8 @@
+import { IBlogMapper } from "../../entities/mapperInterfaces/blog-mapper.interface";
 import { IBlogModel } from "../../frameworks/database/mongo/models/blog.model";
 import { BlogResponseDTO } from "../dtos/response.dto";
 
-export class BlogMapper {
+export class BlogMapper implements IBlogMapper {
   toDTO(blog: IBlogModel): BlogResponseDTO {
     return {
       _id: blog._id,

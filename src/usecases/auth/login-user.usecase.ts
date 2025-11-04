@@ -5,9 +5,6 @@ import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-
 import { IBcrypt } from "../../entities/security/bcrypt.interface";
 import { IAdminRepository } from "../../entities/repositoryInterfaces/users/admin-repository.inteface";
 import { IHostRepository } from "../../entities/repositoryInterfaces/users/host-repository.interface";
-import { UserMapper } from "../../shared/mappers/user.mapper";
-import { HostMapper } from "../../shared/mappers/host.mapper";
-import { AdminMapper } from "../../shared/mappers/admin.mapper";
 import {
   AdminResponseDTO,
   HostResponseDTO,
@@ -15,6 +12,9 @@ import {
 } from "../../shared/dtos/response.dto";
 import { HttpStatusCode, ROLE } from "../../shared/constants/constants";
 import { AppError } from "../../shared/errors/appError";
+import { IUserMapper } from "../../entities/mapperInterfaces/user-mapper.interface";
+import { IHostMapper } from "../../entities/mapperInterfaces/host-mapper.interface";
+import { IAdminMapper } from "../../entities/mapperInterfaces/admin-mapper.interface";
 
 @injectable()
 export class LoginUsecase implements ILoginUser {
@@ -31,14 +31,14 @@ export class LoginUsecase implements ILoginUser {
     @inject("IPasswordBcrypt")
     private _passwordBcrypt: IBcrypt,
 
-    @inject(UserMapper)
-    private _userMapper: UserMapper,
+    @inject("IUserMapper")
+    private _userMapper: IUserMapper,
 
-    @inject(HostMapper)
-    private _hostMapper: HostMapper,
+    @inject("IHostMapper")
+    private _hostMapper: IHostMapper,
 
-    @inject(AdminMapper)
-    private _adminMapper: AdminMapper,
+    @inject("IAdminMapper")
+    private _adminMapper: IAdminMapper,
   ) {}
 
   async execute(

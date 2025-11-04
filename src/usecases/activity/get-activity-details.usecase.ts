@@ -5,12 +5,12 @@ import { IActivityRepository } from "../../entities/repositoryInterfaces/activit
 import { IHostRepository } from "../../entities/repositoryInterfaces/users/host-repository.interface";
 import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/booking-repository.interface";
 import { ICacheService } from "../../entities/serviceInterfaces/cache-service.interface";
-import { ActivityMapper } from "../../shared/mappers/activity.mapper";
 import { ActivityResponseDTO } from "../../shared/dtos/response.dto";
 import { getNextDaysInTimezone } from "../../shared/utils/date.helper";
 import { AppError } from "../../shared/errors/appError";
 import { HttpStatusCode } from "../../shared/constants/constants";
 import { IAvailabilityRepository } from "../../entities/repositoryInterfaces/availability/availability-repository.interface";
+import { IActivityMapper } from "../../entities/mapperInterfaces/activitiy-mapper.interface";
 
 @injectable()
 export class GetActivityDetailsUsecase implements IGetActivityDetailsUsecase {
@@ -30,8 +30,8 @@ export class GetActivityDetailsUsecase implements IGetActivityDetailsUsecase {
     @inject("IAvailabilityRepository")
     private _availabilityRepository: IAvailabilityRepository,
 
-    @inject(ActivityMapper)
-    private _activityMapper: ActivityMapper,
+    @inject("IActivityMapper")
+    private _activityMapper: IActivityMapper,
   ) {}
 
   async execute(id: string): Promise<{

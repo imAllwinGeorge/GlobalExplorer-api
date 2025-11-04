@@ -2,10 +2,10 @@ import { inject, injectable } from "tsyringe";
 import { IGetActivityUsecase } from "../../entities/usecaseInterfaces/activity/get-activity.usecase.interface";
 import { IActivityRepository } from "../../entities/repositoryInterfaces/activity/activityRepository.interface";
 import { ICacheService } from "../../entities/serviceInterfaces/cache-service.interface";
-import { ActivityMapper } from "../../shared/mappers/activity.mapper";
 import { ActivityResponseDTO } from "../../shared/dtos/response.dto";
 import { IActivityModel } from "../../frameworks/database/mongo/models/activity.model";
 import mongoose, { FilterQuery } from "mongoose";
+import { IActivityMapper } from "../../entities/mapperInterfaces/activitiy-mapper.interface";
 
 @injectable()
 export class GetActivityUsecase implements IGetActivityUsecase {
@@ -16,8 +16,8 @@ export class GetActivityUsecase implements IGetActivityUsecase {
     @inject("ICacheService")
     private _cacheService: ICacheService,
 
-    @inject(ActivityMapper)
-    private _activityMapper: ActivityMapper,
+    @inject("IActivityMapper")
+    private _activityMapper: IActivityMapper,
   ) {}
 
   async execute(

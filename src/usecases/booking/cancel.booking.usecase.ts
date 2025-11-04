@@ -5,7 +5,6 @@ import { IpaymentService } from "../../entities/serviceInterfaces/razorpay-servi
 import { INotificationService } from "../../entities/serviceInterfaces/notification-service.interface";
 import { INotificationRepository } from "../../entities/repositoryInterfaces/notification/notificationRepository";
 import { ICacheService } from "../../entities/serviceInterfaces/cache-service.interface";
-import { BookingMapper } from "../../shared/mappers/booking.mapper";
 import { BookingResponseDTO } from "../../shared/dtos/response.dto";
 import {
   HttpStatusCode,
@@ -16,6 +15,7 @@ import { AppError } from "../../shared/errors/appError";
 import mongoose from "mongoose";
 import { IAvailabilityRepository } from "../../entities/repositoryInterfaces/availability/availability-repository.interface";
 import logger from "../../infrastructures/logger";
+import { IBookingMapper } from "../../entities/mapperInterfaces/booking-mapper.interface";
 
 @injectable()
 export class CancelBookingUsecase implements ICancelBookingUsecase {
@@ -38,8 +38,8 @@ export class CancelBookingUsecase implements ICancelBookingUsecase {
     @inject("ICacheService")
     private _cacheService: ICacheService,
 
-    @inject(BookingMapper)
-    private _bookingMapper: BookingMapper,
+    @inject("IBookingMapper")
+    private _bookingMapper: IBookingMapper,
   ) {}
 
   async execute(id: string, message: string): Promise<BookingResponseDTO> {

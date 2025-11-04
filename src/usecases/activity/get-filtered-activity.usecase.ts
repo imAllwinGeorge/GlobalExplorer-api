@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
 import { IGetFilteredAcitivityUsecase } from "../../entities/usecaseInterfaces/activity/get-filtered-activity.usecase.interface";
 import { IActivityRepository } from "../../entities/repositoryInterfaces/activity/activityRepository.interface";
-import { ActivityMapper } from "../../shared/mappers/activity.mapper";
 import { Filter } from "../../shared/types/types";
 import { ActivityResponseDTO } from "../../shared/dtos/response.dto";
+import { IActivityMapper } from "../../entities/mapperInterfaces/activitiy-mapper.interface";
 
 @injectable()
 export class GetFilteredActivityUsecase
@@ -13,8 +13,8 @@ export class GetFilteredActivityUsecase
     @inject("IActivityRepository")
     private _activityRepository: IActivityRepository,
 
-    @inject(ActivityMapper)
-    private _activityMapper: ActivityMapper,
+    @inject("IActivityMapper")
+    private _activityMapper: IActivityMapper,
   ) {}
 
   async execute(

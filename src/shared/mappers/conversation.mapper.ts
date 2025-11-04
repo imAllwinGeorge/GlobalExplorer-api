@@ -1,8 +1,9 @@
+import { IConversationMapper } from "../../entities/mapperInterfaces/conversation-mapper.interface";
 import { IConversationModel } from "../../frameworks/database/mongo/models/conversation.model";
 import { ConversationResponseDTO } from "../dtos/response.dto";
 import { ConversationResponse } from "../types/types";
 
-export class ConversationMapper {
+export class ConversationMapper implements IConversationMapper {
   toDTO(conversation: IConversationModel): ConversationResponseDTO {
     return {
       _id: conversation._id,

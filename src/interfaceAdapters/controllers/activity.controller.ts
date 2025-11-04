@@ -12,6 +12,7 @@ import {
   getPaginationParams,
 } from "../../shared/utils/pagination.helper";
 import logger from "../../infrastructures/logger";
+import { EditActivityDTO } from "../../shared/dtos/edit.dto";
 
 @injectable()
 export class ActivityController implements IActivityController {
@@ -102,7 +103,7 @@ export class ActivityController implements IActivityController {
         reportingTime,
         location: parsedLocation,
         images,
-      });
+      } as EditActivityDTO);
 
       res.status(HttpStatusCode.OK).json({ activity });
     } catch (error) {

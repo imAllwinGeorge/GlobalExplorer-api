@@ -5,8 +5,6 @@ import { IJwtservice } from "../../entities/serviceInterfaces/jwt-services.inter
 import { IBcrypt } from "../../entities/security/bcrypt.interface";
 import { IAdminRepository } from "../../entities/repositoryInterfaces/users/admin-repository.inteface";
 import { IHostRepository } from "../../entities/repositoryInterfaces/users/host-repository.interface";
-import { UserMapper } from "../../shared/mappers/user.mapper";
-import { HostMapper } from "../../shared/mappers/host.mapper";
 import {
   HostResponseDTO,
   UserResponseDTO,
@@ -16,6 +14,8 @@ import { HttpStatusCode, ROLE } from "../../shared/constants/constants";
 import { IUserModel } from "../../frameworks/database/mongo/models/user.model";
 import { IHostModel } from "../../frameworks/database/mongo/models/host.model";
 import { AppError } from "../../shared/errors/appError";
+import { IUserMapper } from "../../entities/mapperInterfaces/user-mapper.interface";
+import { IHostMapper } from "../../entities/mapperInterfaces/host-mapper.interface";
 
 @injectable()
 export class ResetPasswordUsecase implements IResetPasswordUseCase {
@@ -35,11 +35,11 @@ export class ResetPasswordUsecase implements IResetPasswordUseCase {
     @inject("IPasswordBcrypt")
     private _bcryptService: IBcrypt,
 
-    @inject(UserMapper)
-    private _userMapper: UserMapper,
+    @inject("IUserMapper")
+    private _userMapper: IUserMapper,
 
-    @inject(HostMapper)
-    private _hostMapper: HostMapper,
+    @inject("IHostMapper")
+    private _hostMapper: IHostMapper,
   ) {}
   async execute(
     id: string,

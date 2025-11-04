@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 import { IGetMyBlogsUsecase } from "../../entities/usecaseInterfaces/blog/get-my-blog.usecase.interface";
 import { IBlogRepository } from "../../entities/repositoryInterfaces/Blog/blog-repository.interface";
-import { BlogMapper } from "../../shared/mappers/blog.mapper";
 import { IBlogModel } from "../../frameworks/database/mongo/models/blog.model";
+import { IBlogMapper } from "../../entities/mapperInterfaces/blog-mapper.interface";
 
 @injectable()
 export class GetMyBlogsUsecase implements IGetMyBlogsUsecase {
@@ -10,8 +10,8 @@ export class GetMyBlogsUsecase implements IGetMyBlogsUsecase {
     @inject("IBlogRepository")
     private _blogRepository: IBlogRepository,
 
-    @inject(BlogMapper)
-    private _blogMapped: BlogMapper,
+    @inject("IBlogMapper")
+    private _blogMapped: IBlogMapper,
   ) {}
 
   async execute(

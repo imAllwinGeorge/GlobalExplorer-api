@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
 import { IMarkReadMessageUsecase } from "../../../entities/usecaseInterfaces/chat/direct-message/mark-read-message.usecase.interface";
 import { IConversationRepository } from "../../../entities/repositoryInterfaces/chat/Conversation.repository.interface";
-import { ConversationMapper } from "../../../shared/mappers/conversation.mapper";
 import { ConversationResponseDTO } from "../../../shared/dtos/response.dto";
 import { AppError } from "../../../shared/errors/appError";
 import { HttpStatusCode } from "../../../shared/constants/constants";
+import { IConversationMapper } from "../../../entities/mapperInterfaces/conversation-mapper.interface";
 
 @injectable()
 export class MarkReadMessageUsecase implements IMarkReadMessageUsecase {
@@ -12,8 +12,8 @@ export class MarkReadMessageUsecase implements IMarkReadMessageUsecase {
     @inject("IConversationRepository")
     private _conversationRepository: IConversationRepository,
 
-    @inject(ConversationMapper)
-    private _conversationMapper: ConversationMapper,
+    @inject("IConversationMapper")
+    private _conversationMapper: IConversationMapper,
   ) {}
 
   async execute(

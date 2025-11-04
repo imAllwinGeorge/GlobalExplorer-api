@@ -1,9 +1,10 @@
 import { injectable } from "tsyringe";
 import { IAdminModel } from "../../frameworks/database/mongo/models/admin.model";
 import { AdminResponseDTO } from "../dtos/response.dto";
+import { IAdminMapper } from "../../entities/mapperInterfaces/admin-mapper.interface";
 
 @injectable()
-export class AdminMapper {
+export class AdminMapper implements IAdminMapper {
   toDTO(data: IAdminModel): AdminResponseDTO {
     console.log("data for mapping: ", data);
     return {

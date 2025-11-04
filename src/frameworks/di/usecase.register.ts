@@ -383,24 +383,24 @@ export class UsecaseRegistery {
 
     //   mappers....
 
-    container.registerSingleton(ActivityMapper);
+    container.register("IActivityMapper", { useClass: ActivityMapper });
 
-    container.registerSingleton(UserMapper);
+    container.register("IUserMapper", { useClass: UserMapper });
 
-    container.registerSingleton(HostMapper);
+    container.register("IHostMapper", { useClass: HostMapper });
 
-    container.registerSingleton(ReviewMapper);
+    container.register("IReviewMapper", { useClass: ReviewMapper });
 
-    container.registerSingleton(BlogMapper);
+    container.register("IBlogMapper", { useClass: BlogMapper });
 
-    container.registerSingleton(BookingMapper);
+    container.register("IBookingMapper", { useClass: BookingMapper });
 
-    container.registerSingleton(CategoryMapper);
+    container.register("ICategoryMapper", { useClass: CategoryMapper });
 
-    container.registerSingleton(ConversationMapper);
+    container.register("IConversation", { useClass: ConversationMapper });
 
-    container.registerSingleton(MessageMapper);
+    container.register("IMessageMapper", { useClass: MessageMapper });
 
-    container.registerSingleton(NotificationMapper);
+    container.register("INotificationMapper", { useClass: NotificationMapper });
   }
 }

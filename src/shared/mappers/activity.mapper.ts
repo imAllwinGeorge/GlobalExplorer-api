@@ -2,9 +2,10 @@ import { injectable } from "tsyringe";
 import { ActivityDTO } from "../dtos/Auth.dto";
 import { IActivityModel } from "../../frameworks/database/mongo/models/activity.model";
 import { ActivityResponseDTO } from "../dtos/response.dto";
+import { IActivityMapper } from "../../entities/mapperInterfaces/activitiy-mapper.interface";
 
 @injectable()
-export class ActivityMapper {
+export class ActivityMapper implements IActivityMapper {
   toEntity(dto: ActivityDTO): Partial<IActivityModel> {
     return {
       activityName: dto.activityName,

@@ -1,11 +1,11 @@
 import { inject, injectable } from "tsyringe";
-import { BlogMapper } from "../../shared/mappers/blog.mapper";
 import { IGetAllBlogUsecase } from "../../entities/usecaseInterfaces/blog/get-all-blog.usecase.interface";
 import { IBlogRepository } from "../../entities/repositoryInterfaces/Blog/blog-repository.interface";
 import { ICacheService } from "../../entities/serviceInterfaces/cache-service.interface";
 import { IBlogModel } from "../../frameworks/database/mongo/models/blog.model";
 import { AppError } from "../../shared/errors/appError";
 import { HttpStatusCode } from "../../shared/constants/constants";
+import { IBlogMapper } from "../../entities/mapperInterfaces/blog-mapper.interface";
 
 @injectable()
 export class GetAllBlogUsecase implements IGetAllBlogUsecase {
@@ -16,8 +16,8 @@ export class GetAllBlogUsecase implements IGetAllBlogUsecase {
     @inject("ICacheService")
     private _cacheService: ICacheService,
 
-    @inject(BlogMapper)
-    private _blogMapper: BlogMapper,
+    @inject("IBlogMapper")
+    private _blogMapper: IBlogMapper,
   ) {}
 
   async execute(

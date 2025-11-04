@@ -1,7 +1,8 @@
+import { IBookingMapper } from "../../entities/mapperInterfaces/booking-mapper.interface";
 import { IBookingModal } from "../../frameworks/database/mongo/models/booking.model";
 import { BookingResponseDTO } from "../dtos/response.dto";
 
-export class BookingMapper {
+export class BookingMapper implements IBookingMapper {
   toDTO(booking: IBookingModal): BookingResponseDTO {
     return {
       _id: booking._id,

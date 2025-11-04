@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
 import { IAddActivityUsecase } from "../../entities/usecaseInterfaces/activity/add-activity.usecase.interface";
 import { IActivityRepository } from "../../entities/repositoryInterfaces/activity/activityRepository.interface";
-import { ActivityMapper } from "../../shared/mappers/activity.mapper";
 import { ActivityDTO } from "../../shared/dtos/Auth.dto";
 import { ActivityResponseDTO } from "../../shared/dtos/response.dto";
+import { IActivityMapper } from "../../entities/mapperInterfaces/activitiy-mapper.interface";
 
 @injectable()
 export class AddActivityUsecase implements IAddActivityUsecase {
@@ -11,8 +11,8 @@ export class AddActivityUsecase implements IAddActivityUsecase {
     @inject("IActivityRepository")
     private _activityRepository: IActivityRepository,
 
-    @inject(ActivityMapper)
-    private _activityMapper: ActivityMapper,
+    @inject("IActivityMapper")
+    private _activityMapper: IActivityMapper,
   ) {}
 
   async execute(data: ActivityDTO): Promise<ActivityResponseDTO> {

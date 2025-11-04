@@ -14,9 +14,9 @@ import {
   HostResponseDTO,
   UserResponseDTO,
 } from "../../shared/dtos/response.dto";
-import { UserMapper } from "../../shared/mappers/user.mapper";
-import { HostMapper } from "../../shared/mappers/host.mapper";
-import { AdminMapper } from "../../shared/mappers/admin.mapper";
+import { IUserMapper } from "../../entities/mapperInterfaces/user-mapper.interface";
+import { IHostMapper } from "../../entities/mapperInterfaces/host-mapper.interface";
+import { IAdminMapper } from "../../entities/mapperInterfaces/admin-mapper.interface";
 
 @injectable()
 export class VerifyTokenUsecase implements IVerifyTokenUsecase {
@@ -33,14 +33,14 @@ export class VerifyTokenUsecase implements IVerifyTokenUsecase {
     @inject("IHostRepository")
     private _hostRepository: IHostRepository,
 
-    @inject(UserMapper)
-    private _userMapper: UserMapper,
+    @inject("IUserMapper")
+    private _userMapper: IUserMapper,
 
-    @inject(HostMapper)
-    private _hostMapper: HostMapper,
+    @inject("IHostMapper")
+    private _hostMapper: IHostMapper,
 
-    @inject(AdminMapper)
-    private _adminMapper: AdminMapper,
+    @inject("IAdminMapper")
+    private _adminMapper: IAdminMapper,
   ) {}
   async execute(
     token: string,

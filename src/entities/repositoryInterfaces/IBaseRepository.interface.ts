@@ -29,12 +29,12 @@ export interface IBaseRepository<T> {
   findDetailsWithProjection(
     filter: FilterQuery<object>,
     projection: FilterQuery<object>,
-    session: ClientSession,
+    session?: ClientSession,
   ): Promise<object>;
   isNameExist(
     field: string,
     name: string,
     session?: ClientSession,
   ): Promise<boolean>;
-  findExcludingId(excludeId: string, value: string): Promise<T | null>;
+  findExcludingId(excludeId: string, value: object): Promise<T | null>;
 }

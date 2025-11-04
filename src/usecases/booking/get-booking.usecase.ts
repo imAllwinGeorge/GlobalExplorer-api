@@ -4,7 +4,7 @@ import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/
 import { BookingResponseDTO } from "../../shared/dtos/response.dto";
 import { AppError } from "../../shared/errors/appError";
 import { HttpStatusCode } from "../../shared/constants/constants";
-import { BookingMapper } from "../../shared/mappers/booking.mapper";
+import { IBookingMapper } from "../../entities/mapperInterfaces/booking-mapper.interface";
 
 @injectable()
 export class GetBookingUsecase implements IGetBookingUsecase {
@@ -12,8 +12,8 @@ export class GetBookingUsecase implements IGetBookingUsecase {
     @inject("IBookingRepository")
     private _bookingRepository: IBookingRepository,
 
-    @inject(BookingMapper)
-    private _bookingMapper: BookingMapper,
+    @inject("IBookingMapper")
+    private _bookingMapper: IBookingMapper,
   ) {}
 
   async execute(id: string): Promise<BookingResponseDTO> {

@@ -1,7 +1,8 @@
+import { IMessageMapper } from "../../entities/mapperInterfaces/message-mapper.interface";
 import { IMessageModel } from "../../frameworks/database/mongo/models/message.model";
 import { MessageResponseDTO } from "../dtos/response.dto";
 
-export class MessageMapper {
+export class MessageMapper implements IMessageMapper {
   toDTO(message: IMessageModel): MessageResponseDTO {
     return {
       _id: message._id,

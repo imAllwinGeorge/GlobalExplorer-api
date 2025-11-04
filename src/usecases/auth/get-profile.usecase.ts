@@ -3,9 +3,6 @@ import { IGetProfileUsecase } from "../../entities/usecaseInterfaces/auth/get-pr
 import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
 import { IHostRepository } from "../../entities/repositoryInterfaces/users/host-repository.interface";
 import { IAdminRepository } from "../../entities/repositoryInterfaces/users/admin-repository.inteface";
-import { UserMapper } from "../../shared/mappers/user.mapper";
-import { HostMapper } from "../../shared/mappers/host.mapper";
-import { AdminMapper } from "../../shared/mappers/admin.mapper";
 import {
   AdminResponseDTO,
   HostResponseDTO,
@@ -13,6 +10,9 @@ import {
 } from "../../shared/dtos/response.dto";
 import { HttpStatusCode, ROLE } from "../../shared/constants/constants";
 import { AppError } from "../../shared/errors/appError";
+import { IUserMapper } from "../../entities/mapperInterfaces/user-mapper.interface";
+import { IHostMapper } from "../../entities/mapperInterfaces/host-mapper.interface";
+import { IAdminMapper } from "../../entities/mapperInterfaces/admin-mapper.interface";
 
 @injectable()
 export class GetProfileUsecase implements IGetProfileUsecase {
@@ -26,14 +26,14 @@ export class GetProfileUsecase implements IGetProfileUsecase {
     @inject("IAdminRepository")
     private _adminRepository: IAdminRepository,
 
-    @inject(UserMapper)
-    private _userMapper: UserMapper,
+    @inject("IUserMapper")
+    private _userMapper: IUserMapper,
 
-    @inject(HostMapper)
-    private _hostMapper: HostMapper,
+    @inject("IHostMapper")
+    private _hostMapper: IHostMapper,
 
-    @inject(AdminMapper)
-    private _adminMapper: AdminMapper,
+    @inject("IAdminMapper")
+    private _adminMapper: IAdminMapper,
   ) {}
 
   async execute(

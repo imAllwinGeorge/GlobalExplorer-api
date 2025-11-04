@@ -4,8 +4,6 @@ import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-
 import { IHostRepository } from "../../entities/repositoryInterfaces/users/host-repository.interface";
 import { ISocketUserMapRepository } from "../../entities/repositoryInterfaces/redis/socket-user.repository";
 import { ISocketServices } from "../../entities/serviceInterfaces/socket.service";
-import { UserMapper } from "../../shared/mappers/user.mapper";
-import { HostMapper } from "../../shared/mappers/host.mapper";
 import {
   HostResponseDTO,
   UserResponseDTO,
@@ -14,6 +12,8 @@ import { HttpStatusCode, ROLE } from "../../shared/constants/constants";
 import { IUserModel } from "../../frameworks/database/mongo/models/user.model";
 import { IHostModel } from "../../frameworks/database/mongo/models/host.model";
 import { AppError } from "../../shared/errors/appError";
+import { IUserMapper } from "../../entities/mapperInterfaces/user-mapper.interface";
+import { IHostMapper } from "../../entities/mapperInterfaces/host-mapper.interface";
 
 @injectable()
 export class UpdateStatusUsecase implements IUpdateStatusUsecase {
@@ -30,11 +30,11 @@ export class UpdateStatusUsecase implements IUpdateStatusUsecase {
     @inject("ISocketServices")
     private _socketServices: ISocketServices,
 
-    @inject(UserMapper)
-    private _userMapper: UserMapper,
+    @inject("IUserMapper")
+    private _userMapper: IUserMapper,
 
-    @inject(HostMapper)
-    private _hostMapper: HostMapper,
+    @inject("IHostMapper")
+    private _hostMapper: IHostMapper,
   ) {}
 
   async execute(

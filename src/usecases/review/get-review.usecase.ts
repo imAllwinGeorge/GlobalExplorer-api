@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 import { IGetReviewUsecase } from "../../entities/usecaseInterfaces/review/get-review.interface";
 import { IReviewRepository } from "../../entities/repositoryInterfaces/review/review-repository.interface";
-import { ReviewMapper } from "../../shared/mappers/review.mapper";
 import { ReviewResponseDTO } from "../../shared/dtos/response.dto";
+import { IReviewMapper } from "../../entities/mapperInterfaces/review-mapper.interface";
 
 @injectable()
 export class GetReviewUsecase implements IGetReviewUsecase {
@@ -10,8 +10,8 @@ export class GetReviewUsecase implements IGetReviewUsecase {
     @inject("IReviewRepository")
     private _reviewRepository: IReviewRepository,
 
-    @inject(ReviewMapper)
-    private _reviewMapper: ReviewMapper,
+    @inject("IReviewMapper")
+    private _reviewMapper: IReviewMapper,
   ) {}
 
   async execute(id: string): Promise<ReviewResponseDTO[]> {

@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
 import { IGetCategoryUsecase } from "../../entities/usecaseInterfaces/category/get-categoty.usecase.interface";
 import { ICategoryRepository } from "../../entities/repositoryInterfaces/category/categoryRepository.interface";
-import { CategoryMapper } from "../../shared/mappers/category.mapper";
 import { CategoryResponseDTO } from "../../shared/dtos/response.dto";
 import { AppError } from "../../shared/errors/appError";
 import { HttpStatusCode } from "../../shared/constants/constants";
+import { ICategoryMapper } from "../../entities/mapperInterfaces/category-mapper.interface";
 
 @injectable()
 export class GetCatgoryUsecase implements IGetCategoryUsecase {
@@ -12,8 +12,8 @@ export class GetCatgoryUsecase implements IGetCategoryUsecase {
     @inject("ICategoryRepository")
     private _categoryRepository: ICategoryRepository,
 
-    @inject(CategoryMapper)
-    private _categoryMapper: CategoryMapper,
+    @inject("ICategoryMapper")
+    private _categoryMapper: ICategoryMapper,
   ) {}
 
   async execute(filter: object): Promise<CategoryResponseDTO> {

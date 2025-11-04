@@ -2,10 +2,10 @@ import { inject, injectable } from "tsyringe";
 import { IReadNotificationUsecase } from "../../entities/usecaseInterfaces/notification/read-notification.interface";
 import { INotificationRepository } from "../../entities/repositoryInterfaces/notification/notificationRepository";
 import { ISocketUserMapRepository } from "../../entities/repositoryInterfaces/redis/socket-user.repository";
-import { NotificationMapper } from "../../shared/mappers/notification.mapper";
 import { NotificationResponseDTO } from "../../shared/dtos/response.dto";
 import { AppError } from "../../shared/errors/appError";
 import { HttpStatusCode } from "../../shared/constants/constants";
+import { INotificationMapper } from "../../entities/mapperInterfaces/notification-mapper.interface";
 
 @injectable()
 export class ReadNotificationUsecase implements IReadNotificationUsecase {
@@ -16,8 +16,8 @@ export class ReadNotificationUsecase implements IReadNotificationUsecase {
     @inject("ISocketUserRepository")
     private _socketRepository: ISocketUserMapRepository,
 
-    @inject(NotificationMapper)
-    private _notifcationMapper: NotificationMapper,
+    @inject("INotificationMapper")
+    private _notifcationMapper: INotificationMapper,
   ) {}
 
   async execute(

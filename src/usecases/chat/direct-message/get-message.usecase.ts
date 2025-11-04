@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 import { IGetMessageUsecase } from "../../../entities/usecaseInterfaces/chat/direct-message/get-message.usecase.interface";
 import { IMessageRepository } from "../../../entities/repositoryInterfaces/chat/IMessage.repository.interface";
-import { MessageMapper } from "../../../shared/mappers/message.mapper";
 import { MessageResponseDTO } from "../../../shared/dtos/response.dto";
+import { IMessageMapper } from "../../../entities/mapperInterfaces/message-mapper.interface";
 
 @injectable()
 export class GetMessageUsecase implements IGetMessageUsecase {
@@ -10,8 +10,8 @@ export class GetMessageUsecase implements IGetMessageUsecase {
     @inject("IMessageRepository")
     private _messageRepository: IMessageRepository,
 
-    @inject(MessageMapper)
-    private _messageMapper: MessageMapper,
+    @inject("IMessageMapper")
+    private _messageMapper: IMessageMapper,
   ) {}
 
   async execute(conversationId: string): Promise<MessageResponseDTO[]> {

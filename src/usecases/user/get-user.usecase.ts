@@ -2,14 +2,14 @@ import { inject, injectable } from "tsyringe";
 import { IGetUserUsecase } from "../../entities/usecaseInterfaces/user/get-user.usecase.interface";
 import { IUserRepository } from "../../entities/repositoryInterfaces/users/user-repository.interface";
 import { IHostRepository } from "../../entities/repositoryInterfaces/users/host-repository.interface";
-import { UserMapper } from "../../shared/mappers/user.mapper";
-import { HostMapper } from "../../shared/mappers/host.mapper";
 import {
   HostResponseDTO,
   UserResponseDTO,
 } from "../../shared/dtos/response.dto";
 import { HttpStatusCode, ROLE } from "../../shared/constants/constants";
 import { AppError } from "../../shared/errors/appError";
+import { IUserMapper } from "../../entities/mapperInterfaces/user-mapper.interface";
+import { IHostMapper } from "../../entities/mapperInterfaces/host-mapper.interface";
 
 @injectable()
 export class GetUserUsecase implements IGetUserUsecase {
@@ -20,11 +20,11 @@ export class GetUserUsecase implements IGetUserUsecase {
     @inject("IHostRepository")
     private _hostRepository: IHostRepository,
 
-    @inject(UserMapper)
-    private _userMapper: UserMapper,
+    @inject("IUserMapper")
+    private _userMapper: IUserMapper,
 
-    @inject(HostMapper)
-    private _hostMapper: HostMapper,
+    @inject("IHostMapper")
+    private _hostMapper: IHostMapper,
   ) {}
   async execute(
     _id: string,

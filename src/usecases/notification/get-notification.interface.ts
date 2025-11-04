@@ -1,8 +1,8 @@
 import { inject, injectable } from "tsyringe";
 import { IGetNotificationUsecase } from "../../entities/usecaseInterfaces/notification/get-notification.interface";
 import { INotificationRepository } from "../../entities/repositoryInterfaces/notification/notificationRepository";
-import { NotificationMapper } from "../../shared/mappers/notification.mapper";
 import { NotificationResponseDTO } from "../../shared/dtos/response.dto";
+import { INotificationMapper } from "../../entities/mapperInterfaces/notification-mapper.interface";
 
 @injectable()
 export class GetNotificationUsecase implements IGetNotificationUsecase {
@@ -10,8 +10,8 @@ export class GetNotificationUsecase implements IGetNotificationUsecase {
     @inject("INotificationRepository")
     private _notificationRepository: INotificationRepository,
 
-    @inject(NotificationMapper)
-    private _notificationMapper: NotificationMapper,
+    @inject("INotificationMapper")
+    private _notificationMapper: INotificationMapper,
   ) {}
 
   async execute(userId: string): Promise<NotificationResponseDTO[]> {

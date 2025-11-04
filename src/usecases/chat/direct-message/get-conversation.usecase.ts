@@ -3,9 +3,9 @@ import { IGetConversationUsecase } from "../../../entities/usecaseInterfaces/cha
 import { IConversationRepository } from "../../../entities/repositoryInterfaces/chat/Conversation.repository.interface";
 import { IUserRepository } from "../../../entities/repositoryInterfaces/users/user-repository.interface";
 import { IHostRepository } from "../../../entities/repositoryInterfaces/users/host-repository.interface";
-import { ConversationMapper } from "../../../shared/mappers/conversation.mapper";
 import { ConversationResponse } from "../../../shared/types/types";
 import { extractUserIds } from "../../../shared/utils/extractUserIds";
+import { IConversationMapper } from "../../../entities/mapperInterfaces/conversation-mapper.interface";
 
 @injectable()
 export class GetConversationUsecase implements IGetConversationUsecase {
@@ -19,8 +19,8 @@ export class GetConversationUsecase implements IGetConversationUsecase {
     @inject("IHostRepository")
     private _hostRepository: IHostRepository,
 
-    @inject(ConversationMapper)
-    private _conversationMapper: ConversationMapper,
+    @inject("IConversationMapper")
+    private _conversationMapper: IConversationMapper,
   ) {}
 
   async execute(selfUserId: string): Promise<ConversationResponse[]> {

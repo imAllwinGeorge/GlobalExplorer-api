@@ -1,11 +1,11 @@
 import { inject, injectable } from "tsyringe";
 import { IGetAllCategoryUsecase } from "../../entities/usecaseInterfaces/category/get-all-category.usecase.interface";
 import { ICategoryRepository } from "../../entities/repositoryInterfaces/category/categoryRepository.interface";
-import { CategoryMapper } from "../../shared/mappers/category.mapper";
 import { ICategoryModel } from "../../frameworks/database/mongo/models/category.model";
 import { AppError } from "../../shared/errors/appError";
 import { HttpStatusCode } from "../../shared/constants/constants";
 import { FilterQuery } from "mongoose";
+import { ICategoryMapper } from "../../entities/mapperInterfaces/category-mapper.interface";
 
 @injectable()
 export class GetAllCategoryUsecase implements IGetAllCategoryUsecase {
@@ -13,8 +13,8 @@ export class GetAllCategoryUsecase implements IGetAllCategoryUsecase {
     @inject("ICategoryRepository")
     private _categoryRepository: ICategoryRepository,
 
-    @inject(CategoryMapper)
-    private _categoryMapper: CategoryMapper,
+    @inject("ICategoryMapper")
+    private _categoryMapper: ICategoryMapper,
   ) {}
 
   async execute(

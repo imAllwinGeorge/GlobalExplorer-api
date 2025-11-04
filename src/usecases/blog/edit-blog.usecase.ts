@@ -2,11 +2,11 @@ import { inject, injectable } from "tsyringe";
 import { IEditBlogUsecase } from "../../entities/usecaseInterfaces/blog/edit-blog.usecase.interface";
 import { IBlogRepository } from "../../entities/repositoryInterfaces/Blog/blog-repository.interface";
 import { ICacheService } from "../../entities/serviceInterfaces/cache-service.interface";
-import { BlogMapper } from "../../shared/mappers/blog.mapper";
 import { IBlogModel } from "../../frameworks/database/mongo/models/blog.model";
 import { BlogResponseDTO } from "../../shared/dtos/response.dto";
 import { AppError } from "../../shared/errors/appError";
 import { HttpStatusCode } from "../../shared/constants/constants";
+import { IBlogMapper } from "../../entities/mapperInterfaces/blog-mapper.interface";
 
 @injectable()
 export class EditBlogUsecase implements IEditBlogUsecase {
@@ -17,8 +17,8 @@ export class EditBlogUsecase implements IEditBlogUsecase {
     @inject("ICacheService")
     private _cacheService: ICacheService,
 
-    @inject(BlogMapper)
-    private _blogMapper: BlogMapper,
+    @inject("IBlogMapper")
+    private _blogMapper: IBlogMapper,
   ) {}
 
   async execute(data: IBlogModel): Promise<BlogResponseDTO> {

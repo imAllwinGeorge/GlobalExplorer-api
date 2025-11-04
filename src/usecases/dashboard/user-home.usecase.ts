@@ -3,9 +3,9 @@ import { IBlogRepository } from "../../entities/repositoryInterfaces/Blog/blog-r
 import { IActivityRepository } from "../../entities/repositoryInterfaces/activity/activityRepository.interface";
 import { IUserHomeUsecase } from "../../entities/usecaseInterfaces/dashboard/user-home.interface";
 import { ImageGallery } from "../../shared/types/types";
-import { ActivityMapper } from "../../shared/mappers/activity.mapper";
 import { IActivityModel } from "../../frameworks/database/mongo/models/activity.model";
 import { ActivityResponseDTO } from "../../shared/dtos/response.dto";
+import { IActivityMapper } from "../../entities/mapperInterfaces/activitiy-mapper.interface";
 
 @injectable()
 export class UserHomeUsecase implements IUserHomeUsecase {
@@ -16,8 +16,8 @@ export class UserHomeUsecase implements IUserHomeUsecase {
     @inject("IActivityRepository")
     private _activityRepository: IActivityRepository,
 
-    @inject(ActivityMapper)
-    private activityMapper: ActivityMapper,
+    @inject("IActivityMapper")
+    private activityMapper: IActivityMapper,
   ) {}
 
   async execute(

@@ -13,12 +13,12 @@ import {
   NOTIFICATION_EVENT,
   NOTIFICATION_TYPE,
 } from "../../shared/constants/constants";
-import { BookingMapper } from "../../shared/mappers/booking.mapper";
 import { AppError } from "../../shared/errors/appError";
 import { IReservationRepository } from "../../entities/repositoryInterfaces/reservation/reservation-repository.interface";
 import { IAvailabilityRepository } from "../../entities/repositoryInterfaces/availability/availability-repository.interface";
 import mongoose from "mongoose";
 import logger from "../../infrastructures/logger";
+import { IBookingMapper } from "../../entities/mapperInterfaces/booking-mapper.interface";
 
 @injectable()
 export class BookActivityUsecase implements IBookActivityUsecase {
@@ -47,8 +47,8 @@ export class BookActivityUsecase implements IBookActivityUsecase {
     @inject("ICacheService")
     private _cacheService: ICacheService,
 
-    @inject(BookingMapper)
-    private _bookingMapper: BookingMapper,
+    @inject("IBookingMapper")
+    private _bookingMapper: IBookingMapper,
   ) {}
 
   async execute(data: BookingDTO): Promise<BookingResponseDTO> {

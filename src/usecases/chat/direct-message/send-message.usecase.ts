@@ -2,14 +2,14 @@ import { inject, injectable } from "tsyringe";
 import { ISendDirectMessageUsecase } from "../../../entities/usecaseInterfaces/chat/direct-message/send-message.usecase.interface";
 import { IMessageRepository } from "../../../entities/repositoryInterfaces/chat/IMessage.repository.interface";
 import { IConversationRepository } from "../../../entities/repositoryInterfaces/chat/Conversation.repository.interface";
-import { ConversationMapper } from "../../../shared/mappers/conversation.mapper";
-import { MessageMapper } from "../../../shared/mappers/message.mapper";
 import {
   ConversationResponseDTO,
   MessageResponseDTO,
 } from "../../../shared/dtos/response.dto";
 import { AppError } from "../../../shared/errors/appError";
 import { HttpStatusCode } from "../../../shared/constants/constants";
+import { IConversationMapper } from "../../../entities/mapperInterfaces/conversation-mapper.interface";
+import { IMessageMapper } from "../../../entities/mapperInterfaces/message-mapper.interface";
 
 @injectable()
 export class SendDirectMessageUsecase implements ISendDirectMessageUsecase {
@@ -20,11 +20,11 @@ export class SendDirectMessageUsecase implements ISendDirectMessageUsecase {
     @inject("IConversationRepository")
     private _conversationRepository: IConversationRepository,
 
-    @inject(ConversationMapper)
-    private _conversationMapper: ConversationMapper,
+    @inject("IConversationMapper")
+    private _conversationMapper: IConversationMapper,
 
-    @inject(MessageMapper)
-    private _messageMapper: MessageMapper,
+    @inject("IMessageMapper")
+    private _messageMapper: IMessageMapper,
   ) {}
 
   async execute(

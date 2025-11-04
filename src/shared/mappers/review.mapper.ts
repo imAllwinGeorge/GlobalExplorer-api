@@ -1,7 +1,8 @@
+import { IReviewMapper } from "../../entities/mapperInterfaces/review-mapper.interface";
 import { IReviewModel } from "../../frameworks/database/mongo/models/review.model";
 import { ReviewResponseDTO } from "../dtos/response.dto";
 
-export class ReviewMapper {
+export class ReviewMapper implements IReviewMapper {
   toDTO(review: IReviewModel): ReviewResponseDTO {
     return {
       _id: review._id,

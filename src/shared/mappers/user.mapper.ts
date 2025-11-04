@@ -1,9 +1,10 @@
 import { injectable } from "tsyringe";
 import { IUserModel } from "../../frameworks/database/mongo/models/user.model";
 import { UserResponseDTO } from "../dtos/response.dto";
+import { IUserMapper } from "../../entities/mapperInterfaces/user-mapper.interface";
 
 @injectable()
-export class UserMapper {
+export class UserMapper implements IUserMapper {
   toDTO(user: IUserModel): UserResponseDTO {
     return {
       _id: user._id,

@@ -12,15 +12,7 @@ export class AuthRoutes extends BaseRoute {
   protected initializeRoutes(): void {
     this.router.post(
       "/send-otp",
-      (req: Request, res: Response, next: NextFunction) => {
-        console.log("sfnslkbnsbnsnkld");
-        next();
-      },
       upload.any(),
-      (req: Request, res: Response, next: NextFunction) => {
-        console.log("sfnslkbnsbnsnkld");
-        next();
-      },
       (req: Request, res: Response, next: NextFunction) => {
         authController.send_otp(req, res, next);
       },
