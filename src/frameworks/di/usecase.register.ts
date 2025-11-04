@@ -127,6 +127,7 @@ import { GetBlogUsecase } from "../../usecases/blog/get-blog.usecase";
 import { IGetBlogUsecase } from "../../entities/usecaseInterfaces/blog/get-blog.usecase.interface";
 import { IUserHomeUsecase } from "../../entities/usecaseInterfaces/dashboard/user-home.interface";
 import { UserHomeUsecase } from "../../usecases/dashboard/user-home.usecase";
+import { AdminMapper } from "../../shared/mappers/admin.mapper";
 
 export class UsecaseRegistery {
   static registerUsecases(): void {
@@ -388,6 +389,8 @@ export class UsecaseRegistery {
     container.register("IUserMapper", { useClass: UserMapper });
 
     container.register("IHostMapper", { useClass: HostMapper });
+
+    container.register("IAdminMapper", { useClass: AdminMapper });
 
     container.register("IReviewMapper", { useClass: ReviewMapper });
 
