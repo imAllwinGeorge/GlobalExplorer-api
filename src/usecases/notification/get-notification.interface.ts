@@ -19,17 +19,22 @@ export class GetNotificationUsecase implements IGetNotificationUsecase {
     limit: number,
     skip: number,
     userId: string,
-  ): Promise<NotificationResponseDTO[]> {
-    const notifications = await this._notificationRepository.findAll(
-      limit,
-      skip,
-      {
+  ): Promise<{
+    notifications: NotificationResponseDTO[];
+    unreadCount: number;
+  }> {
+    const [notifications, unreadCount] = await Promise.all([
+      this._notificationRepository.findAll(limit, skip, {
         userId,
-      },
-    );
+      }),
+      this._notificationRepository.countDocuments({ isRead: false }),
+    ]);
 
-    return this._notificationMapper.toDTOs(
-      notifications.items as INotificationModel[],
-    );
+    return {
+      notifications: this._notificationMapper.toDTOs(
+        notifications.items as INotificationModel[],
+      ),
+      unreadCount,
+    };
   }
 }

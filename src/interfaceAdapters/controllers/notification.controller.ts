@@ -22,13 +22,13 @@ export class NotificationController implements INotificationController {
       const { userId } = req.params;
       const { limit, skip } = getPaginationParams(req);
 
-      const notifications = await this._getNotificationUsecase.execute(
+      const result = await this._getNotificationUsecase.execute(
         limit,
         skip,
         userId,
       );
 
-      res.status(HttpStatusCode.OK).json({ notifications });
+      res.status(HttpStatusCode.OK).json(result);
     } catch (error) {
       // console.log(error);
       // if (error instanceof Error) {

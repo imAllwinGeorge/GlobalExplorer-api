@@ -5,5 +5,8 @@ export interface IGetNotificationUsecase {
     limit: number,
     skip: number,
     userId: string,
-  ): Promise<NotificationResponseDTO[]>;
+  ): Promise<{
+    notifications: NotificationResponseDTO[];
+    unreadCount: number;
+  }>;
 }
