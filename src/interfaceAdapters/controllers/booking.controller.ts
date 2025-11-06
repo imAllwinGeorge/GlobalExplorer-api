@@ -38,22 +38,6 @@ export class BookingController implements IBookingController {
     private _getBookingUsecase: IGetBookingUsecase,
   ) {}
 
-  // async bookActivity(req: Request, res: Response): Promise<void> {
-  //   try {
-  //     console.log("hit it in the controller");
-  //     const { data } = req.body;
-  //     const booking = this._bookActivityUsecase.execute(data, id );
-  //     res.status(HttpStatusCode.CREATED).json({ booking });
-  //   } catch (error) {
-  //     if (error instanceof Error) {
-  //       res
-  //         .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-  //         .json({ message: "Internal Sever Error" });
-  //       return;
-  //     }
-  //   }
-  // }
-
   async createRazorpayOrder(
     req: Request,
     res: Response,
@@ -82,7 +66,6 @@ export class BookingController implements IBookingController {
         holdUntilDate,
       };
       console.log(" user: sented data: for create order   :", data);
-      // await this._checkAvailabilityUsecase.execute(data);
       const bookedActivity = await this._createOrderUsecase.execute(data);
       res.json(bookedActivity);
     } catch (error) {
@@ -125,7 +108,6 @@ export class BookingController implements IBookingController {
         return;
       }
 
-      // continue with transfer logic
       const data = {
         razorpayOrderId: razorpay_order_id,
         razorpayPaymentId: razorpay_payment_id,
@@ -146,11 +128,6 @@ export class BookingController implements IBookingController {
         .status(HttpStatusCode.CREATED)
         .json({ success: true, paymentId: razorpay_payment_id, booking });
     } catch (error) {
-      // console.log(error);
-      // res
-      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      //   .json({ message: "Unable to process the payment" });
-
       next(error);
     }
   }
@@ -162,9 +139,6 @@ export class BookingController implements IBookingController {
   ): Promise<void> {
     try {
       const userId = req.query.id;
-      // const page = parseInt(req.query.page as string);
-      // const limit = parseInt(req.query.limit as string);
-      // const skip = (page - 1) * limit;
 
       const { limit, skip } = getPaginationParams(req);
 
@@ -180,15 +154,6 @@ export class BookingController implements IBookingController {
         .status(HttpStatusCode.OK)
         .json({ bookings: result.items, totalPages });
     } catch (error) {
-      // if (error instanceof Error) {
-      //   res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
-      //   return;
-      // }
-
-      // res
-      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      //   .json({ message: "Error fetching booking details" });
-
       next(error);
     }
   }
@@ -209,15 +174,6 @@ export class BookingController implements IBookingController {
 
       res.status(HttpStatusCode.OK).json({ message: booking });
     } catch (error) {
-      // if (error instanceof Error) {
-      //   res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
-      //   return;
-      // }
-
-      // res
-      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      //   .json({ message: "Internal server error" });
-
       next(error);
     }
   }
@@ -229,9 +185,6 @@ export class BookingController implements IBookingController {
   ): Promise<void> {
     try {
       const { hostId, search, filter } = req.query;
-      // const page = parseInt(req.query.page as string);
-      // const limit = parseInt(req.query.limit as string);
-      // const skip = (page - 1) * limit;
 
       const { limit, skip } = getPaginationParams(req);
       let query;
@@ -264,15 +217,6 @@ export class BookingController implements IBookingController {
         .status(HttpStatusCode.OK)
         .json({ bookings: result.items, totalPages });
     } catch (error) {
-      // if (error instanceof Error) {
-      //   res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
-      //   return;
-      // }
-
-      // res
-      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      //   .json({ message: "Error fetching booking details" });
-
       next(error);
     }
   }

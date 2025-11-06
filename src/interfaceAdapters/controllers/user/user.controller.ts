@@ -83,7 +83,6 @@ export class UserController implements IUserController {
         message: `${user.firstName} is ${user.isBlocked ? "Blocked" : "UnBlocked"}`,
       });
     } catch (error) {
-      // res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
       next(error);
     }
   }
@@ -101,8 +100,6 @@ export class UserController implements IUserController {
       );
       res.status(HttpStatusCode.OK).json({ user });
     } catch (error) {
-      // console.log("get user details", error);
-      // res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ messge: error });
       next(error);
     }
   }

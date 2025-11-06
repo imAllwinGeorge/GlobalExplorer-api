@@ -22,17 +22,6 @@ export class ReviewController implements IReviewController {
 
       res.status(HttpStatusCode.Created).json({ newReview });
     } catch (error) {
-      // console.log("write review usecase error: ", error);
-
-      // if (error instanceof Error) {
-      //   res.status(HttpStatusCode.BadRequest).json({ message: error.message });
-      //   return;
-      // }
-
-      // res
-      //   .status(HttpStatusCode.InternalServerError)
-      //   .json({ message: "Internal Server Error" });
-
       next(error);
     }
   }

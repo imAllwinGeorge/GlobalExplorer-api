@@ -139,19 +139,6 @@ export class AuthController implements IAuthController {
       return;
     } catch (error) {
       next(error);
-      // if (error instanceof Error && error.message === "Email already exist") {
-      //   res
-      //     .status(HttpStatusCode.BAD_REQUEST)
-      //     .json({ message: "Email already exists" });
-      // } else if (error instanceof ZodError) {
-      //   res
-      //     .status(HttpStatusCode.BAD_REQUEST)
-      //     .json({ message: error.errors[0].message });
-      // } else {
-      //   res
-      //     .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      //     .json({ message: "Internal server Error." });
-      // }
     }
   }
 
@@ -180,8 +167,6 @@ export class AuthController implements IAuthController {
       return;
     } catch (error) {
       next(error);
-      // console.log(error);
-      // res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json(error);
     }
   }
 
@@ -228,8 +213,6 @@ export class AuthController implements IAuthController {
       return;
     } catch (error) {
       next(error);
-      // console.log("user signup error: ", error);
-      // res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
     }
   }
 
@@ -279,11 +262,6 @@ export class AuthController implements IAuthController {
         .json({ message: "user login successful", user: userData });
     } catch (error) {
       next(error);
-      // console.log(error);
-
-      // res
-      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      //   .json({ message: "server error" });
     }
   }
 
@@ -308,12 +286,6 @@ export class AuthController implements IAuthController {
       return;
     } catch (error) {
       next(error);
-      // console.log(error);
-      // if (error instanceof Error) {
-      //   res
-      //     .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      //     .json({ message: error.message });
-      // }
     }
   }
 
@@ -335,14 +307,6 @@ export class AuthController implements IAuthController {
       return;
     } catch (error) {
       next(error);
-      // console.log("error:", error);
-      // if (error instanceof JsonWebTokenError) {
-      //   res
-      //     .status(HttpStatusCode.FORBIDDEN)
-      //     .json({ message: "Token Expired." });
-      //   return;
-      // }
-      // res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
     }
   }
 
@@ -377,8 +341,6 @@ export class AuthController implements IAuthController {
       res.status(HttpStatusCode.OK).json({ message: "token verified" });
     } catch (error) {
       next(error);
-      // console.log(error);
-      // res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
     }
   }
 
@@ -416,11 +378,6 @@ export class AuthController implements IAuthController {
       res.status(HttpStatusCode.OK).json({ message: "Token validated" });
     } catch (error) {
       next(error);
-      // if (error instanceof Error) {
-      //   res.status(HttpStatusCode.FORBIDDEN).json({ message: error.message });
-      //   return;
-      // }
-      // res.status(500).json({ message: "Internal Server Error" });
     }
   }
 
@@ -471,8 +428,6 @@ export class AuthController implements IAuthController {
       res.redirect(`${frontEndUrl}/login?user=${userData}`);
     } catch (error) {
       next(error);
-      // console.log(error);
-      // res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: error });
     }
   }
 
@@ -495,10 +450,6 @@ export class AuthController implements IAuthController {
       res.status(HttpStatusCode.OK).json({ message: "logout" });
     } catch (error) {
       next(error);
-      // console.log("logout Error :", error);
-      // res
-      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      //   .json({ message: "Internal server error" });
     }
   }
 
@@ -514,13 +465,6 @@ export class AuthController implements IAuthController {
       res.status(HttpStatusCode.OK).json({ user: profile });
     } catch (error) {
       next(error);
-      // if (error instanceof Error) {
-      //   res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
-      //   return;
-      // }
-      // res
-      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      //   .json({ message: "Internal Server Error" });
     }
   }
 }

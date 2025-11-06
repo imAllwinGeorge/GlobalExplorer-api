@@ -33,16 +33,6 @@ export class DashBoardController implements IDashboardController {
 
       res.status(HttpStatusCode.Ok).json(result);
     } catch (error) {
-      // console.log(error);
-      // if (error instanceof Error) {
-      //   res.status(HttpStatusCode.BadRequest).json({ message: error.message });
-      //   return;
-      // }
-
-      // res
-      //   .status(HttpStatusCode.InternalServerError)
-      //   .json({ message: "Internal Server Error" });
-
       next(error);
     }
   }
@@ -59,15 +49,6 @@ export class DashBoardController implements IDashboardController {
 
       res.status(HttpStatusCode.Ok).json(result);
     } catch (error) {
-      // console.log(error);
-      // if (error instanceof Error) {
-      //   res.status(HttpStatusCode.BadRequest).json({ message: error.message });
-      //   return;
-      // }
-
-      // res
-      //   .status(HttpStatusCode.InternalServerError)
-      //   .json({ message: "Internal Server Error" });
       next(error);
     }
   }

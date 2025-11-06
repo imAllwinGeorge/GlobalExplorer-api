@@ -38,9 +38,6 @@ export class CategoryController implements ICategoryController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      // const page = parseInt(req.query.page as string);
-      // const limit = parseInt(req.query.limit as string);
-      // const skip = (page - 1) * limit;
       const { limit, skip } = getPaginationParams(req);
       const { search } = req.query;
       const result = await this._getAllCategoryUsecase.execute(
@@ -55,11 +52,6 @@ export class CategoryController implements ICategoryController {
         .json({ categories: result.items, totalPages });
       return;
     } catch (error) {
-      // console.log(error);
-      // res
-      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      //   .json({ message: "Internal Server Error" });
-
       next(error);
     }
   }
@@ -92,20 +84,6 @@ export class CategoryController implements ICategoryController {
         .status(HttpStatusCode.BAD_REQUEST)
         .json({ message: "Ivalid Request" });
     } catch (error) {
-      // console.log(error);
-      // if (error instanceof Error) {
-      //   if (error.message === "Category name already exist!") {
-      //     res
-      //       .status(HttpStatusCode.BAD_REQUEST)
-      //       .json({ message: "Category name already exist!" });
-      //   }
-      //   return;
-      // }
-
-      // res
-      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      //   .json({ message: "Internal sever error" });
-
       next(error);
     }
   }
@@ -151,16 +129,6 @@ export class CategoryController implements ICategoryController {
       res.status(HttpStatusCode.OK).json({ category });
       return;
     } catch (error) {
-      // console.log(error);
-      // if (error instanceof Error) {
-      //   res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
-      //   return;
-      // }
-
-      // res
-      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      //   .json({ message: "Internal server Error!" });
-
       next(error);
     }
   }
@@ -175,15 +143,6 @@ export class CategoryController implements ICategoryController {
 
       res.status(HttpStatusCode.OK).json({ categories });
     } catch (error) {
-      // if (error instanceof Error) {
-      //   res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
-      //   return;
-      // }
-
-      // res
-      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      //   .json({ message: "Internal Server Error" });
-
       next(error);
     }
   }

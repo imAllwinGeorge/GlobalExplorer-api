@@ -180,14 +180,6 @@ export class HostController implements IHostController {
       res.status(HttpStatusCode.OK).json({ user: updatedProfile });
     } catch (error) {
       next(error);
-      // console.log(error);
-      // if (error instanceof Error) {
-      //   res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
-      //   return;
-      // }
-      // res
-      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      //   .json({ message: "Internal server error" });
     }
   }
 }

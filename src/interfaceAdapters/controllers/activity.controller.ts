@@ -125,7 +125,6 @@ export class ActivityController implements IActivityController {
       );
       res.status(HttpStatusCode.OK).json({ activity });
     } catch (error) {
-      // console.log(error);
       next(error);
     }
   }
@@ -136,10 +135,6 @@ export class ActivityController implements IActivityController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      // const data = {};
-      // const page = parseInt(req.query.page as string) || 1;
-      // const limit = parseInt(req.query.limit as string) || 10;
-      // const skip = (page - 1) * limit;
       const { limit, skip } = getPaginationParams(req);
       const { search, filter } = req.query;
 
@@ -152,10 +147,6 @@ export class ActivityController implements IActivityController {
       const totalPages = calculateTotalPages(total, limit);
       res.status(HttpStatusCode.OK).json({ activities: items, totalPages });
     } catch (error) {
-      // console.log(error);
-      // res
-      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      //   .json({ message: "Internal Server Error" });
       next(error);
     }
   }
@@ -182,10 +173,6 @@ export class ActivityController implements IActivityController {
         reviews,
       });
     } catch (error) {
-      // console.log(error);
-      // res
-      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      //   .json({ message: "Internal Server Error" });
       next(error);
     }
   }
@@ -196,21 +183,16 @@ export class ActivityController implements IActivityController {
     next: NextFunction,
   ): Promise<void> {
     try {
-      // const page = parseInt(req.query.page as string) || 1;
-      // const limit = parseInt(req.query.limit as string) || 10;
-
       const { limit, skip } = getPaginationParams(req);
 
-      const lat = parseFloat(req.query.lat as string); // ❗ Prefer parseFloat for coordinates
-      const lng = parseFloat(req.query.lng as string); // ❗ Same here
-      const distance = parseInt(req.query.distance as string); // ✅ parseInt is fine for meters
+      const lat = parseFloat(req.query.lat as string);
+      const lng = parseFloat(req.query.lng as string);
+      const distance = parseInt(req.query.distance as string);
 
       const priceRangeMax = parseInt(req.query.priceRangeMax as string);
       const priceRangeMin = parseInt(req.query.priceRangeMin as string);
 
       const { search, category } = req.query;
-
-      // const skip = (page - 1) * limit;
 
       const filter = {
         search: search ? String(search) : undefined,
@@ -229,13 +211,6 @@ export class ActivityController implements IActivityController {
       );
       res.status(HttpStatusCode.OK).json(result);
     } catch (error) {
-      // if (error instanceof Error) {
-      //   res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
-      //   return;
-      // }
-      // res
-      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      //   .json({ message: "Internal Server Error" });
       next(error);
     }
   }

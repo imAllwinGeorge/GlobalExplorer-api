@@ -35,15 +35,6 @@ export class ChatController implements IChatController {
 
       res.status(HttpStatusCode.Ok).json({ conversations });
     } catch (error) {
-      // if (error instanceof Error) {
-      //   res.status(HttpStatusCode.BadRequest).json({ message: error.message });
-      //   return;
-      // }
-
-      // res
-      //   .status(HttpStatusCode.InternalServerError)
-      //   .json({ message: "Internal Server Error" });
-
       next(error);
     }
   }
@@ -60,15 +51,6 @@ export class ChatController implements IChatController {
 
       res.status(HttpStatusCode.Ok).json({ userSearch });
     } catch (error) {
-      // if (error instanceof Error) {
-      //   res.status(HttpStatusCode.BadRequest).json({ message: error.message });
-      //   return;
-      // }
-
-      // res
-      //   .status(HttpStatusCode.InternalServerError)
-      //   .json({ message: "Internal Server Error." });
-
       next(error);
     }
   }
@@ -84,15 +66,6 @@ export class ChatController implements IChatController {
 
       res.status(HttpStatusCode.Ok).json({ messages });
     } catch (error) {
-      // if (error instanceof Error) {
-      //   res.status(HttpStatusCode.BadRequest).json({ message: error.message });
-      //   return;
-      // }
-
-      // res
-      //   .status(HttpStatusCode.InternalServerError)
-      //   .json({ message: "Internal Server Error." });
-
       next(error);
     }
   }
@@ -112,16 +85,6 @@ export class ChatController implements IChatController {
 
       res.status(HttpStatusCode.Ok).json({ conversation });
     } catch (error) {
-      // console.log(error);
-      // if (error instanceof Error) {
-      //   res.status(HttpStatusCode.BadRequest).json({ message: error.message });
-      //   return;
-      // }
-
-      // res
-      //   .status(HttpStatusCode.InternalServerError)
-      //   .json({ message: "Internal Server Error" });
-
       next(error);
     }
   }

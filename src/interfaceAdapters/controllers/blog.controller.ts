@@ -57,7 +57,7 @@ export class BlogController implements IBlogController {
         title: body.title,
         author: body.author,
         introduction: body.introduction,
-        image: "", // to be set if found
+        image: "",
         sections: [],
       };
 
@@ -98,11 +98,6 @@ export class BlogController implements IBlogController {
 
       res.status(HttpStatusCode.CREATED).json({ blog: newBlog });
     } catch (error) {
-      // if (error instanceof Error) {
-      //   res
-      //     .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      //     .json({ message: error.message });
-      // }
       next(error);
     }
   }
@@ -124,12 +119,6 @@ export class BlogController implements IBlogController {
       const totalPages = calculateTotalPages(total, limit);
       res.status(HttpStatusCode.OK).json({ blogs: items, totalPages });
     } catch (error) {
-      // if (error instanceof Error) {
-      //   res
-      //     .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      //     .json({ meassage: error.message });
-      // }
-
       next(error);
     }
   }
@@ -157,10 +146,6 @@ export class BlogController implements IBlogController {
   ): Promise<void> {
     try {
       const userId = req.query.id as string;
-      // const page = parseInt(req.query.page as string);
-      // const limit = parseInt(req.query.limit as string);
-      // const skip = (page - 1) * limit;
-
       const { limit, skip } = getPaginationParams(req);
 
       const result = await this._getMyBlogUsecase.execute(userId, limit, skip);
@@ -168,15 +153,6 @@ export class BlogController implements IBlogController {
 
       res.status(HttpStatusCode.OK).json({ blogs: result.items, totalPages });
     } catch (error) {
-      // if (error instanceof Error) {
-      //   res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
-      //   return;
-      // }
-
-      // res
-      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      //   .json({ message: "Internal server Error" });
-
       next(error);
     }
   }
@@ -191,18 +167,6 @@ export class BlogController implements IBlogController {
       const body = req.body;
       const files = req.files as Express.Multer.File[];
       console.log(blogId);
-      // if(files){
-      //   files.forEach((file) => {
-      //     if(file.fieldname === "mainImage"){
-      //       body.image = filename;
-      //     }
-      //   });
-      //   body.sections.forEach((file, index) => {
-      //     if(index === file.fieldname){
-      //       body.secions[image] = file.filename
-      //     }
-      //   })
-      // }
       type Sections = {
         sectionTitle?: string;
         content?: string;
@@ -213,7 +177,7 @@ export class BlogController implements IBlogController {
       let parsedSections: Sections[] = [];
       if (body.sections) {
         try {
-          parsedSections = JSON.parse(body.sections); // 💥 convert string to array
+          parsedSections = JSON.parse(body.sections);
         } catch (err) {
           console.error("Failed to parse sections:", err);
           res.status(400).json({ message: "Invalid sections format" });
@@ -243,15 +207,6 @@ export class BlogController implements IBlogController {
 
       res.status(HttpStatusCode.OK).json({ blog });
     } catch (error) {
-      // if (error instanceof Error) {
-      //   res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
-      //   return;
-      // }
-
-      // res
-      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      //   .json({ message: "Internal Server Error" });
-
       next(error);
     }
   }
@@ -270,15 +225,6 @@ export class BlogController implements IBlogController {
         .status(HttpStatusCode.OK)
         .json({ message: "Blog Deleted success full" });
     } catch (error) {
-      // if (error instanceof Error) {
-      //   res.status(HttpStatusCode.BAD_REQUEST).json({ message: error.message });
-      //   return;
-      // }
-
-      // res
-      //   .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      //   .json({ message: "Internal Server Error" });
-
       next(error);
     }
   }
