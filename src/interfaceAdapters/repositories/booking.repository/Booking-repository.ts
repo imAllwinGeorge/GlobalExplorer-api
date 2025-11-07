@@ -3,6 +3,7 @@ import {
   BookingModel,
   IBookingModal,
 } from "../../../frameworks/database/mongo/models/booking.model";
+import { BookingWithUser } from "../../../shared/types/types";
 import { BaseRepository } from "../base.repository";
 import mongoose, { FilterQuery, ObjectId } from "mongoose";
 
@@ -185,5 +186,40 @@ export class BookingRepository
     ]);
 
     return result;
+  }
+
+  async findBookingsWithUser(
+    limit: number,
+    skip: number,
+    filter: FilterQuery<object> = {},
+  ): Promise<BookingWithUser[]> {
+    console.log("find booking with user", filter, limit, skip);
+    const results = await this.model
+      .aggregate<BookingWithUser>([
+        { $match: filter },
+        { $sort: { createdAt: -1 } },
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "user",
+          },
+        },
+        { $unwind: "$user" },
+        {
+          $unset: [
+            "user.password",
+            "user.refreshToken",
+            "user.__v",
+            "user.updatedAt",
+          ],
+        },
+        { $skip: skip },
+        { $limit: limit },
+      ])
+      .exec();
+    console.log(results);
+    return results;
   }
 }

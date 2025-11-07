@@ -38,6 +38,14 @@ const BookingSchema = new Schema(
       enum: ["pending", "paid", "failed", "refunded"],
       default: "pending",
     },
+    qrCode: {
+      type: String,
+      default: null,
+    },
+    qrToken: {
+      type: String,
+      default: null,
+    },
     razorpayPaymentId: {
       type: String,
     },

@@ -14,7 +14,10 @@ import {
 import { HttpStatusCode } from "../../shared/constants/constants";
 import { config } from "../../shared/config";
 import { IGetBookingUsecase } from "../../entities/usecaseInterfaces/booking/get-booking.usecase.interface";
-import { FilterQuery } from "mongoose";
+import { FilterQuery, Types } from "mongoose";
+import { IGenerateBookingQRUsecase } from "../../entities/usecaseInterfaces/booking/generate-bookingQR.usecase.interface";
+import { IQRVerificationUsecase } from "../../entities/usecaseInterfaces/booking/qr-verification.usecase.interface";
+import { IAvailableSlotUsecase } from "../../entities/usecaseInterfaces/booking/available-slots.usecase.interface";
 
 @injectable()
 export class BookingController implements IBookingController {
@@ -36,6 +39,15 @@ export class BookingController implements IBookingController {
 
     @inject("IGetBookingUsecase")
     private _getBookingUsecase: IGetBookingUsecase,
+
+    @inject("IGenerateBookingQRUsecase")
+    private _generateBookingQRUsecase: IGenerateBookingQRUsecase,
+
+    @inject("IQRVerificationUsecase")
+    private _qrVerificationUsecase: IQRVerificationUsecase,
+
+    @inject("IAvailableSlotUsecase")
+    private _availableSlotUsecase: IAvailableSlotUsecase,
   ) {}
 
   async createRazorpayOrder(
@@ -124,9 +136,14 @@ export class BookingController implements IBookingController {
 
       const booking = await this._bookActivityUsecase.execute(data);
 
-      res
-        .status(HttpStatusCode.CREATED)
-        .json({ success: true, paymentId: razorpay_payment_id, booking });
+      const updatedBooking =
+        await this._generateBookingQRUsecase.execute(booking);
+
+      res.status(HttpStatusCode.CREATED).json({
+        success: true,
+        paymentId: razorpay_payment_id,
+        booking: updatedBooking,
+      });
     } catch (error) {
       next(error);
     }
@@ -143,7 +160,7 @@ export class BookingController implements IBookingController {
       const { limit, skip } = getPaginationParams(req);
 
       const result = await this._getBookedActivityUsecase.execute(
-        { userId },
+        { userId: new Types.ObjectId(userId as string) },
         limit,
         skip,
       );
@@ -172,7 +189,7 @@ export class BookingController implements IBookingController {
         message,
       );
 
-      res.status(HttpStatusCode.OK).json({ message: booking });
+      res.status(HttpStatusCode.OK).json({ booking: booking });
     } catch (error) {
       next(error);
     }
@@ -197,7 +214,7 @@ export class BookingController implements IBookingController {
       }
 
       const filterObject: FilterQuery<object> = {
-        hostId,
+        hostId: new Types.ObjectId(hostId as string),
         ...query,
       };
 
@@ -210,12 +227,15 @@ export class BookingController implements IBookingController {
         limit,
         skip,
       );
+      const availableSlots = await this._availableSlotUsecase.execute(
+        hostId as string,
+      );
 
       const totalPages = calculateTotalPages(result.total, limit);
 
       res
         .status(HttpStatusCode.OK)
-        .json({ bookings: result.items, totalPages });
+        .json({ bookings: result.items, totalPages, availableSlots });
     } catch (error) {
       next(error);
     }
@@ -232,6 +252,21 @@ export class BookingController implements IBookingController {
       const order = await this._getBookingUsecase.execute(orderId);
 
       res.status(HttpStatusCode.OK).json({ booking: order });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async qrVerification(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const token = req.body.token;
+
+      const result = await this._qrVerificationUsecase.execute(token);
+      res.status(HttpStatusCode.OK).json(result);
     } catch (error) {
       next(error);
     }

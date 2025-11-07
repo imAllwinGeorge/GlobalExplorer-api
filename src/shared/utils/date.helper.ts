@@ -28,3 +28,12 @@ export function getNextDaysInTimezone(
 
   return result;
 }
+
+export function expiryDateForQR(date: string | Date): Date {
+  const bookingDate = new Date(date);
+
+  const expiry = new Date(bookingDate);
+  expiry.setHours(23, 59, 59, 999);
+
+  return expiry;
+}

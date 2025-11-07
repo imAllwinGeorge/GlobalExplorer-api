@@ -128,6 +128,14 @@ import { IGetBlogUsecase } from "../../entities/usecaseInterfaces/blog/get-blog.
 import { IUserHomeUsecase } from "../../entities/usecaseInterfaces/dashboard/user-home.interface";
 import { UserHomeUsecase } from "../../usecases/dashboard/user-home.usecase";
 import { AdminMapper } from "../../shared/mappers/admin.mapper";
+import { IQrServices } from "../../entities/serviceInterfaces/qr-service.interface";
+import { QrServices } from "../../interfaceAdapters/services/qr-services";
+import { IGenerateBookingQRUsecase } from "../../entities/usecaseInterfaces/booking/generate-bookingQR.usecase.interface";
+import { GenerateBookingQRUsecase } from "../../usecases/booking/generate-bookingQR.usecase";
+import { IQRVerificationUsecase } from "../../entities/usecaseInterfaces/booking/qr-verification.usecase.interface";
+import { QRVerificationUsecase } from "../../usecases/booking/qr-verification.usecase";
+import { IAvailableSlotUsecase } from "../../entities/usecaseInterfaces/booking/available-slots.usecase.interface";
+import { AvailableSlotUsecase } from "../../usecases/booking/available-slot.usecase";
 
 export class UsecaseRegistery {
   static registerUsecases(): void {
@@ -380,6 +388,22 @@ export class UsecaseRegistery {
 
     container.register<IUserHomeUsecase>("IUserHomeUsecase", {
       useClass: UserHomeUsecase,
+    });
+
+    container.register<IQrServices>("IQrServices", {
+      useClass: QrServices,
+    });
+
+    container.register<IGenerateBookingQRUsecase>("IGenerateBookingQRUsecase", {
+      useClass: GenerateBookingQRUsecase,
+    });
+
+    container.register<IQRVerificationUsecase>("IQRVerificationUsecase", {
+      useClass: QRVerificationUsecase,
+    });
+
+    container.register<IAvailableSlotUsecase>("IAvailableSlotUsecase", {
+      useClass: AvailableSlotUsecase,
     });
 
     //   mappers....

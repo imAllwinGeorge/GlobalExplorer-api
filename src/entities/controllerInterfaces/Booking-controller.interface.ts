@@ -16,4 +16,9 @@ export interface IBookingController {
     next: NextFunction,
   ): Promise<void>;
   getBooking(req: Request, res: Response, next: NextFunction): Promise<void>;
+  qrVerification(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void>;
 }

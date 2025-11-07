@@ -12,6 +12,8 @@ export interface IBookingEntitiy extends IBaseEntitiy {
   razporpayOrderId?: string;
   razorpaySignatue?: string;
   bookingStatus: "pending" | "cancelled" | "completed";
+  qrCode: string | null;
+  qrToken: string | null;
   hostId: string;
   isCancelled: boolean;
   cancellationReason?: string;

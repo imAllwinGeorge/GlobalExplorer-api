@@ -27,7 +27,7 @@ export class GetNotificationUsecase implements IGetNotificationUsecase {
       this._notificationRepository.findAll(limit, skip, {
         userId,
       }),
-      this._notificationRepository.countDocuments({ isRead: false }),
+      this._notificationRepository.countDocuments({ userId, isRead: false }),
     ]);
 
     return {

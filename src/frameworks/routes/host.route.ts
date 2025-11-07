@@ -106,5 +106,13 @@ export class HostRoute extends BaseRoute {
         salesController.generateHostSalesReport(req, res, next);
       },
     );
+
+    this.router.post(
+      "/booking/qr-verification",
+      verifyToken,
+      (req: Request, res: Response, next: NextFunction) => {
+        bookingController.qrVerification(req, res, next);
+      },
+    );
   }
 }

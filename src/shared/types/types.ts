@@ -1,6 +1,8 @@
 import { Socket } from "socket.io";
 import { IConversationModel } from "../../frameworks/database/mongo/models/conversation.model";
 import { ObjectId } from "mongoose";
+import { IUserModel } from "../../frameworks/database/mongo/models/user.model";
+import { IBookingModal } from "../../frameworks/database/mongo/models/booking.model";
 
 export interface Filter {
   search: string | undefined;
@@ -27,4 +29,8 @@ export interface ImageGallery {
   image: string;
   title: string;
   url?: string;
+}
+
+export interface BookingWithUser extends IBookingModal {
+  user: Omit<IUserModel, "password">;
 }

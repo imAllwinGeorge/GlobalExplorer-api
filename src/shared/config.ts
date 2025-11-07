@@ -28,4 +28,11 @@ export const config = {
   node: {
     NODE_ENV: process.env.NODE_ENV,
   },
+
+  jwt: {
+    ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
+    REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET,
+    RESET_TOKEN_SECRET: process.env.RESET_TOKEN_SECRET,
+    QR_SECRET: process.env.QR_SECRET,
+  },
 };
