@@ -114,5 +114,13 @@ export class HostRoute extends BaseRoute {
         bookingController.qrVerification(req, res, next);
       },
     );
+
+    this.router.get(
+      "/booking/today/:hostId",
+      verifyToken,
+      (req: Request, res: Response, next: NextFunction) => {
+        bookingController.getBookingToday(req, res, next);
+      },
+    );
   }
 }

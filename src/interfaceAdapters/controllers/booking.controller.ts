@@ -271,4 +271,45 @@ export class BookingController implements IBookingController {
       next(error);
     }
   }
+
+  async getBookingToday(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { hostId } = req.params;
+      const { limit, skip } = getPaginationParams(req);
+
+      const startOfDay = new Date();
+      startOfDay.setUTCHours(0, 0, 0, 0);
+
+      const endOfDay = new Date();
+      endOfDay.setUTCHours(23, 59, 59, 999);
+
+      const query = {
+        hostId: new Types.ObjectId(hostId as string),
+        date: {
+          $gte: startOfDay,
+          $lt: endOfDay,
+        },
+      };
+
+      const result = await this._getBookedActivityUsecase.execute(
+        query,
+        limit,
+        skip,
+      );
+
+      const totalPages = calculateTotalPages(result.total, limit);
+
+      console.log(result);
+
+      res
+        .status(HttpStatusCode.OK)
+        .json({ bookings: result.items, totalPages });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

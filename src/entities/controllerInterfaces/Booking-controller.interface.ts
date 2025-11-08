@@ -21,4 +21,9 @@ export interface IBookingController {
     res: Response,
     next: NextFunction,
   ): Promise<void>;
+  getBookingToday(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void>;
 }
