@@ -27,7 +27,7 @@ export class GetAllCategoryUsecase implements IGetAllCategoryUsecase {
       filter.categoryName = { $regex: search, $options: "i" };
     }
     const result = await this._categoryRepository.findAll(limit, skip, filter);
-
+    console.log(filter, "=>", result);
     if (!result)
       throw new AppError(
         "We can not process the request... Please try again.",

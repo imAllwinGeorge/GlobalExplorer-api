@@ -1,6 +1,6 @@
 import { ActivityResponseDTO } from "../../../shared/dtos/response.dto";
 
-export interface IGetActivityUsecase {
+export interface IGetActivitiesUsecase {
   execute(
     limit: number,
     skip: number,

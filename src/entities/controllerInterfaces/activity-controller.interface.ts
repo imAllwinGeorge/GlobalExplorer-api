@@ -2,6 +2,13 @@ import { NextFunction, Request, Response } from "express";
 
 export interface IActivityController {
   addActivity(req: Request, res: Response, next: NextFunction): Promise<void>;
+  getActivity(req: Request, res: Response, next: NextFunction): Promise<void>;
+  updateDynamicPricing(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void>;
+  updatePricing(req: Request, res: Response, next: NextFunction): Promise<void>;
   editActivity(req: Request, res: Response, next: NextFunction): Promise<void>;
   updateActivity(
     req: Request,

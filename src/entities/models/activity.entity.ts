@@ -22,4 +22,9 @@ export interface IActivityEntity extends IBaseEntitiy {
   reportingPlace: string;
   reportingTime: string;
   isActive: boolean;
+  //-----
+  dynamicPricingEnabled: boolean;
+  maxDynamicPercentage: number;
+  offerPercentage: number;
+  basePrice: number;
 }

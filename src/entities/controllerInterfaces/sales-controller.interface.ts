@@ -1,13 +1,31 @@
 import { NextFunction, Request, Response } from "express";
 
 export interface ISalesController {
-  generateSalesReport(
+  generateSalesDetails(
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void>;
 
-  generateHostSalesReport(
+  generateHostSalesDetails(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void>;
+
+  hostSalesReport(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void>;
+
+  adminSalesReport(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void>;
+
+  activitySalesReport(
     req: Request,
     res: Response,
     next: NextFunction,

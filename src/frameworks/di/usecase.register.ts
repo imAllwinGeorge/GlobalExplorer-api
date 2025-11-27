@@ -43,8 +43,8 @@ import { IUpdateCategoryUsecase } from "../../entities/usecaseInterfaces/categor
 import { UpdateStatusCategoryUsecase } from "../../usecases/category/update-status.category.usecase";
 import { IGetAllCategoryNameUsecase } from "../../entities/usecaseInterfaces/category/get-all-category-names.usecase.interface";
 import { GetAllCategoryNameUsecase } from "../../usecases/category/get-all-category-name.usecase";
-import { IGetActivityUsecase } from "../../entities/usecaseInterfaces/activity/get-activity.usecase.interface";
-import { GetActivityUsecase } from "../../usecases/activity/get-actvitiy.usecase";
+import { IGetActivitiesUsecase } from "../../entities/usecaseInterfaces/activity/get-activities.usecase.interface";
+import { GetActivitiesUsecase } from "../../usecases/activity/get-actvities.usecase";
 import { IAddActivityUsecase } from "../../entities/usecaseInterfaces/activity/add-activity.usecase.interface";
 import { AddActivityUsecase } from "../../usecases/activity/add-activity.usecase";
 import { IEditActivityUsecase } from "../../entities/usecaseInterfaces/activity/edit-activity.usecase.interface";
@@ -119,10 +119,10 @@ import { MessageMapper } from "../../shared/mappers/message.mapper";
 import { NotificationMapper } from "../../shared/mappers/notification.mapper";
 import { IGetBookingUsecase } from "../../entities/usecaseInterfaces/booking/get-booking.usecase.interface";
 import { GetBookingUsecase } from "../../usecases/booking/get-booking.usecase";
-import { IAdminSalesReportUsecase } from "../../entities/usecaseInterfaces/sales/admin-salesReport.interface";
-import { AdminSalesReportUsecase } from "../../usecases/sales/admin-salesReport.usecase";
-import { IHostSalesReportUsecase } from "../../entities/usecaseInterfaces/sales/host-salesReport.interface";
-import { HostSalesReportUsecase } from "../../usecases/sales/host-salesReport.usecase";
+import { IAdminSalesDetailsUsecase } from "../../entities/usecaseInterfaces/sales/admin-salesReport.interface";
+import { AdminSalesDetailsUsecase } from "../../usecases/sales/admin-salesReport.usecase";
+import { IHostSalesDetailsUsecase } from "../../entities/usecaseInterfaces/sales/host-salesDetails.interface";
+import { HostSalesDetailsUsecase } from "../../usecases/sales/host-salesDetails.usecase";
 import { GetBlogUsecase } from "../../usecases/blog/get-blog.usecase";
 import { IGetBlogUsecase } from "../../entities/usecaseInterfaces/blog/get-blog.usecase.interface";
 import { IUserHomeUsecase } from "../../entities/usecaseInterfaces/dashboard/user-home.interface";
@@ -136,6 +136,14 @@ import { IQRVerificationUsecase } from "../../entities/usecaseInterfaces/booking
 import { QRVerificationUsecase } from "../../usecases/booking/qr-verification.usecase";
 import { IAvailableSlotUsecase } from "../../entities/usecaseInterfaces/booking/available-slots.usecase.interface";
 import { AvailableSlotUsecase } from "../../usecases/booking/available-slot.usecase";
+import { IGetActivityUsecase } from "../../entities/usecaseInterfaces/activity/get-actvity.usecase.interface";
+import { GetActivityUsecase } from "../../usecases/activity/get-activity.usecase";
+import { IUpdateDynamicPricingUsecase } from "../../entities/usecaseInterfaces/activity/update-dynamic-pricing.usecase.interface";
+import { UpdateDynamicPricingUsecase } from "../../usecases/activity/update-dynamic-pricing-usecase";
+import { IUpdatePricingUsecase } from "../../entities/usecaseInterfaces/activity/update-pricing.usecase.interface";
+import { UpdatePricingUsecase } from "../../usecases/activity/update-pricing.usecase";
+import { ISalesReportUsecase } from "../../entities/usecaseInterfaces/sales/sales-report.interface";
+import { SalesReportUsecase } from "../../usecases/sales/sales-reoport.usecase";
 
 export class UsecaseRegistery {
   static registerUsecases(): void {
@@ -229,8 +237,8 @@ export class UsecaseRegistery {
       },
     );
 
-    container.register<IGetActivityUsecase>("IGetActivityUsecase", {
-      useClass: GetActivityUsecase,
+    container.register<IGetActivitiesUsecase>("IGetActivitiesUsecase", {
+      useClass: GetActivitiesUsecase,
     });
 
     container.register<IAddActivityUsecase>("IAddActivityUsecase", {
@@ -378,12 +386,12 @@ export class UsecaseRegistery {
       useClass: GetBookingUsecase,
     });
 
-    container.register<IAdminSalesReportUsecase>("IAdminSalesReportUsecase", {
-      useClass: AdminSalesReportUsecase,
+    container.register<IAdminSalesDetailsUsecase>("IAdminSalesDetailsUsecase", {
+      useClass: AdminSalesDetailsUsecase,
     });
 
-    container.register<IHostSalesReportUsecase>("IHostSalesReportUsecase", {
-      useClass: HostSalesReportUsecase,
+    container.register<IHostSalesDetailsUsecase>("IHostSalesDetailsUsecase", {
+      useClass: HostSalesDetailsUsecase,
     });
 
     container.register<IUserHomeUsecase>("IUserHomeUsecase", {
@@ -404,6 +412,25 @@ export class UsecaseRegistery {
 
     container.register<IAvailableSlotUsecase>("IAvailableSlotUsecase", {
       useClass: AvailableSlotUsecase,
+    });
+
+    container.register<IGetActivityUsecase>("IActivityUsecase", {
+      useClass: GetActivityUsecase,
+    });
+
+    container.register<IUpdateDynamicPricingUsecase>(
+      "IUpdateDynamicPricingUsecase",
+      {
+        useClass: UpdateDynamicPricingUsecase,
+      },
+    );
+
+    container.register<IUpdatePricingUsecase>("IUpdatePricingUsecase", {
+      useClass: UpdatePricingUsecase,
+    });
+
+    container.register<ISalesReportUsecase>("ISalesReportUsecase", {
+      useClass: SalesReportUsecase,
     });
 
     //   mappers....

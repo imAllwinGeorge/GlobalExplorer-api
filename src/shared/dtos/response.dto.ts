@@ -31,6 +31,11 @@ export type ActivityResponseDTO = {
   reportingTime: string;
   createdAt: string;
   updatedAt: string;
+  //----
+  dynamicPricingEnabled: boolean;
+  maxDynamicPercentage: number;
+  offerPercentage: number;
+  basePrice: number;
 };
 
 export interface UserResponseDTO {
