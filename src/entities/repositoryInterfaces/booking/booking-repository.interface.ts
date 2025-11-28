@@ -26,8 +26,7 @@ export interface IBookingRepository extends IBaseRepository<IBookingModal> {
   ): Promise<{ _id: { month: number }; count: number }[]>;
 
   findBookingsWithUser(
-    limit: number,
-    skip: number,
     filter: FilterQuery<object>,
+    options?: { limit?: number; skip?: number },
   ): Promise<BookingWithUser[]>;
 }

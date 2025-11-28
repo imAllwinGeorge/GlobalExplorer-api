@@ -18,6 +18,7 @@ import { FilterQuery, Types } from "mongoose";
 import { IGenerateBookingQRUsecase } from "../../entities/usecaseInterfaces/booking/generate-bookingQR.usecase.interface";
 import { IQRVerificationUsecase } from "../../entities/usecaseInterfaces/booking/qr-verification.usecase.interface";
 import { IAvailableSlotUsecase } from "../../entities/usecaseInterfaces/booking/available-slots.usecase.interface";
+import { IActivityAvailabilityUsecase } from "../../entities/usecaseInterfaces/booking/activity-availability.usecase.interface";
 
 @injectable()
 export class BookingController implements IBookingController {
@@ -48,6 +49,9 @@ export class BookingController implements IBookingController {
 
     @inject("IAvailableSlotUsecase")
     private _availableSlotUsecase: IAvailableSlotUsecase,
+
+    @inject("IActivityAvailabilityUsecase")
+    private _activityAvailabilityUsecase: IActivityAvailabilityUsecase,
   ) {}
 
   async createRazorpayOrder(
@@ -308,6 +312,24 @@ export class BookingController implements IBookingController {
       res
         .status(HttpStatusCode.OK)
         .json({ bookings: result.items, totalPages });
+    } catch (error) {
+      next(error);
+    }
+  }
+  async activityAvailability(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { activityId, date } = req.query;
+
+      const result = await this._activityAvailabilityUsecase.execute(
+        activityId as string,
+        date as string,
+      );
+
+      res.status(HttpStatusCode.OK).json(result);
     } catch (error) {
       next(error);
     }

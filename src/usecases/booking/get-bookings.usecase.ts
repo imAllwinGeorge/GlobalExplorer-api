@@ -29,7 +29,7 @@ export class GetBookedActivityUsecase implements IGetBookedActivityUsecase {
     // if (cached) return cached as { items: object[]; total: number };
 
     const [result, total] = await Promise.all([
-      this._bookingRepository.findBookingsWithUser(limit, skip, data),
+      this._bookingRepository.findBookingsWithUser(data, { limit, skip }),
       this._bookingRepository.countDocuments(data),
     ]);
 

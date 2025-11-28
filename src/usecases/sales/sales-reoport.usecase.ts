@@ -187,11 +187,10 @@ export class SalesReportUsecase implements ISalesReportUsecase {
     // }
     console.log("sales report filter query", query);
     const [bookings, total] = await Promise.all([
-      this._bookingRepository.findBookingsWithUser(
-        salesQuery.limit,
-        salesQuery.skip,
-        query,
-      ),
+      this._bookingRepository.findBookingsWithUser(query, {
+        limit: salesQuery.limit,
+        skip: salesQuery.skip,
+      }),
       this._bookingRepository.countDocuments(query),
     ]);
 

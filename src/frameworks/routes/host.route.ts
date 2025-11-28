@@ -161,5 +161,13 @@ export class HostRoute extends BaseRoute {
         bookingController.getBookingToday(req, res, next);
       },
     );
+
+    this.router.get(
+      "/activity/availability",
+      verifyToken,
+      (req: Request, res: Response, next: NextFunction) => {
+        bookingController.activityAvailability(req, res, next);
+      },
+    );
   }
 }

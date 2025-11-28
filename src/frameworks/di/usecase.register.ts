@@ -144,6 +144,8 @@ import { IUpdatePricingUsecase } from "../../entities/usecaseInterfaces/activity
 import { UpdatePricingUsecase } from "../../usecases/activity/update-pricing.usecase";
 import { ISalesReportUsecase } from "../../entities/usecaseInterfaces/sales/sales-report.interface";
 import { SalesReportUsecase } from "../../usecases/sales/sales-reoport.usecase";
+import { IActivityAvailabilityUsecase } from "../../entities/usecaseInterfaces/booking/activity-availability.usecase.interface";
+import { ActivityAvailabilityUsecase } from "../../usecases/booking/activity-availability.usecase";
 
 export class UsecaseRegistery {
   static registerUsecases(): void {
@@ -432,6 +434,13 @@ export class UsecaseRegistery {
     container.register<ISalesReportUsecase>("ISalesReportUsecase", {
       useClass: SalesReportUsecase,
     });
+
+    container.register<IActivityAvailabilityUsecase>(
+      "IActivityAvailabilityUsecase",
+      {
+        useClass: ActivityAvailabilityUsecase,
+      },
+    );
 
     //   mappers....
 
