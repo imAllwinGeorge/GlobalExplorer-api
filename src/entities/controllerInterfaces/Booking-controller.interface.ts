@@ -26,4 +26,9 @@ export interface IBookingController {
     res: Response,
     next: NextFunction,
   ): Promise<void>;
+  activityAvailability(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void>;
 }

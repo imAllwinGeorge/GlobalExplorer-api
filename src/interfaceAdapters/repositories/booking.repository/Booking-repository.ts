@@ -5,7 +5,7 @@ import {
 } from "../../../frameworks/database/mongo/models/booking.model";
 import { BookingWithUser } from "../../../shared/types/types";
 import { BaseRepository } from "../base.repository";
-import mongoose, { FilterQuery, ObjectId } from "mongoose";
+import mongoose, { FilterQuery, ObjectId, PipelineStage } from "mongoose";
 
 export class BookingRepository
   extends BaseRepository<IBookingModal>
@@ -189,37 +189,38 @@ export class BookingRepository
   }
 
   async findBookingsWithUser(
-    limit: number,
-    skip: number,
     filter: FilterQuery<object> = {},
+    options?: { limit?: number; skip?: number },
   ): Promise<BookingWithUser[]> {
-    console.log("find booking with user", filter, limit, skip);
-    const results = await this.model
-      .aggregate<BookingWithUser>([
-        { $match: filter },
-        { $sort: { createdAt: -1 } },
-        {
-          $lookup: {
-            from: "users",
-            localField: "userId",
-            foreignField: "_id",
-            as: "user",
-          },
+    const { limit, skip } = options || {};
+
+    const pipeline: PipelineStage[] = [
+      { $match: filter },
+      { $sort: { createdAt: -1 } },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user",
         },
-        { $unwind: "$user" },
-        {
-          $unset: [
-            "user.password",
-            "user.refreshToken",
-            "user.__v",
-            "user.updatedAt",
-          ],
-        },
-        { $skip: skip },
-        { $limit: limit },
-      ])
-      .exec();
-    console.log(results);
-    return results;
+      },
+      { $unwind: "$user" },
+      {
+        $unset: [
+          "user.password",
+          "user.refreshToken",
+          "user.__v",
+          "user.updatedAt",
+        ],
+      },
+    ];
+
+    // 🧩 Add Pagination only if values exist
+    if (typeof skip === "number") pipeline.push({ $skip: skip });
+
+    if (typeof limit === "number") pipeline.push({ $limit: limit });
+
+    return await this.model.aggregate<BookingWithUser>(pipeline).exec();
   }
 }

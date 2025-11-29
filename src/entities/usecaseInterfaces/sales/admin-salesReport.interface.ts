@@ -1,3 +1,3 @@
-export interface IAdminSalesReportUsecase {
+export interface IAdminSalesDetailsUsecase {
   execute(): Promise<object>;
 }

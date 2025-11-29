@@ -28,6 +28,22 @@ const ActivitySchema = new Schema(
       type: Number,
       required: true,
     },
+    basePrice: {
+      type: Number,
+      required: true,
+    },
+    dynamicPricingEnabled: {
+      type: Boolean,
+      default: false,
+    },
+    offerPercentage: {
+      type: Number,
+      default: 0,
+    },
+    maxDynamicPercentage: {
+      type: Number,
+      default: 25,
+    },
     userId: {
       type: Schema.Types.ObjectId,
       required: true,

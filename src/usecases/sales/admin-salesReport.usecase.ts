@@ -1,10 +1,10 @@
 import { inject, injectable } from "tsyringe";
 import { IBookingRepository } from "../../entities/repositoryInterfaces/booking/booking-repository.interface";
-import { IAdminSalesReportUsecase } from "../../entities/usecaseInterfaces/sales/admin-salesReport.interface";
+import { IAdminSalesDetailsUsecase } from "../../entities/usecaseInterfaces/sales/admin-salesReport.interface";
 import { IBookingMapper } from "../../entities/mapperInterfaces/booking-mapper.interface";
 
 @injectable()
-export class AdminSalesReportUsecase implements IAdminSalesReportUsecase {
+export class AdminSalesDetailsUsecase implements IAdminSalesDetailsUsecase {
   constructor(
     @inject("IBookingRepository")
     private _bookingRepository: IBookingRepository,

@@ -28,6 +28,7 @@ export class ActivityMapper implements IActivityMapper {
       images: dto.images,
       reportingPlace: dto.reportingPlace,
       reportingTime: dto.reportingTime,
+      basePrice: dto.pricePerHead,
     };
   }
 
@@ -57,6 +58,10 @@ export class ActivityMapper implements IActivityMapper {
       reportingTime: activity.reportingTime,
       createdAt: activity.createdAt.toString(),
       updatedAt: activity.updatedAt.toString(),
+      dynamicPricingEnabled: activity.dynamicPricingEnabled,
+      maxDynamicPercentage: activity.maxDynamicPercentage,
+      offerPercentage: activity.offerPercentage,
+      basePrice: activity.basePrice,
     };
   }
 

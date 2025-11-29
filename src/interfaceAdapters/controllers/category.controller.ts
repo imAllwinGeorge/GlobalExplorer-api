@@ -43,7 +43,7 @@ export class CategoryController implements ICategoryController {
       const result = await this._getAllCategoryUsecase.execute(
         limit,
         skip,
-        search as string,
+        (search as string) || "",
       );
       const totalPages = calculateTotalPages(result.total, limit);
 

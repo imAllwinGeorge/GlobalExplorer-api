@@ -53,13 +53,36 @@ export class HostRoute extends BaseRoute {
       },
     );
 
+    this.router.get(
+      "/activity/get-activity/:activityId",
+      verifyToken,
+      (req: Request, res: Response, next: NextFunction) => {
+        activityController.getActivity(req, res, next);
+      },
+    );
+
+    this.router.put(
+      "/activity/update-dynamic-pricing/:activityId",
+      verifyToken,
+      (req: Request, res: Response, next: NextFunction) => {
+        activityController.updateDynamicPricing(req, res, next);
+      },
+    );
+
+    this.router.put(
+      "/activity/update-pricing/:activityId",
+      verifyToken,
+      (req: Request, res: Response, next: NextFunction) => {
+        activityController.updatePricing(req, res, next);
+      },
+    );
+
     this.router
       .route("/edit-activity/:id")
       .put(
         verifyToken,
         upload.any(),
         (req: Request, res: Response, next: NextFunction) => {
-          console.log("hsgsgsdkgasdlfgdjfajfjaljfl");
           activityController.editActivity(req, res, next);
         },
       )
@@ -83,6 +106,22 @@ export class HostRoute extends BaseRoute {
       },
     );
 
+    this.router.get(
+      "/sales/filter/:hostId",
+      verifyToken,
+      (req: Request, res: Response, next: NextFunction) => {
+        salesController.hostSalesReport(req, res, next);
+      },
+    );
+
+    this.router.get(
+      "/activity/sales/filter/:activityId",
+      verifyToken,
+      (req: Request, res: Response, next: NextFunction) => {
+        salesController.activitySalesReport(req, res, next);
+      },
+    );
+
     this.router.patch(
       "/mark-read-message/:conversationId/:userId",
       verifyToken,
@@ -103,7 +142,7 @@ export class HostRoute extends BaseRoute {
       "/sales/:id",
       verifyToken,
       (req: Request, res: Response, next: NextFunction) => {
-        salesController.generateHostSalesReport(req, res, next);
+        salesController.generateHostSalesDetails(req, res, next);
       },
     );
 
@@ -120,6 +159,14 @@ export class HostRoute extends BaseRoute {
       verifyToken,
       (req: Request, res: Response, next: NextFunction) => {
         bookingController.getBookingToday(req, res, next);
+      },
+    );
+
+    this.router.get(
+      "/activity/availability",
+      verifyToken,
+      (req: Request, res: Response, next: NextFunction) => {
+        bookingController.activityAvailability(req, res, next);
       },
     );
   }

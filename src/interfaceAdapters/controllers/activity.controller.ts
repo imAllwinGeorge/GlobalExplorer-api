@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { IActivityController } from "../../entities/controllerInterfaces/activity-controller.interface";
 import { IEditActivityUsecase } from "../../entities/usecaseInterfaces/activity/edit-activity.usecase.interface";
-import { IGetActivityUsecase } from "../../entities/usecaseInterfaces/activity/get-activity.usecase.interface";
+import { IGetActivitiesUsecase } from "../../entities/usecaseInterfaces/activity/get-activities.usecase.interface";
 import { IGetActivityDetailsUsecase } from "../../entities/usecaseInterfaces/activity/get-activity-details.usecase.interface";
 import { IGetFilteredAcitivityUsecase } from "../../entities/usecaseInterfaces/activity/get-filtered-activity.usecase.interface";
 import { IGetReviewUsecase } from "../../entities/usecaseInterfaces/review/get-review.interface";
@@ -13,6 +13,10 @@ import {
 } from "../../shared/utils/pagination.helper";
 import logger from "../../infrastructures/logger";
 import { EditActivityDTO } from "../../shared/dtos/edit.dto";
+import { AppError } from "../../shared/errors/appError";
+import { IGetActivityUsecase } from "../../entities/usecaseInterfaces/activity/get-actvity.usecase.interface";
+import { IUpdateDynamicPricingUsecase } from "../../entities/usecaseInterfaces/activity/update-dynamic-pricing.usecase.interface";
+import { IUpdatePricingUsecase } from "../../entities/usecaseInterfaces/activity/update-pricing.usecase.interface";
 
 @injectable()
 export class ActivityController implements IActivityController {
@@ -20,8 +24,11 @@ export class ActivityController implements IActivityController {
     @inject("IEditActivityUsecase")
     private _editActivityUsecase: IEditActivityUsecase,
 
-    @inject("IGetActivityUsecase")
+    @inject("IActivityUsecase")
     private _getActivityUsecase: IGetActivityUsecase,
+
+    @inject("IGetActivitiesUsecase")
+    private _getActivitiesUsecase: IGetActivitiesUsecase,
 
     @inject("IGetActivityDetailsUsecase")
     private _getActivityDetailsUsecase: IGetActivityDetailsUsecase,
@@ -31,6 +38,12 @@ export class ActivityController implements IActivityController {
 
     @inject("IGetReviewUsecase")
     private _getReviewUsecase: IGetReviewUsecase,
+
+    @inject("IUpdateDynamicPricingUsecase")
+    private _updateDynamicPricingUsecase: IUpdateDynamicPricingUsecase,
+
+    @inject("IUpdatePricingUsecase")
+    private _updatePricingUsecase: IUpdatePricingUsecase,
   ) {}
   async addActivity(req: Request, res: Response): Promise<void> {
     try {
@@ -111,6 +124,69 @@ export class ActivityController implements IActivityController {
     }
   }
 
+  async getActivity(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { activityId } = req.params;
+
+      if (!activityId) {
+        throw new AppError(
+          "Invalid Activity Details",
+          HttpStatusCode.BAD_REQUEST,
+        );
+      }
+
+      const activity = await this._getActivityUsecase.execute(activityId);
+
+      res.status(HttpStatusCode.OK).json({ activity });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async updateDynamicPricing(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { activityId } = req.params;
+      const { data } = req.body;
+      console.log(activityId, data);
+      const activity = await this._updateDynamicPricingUsecase.execute(
+        activityId,
+        data,
+      );
+
+      res.status(HttpStatusCode.OK).json({ activity });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async updatePricing(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { activityId } = req.params;
+      const { data } = req.body;
+      console.log(activityId, data);
+      const activity = await this._updatePricingUsecase.execute(
+        activityId,
+        data,
+      );
+
+      res.status(HttpStatusCode.OK).json({ activity });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async updateActivity(
     req: Request,
     res: Response,
@@ -138,7 +214,7 @@ export class ActivityController implements IActivityController {
       const { limit, skip } = getPaginationParams(req);
       const { search, filter } = req.query;
 
-      const { items, total } = await this._getActivityUsecase.execute(
+      const { items, total } = await this._getActivitiesUsecase.execute(
         limit,
         skip,
         search as string,
@@ -208,6 +284,9 @@ export class ActivityController implements IActivityController {
         limit,
         skip,
         filter,
+      );
+      console.log(
+        "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
       );
       res.status(HttpStatusCode.OK).json(result);
     } catch (error) {

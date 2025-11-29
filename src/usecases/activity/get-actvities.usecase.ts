@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import { IGetActivityUsecase } from "../../entities/usecaseInterfaces/activity/get-activity.usecase.interface";
+import { IGetActivitiesUsecase } from "../../entities/usecaseInterfaces/activity/get-activities.usecase.interface";
 import { IActivityRepository } from "../../entities/repositoryInterfaces/activity/activityRepository.interface";
 import { ICacheService } from "../../entities/serviceInterfaces/cache-service.interface";
 import { ActivityResponseDTO } from "../../shared/dtos/response.dto";
@@ -8,7 +8,7 @@ import mongoose, { FilterQuery } from "mongoose";
 import { IActivityMapper } from "../../entities/mapperInterfaces/activitiy-mapper.interface";
 
 @injectable()
-export class GetActivityUsecase implements IGetActivityUsecase {
+export class GetActivitiesUsecase implements IGetActivitiesUsecase {
   constructor(
     @inject("IActivityRepository")
     private _activityRepository: IActivityRepository,

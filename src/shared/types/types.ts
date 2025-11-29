@@ -34,3 +34,29 @@ export interface ImageGallery {
 export interface BookingWithUser extends IBookingModal {
   user: Omit<IUserModel, "password">;
 }
+
+export type DateFilterType =
+  | "single"
+  | "today"
+  | "yesterday"
+  | "range"
+  | "week"
+  | "month"
+  | "year"
+  | "all";
+
+export interface SalesFilters {
+  dateFilterType: DateFilterType;
+  fromDate?: string; // ISO string
+  toDate?: string; // ISO string
+  minPrice?: number;
+  maxPrice?: number;
+}
+
+export interface SalesReportQuery {
+  filter: SalesFilters;
+  limit: number;
+  skip: number;
+  hostId?: string;
+  activityId?: string;
+}

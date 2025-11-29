@@ -109,7 +109,15 @@ export class AdminRoutes {
       "/sales",
       verifyToken,
       (req: Request, res: Response, next: NextFunction) => {
-        salesController.generateSalesReport(req, res, next);
+        salesController.generateSalesDetails(req, res, next);
+      },
+    );
+
+    this.router.get(
+      "/sales/filter",
+      verifyToken,
+      (req: Request, res: Response, next: NextFunction) => {
+        salesController.adminSalesReport(req, res, next);
       },
     );
   }

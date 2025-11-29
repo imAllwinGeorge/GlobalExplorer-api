@@ -5,7 +5,7 @@ import {
 } from "../auth/validations/host-signup.validation.schema";
 import { IHostController } from "../../../entities/controllerInterfaces/users/host-controller.interface";
 import { IGetAllCategoryUsecase } from "../../../entities/usecaseInterfaces/category/get-all-category.usecase.interface";
-import { IGetActivityUsecase } from "../../../entities/usecaseInterfaces/activity/get-activity.usecase.interface";
+import { IGetActivitiesUsecase } from "../../../entities/usecaseInterfaces/activity/get-activities.usecase.interface";
 import { IAddActivityUsecase } from "../../../entities/usecaseInterfaces/activity/add-activity.usecase.interface";
 import { IGetAllCategoryNameUsecase } from "../../../entities/usecaseInterfaces/category/get-all-category-names.usecase.interface";
 import { IUpdateStatusUsecase } from "../../../entities/usecaseInterfaces/user/update-status.usecase.interface";
@@ -24,8 +24,8 @@ export class HostController implements IHostController {
     @inject("IGetAllCategoryUsecase")
     private _getAllCategoryUsecase: IGetAllCategoryUsecase,
 
-    @inject("IGetActivityUsecase")
-    private _getActivityUsecase: IGetActivityUsecase,
+    @inject("IGetActivitiesUsecase")
+    private _getActivityUsecase: IGetActivitiesUsecase,
 
     @inject("IAddActivityUsecase")
     private _addActvityUsecase: IAddActivityUsecase,
