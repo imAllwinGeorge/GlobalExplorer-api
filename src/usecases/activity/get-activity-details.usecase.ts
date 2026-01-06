@@ -40,6 +40,7 @@ export class GetActivityDetailsUsecase implements IGetActivityDetailsUsecase {
     availability: {
       date: string;
       availableSeats: number;
+      price: number;
     }[];
   }> {
     const activity = await this._activityRepository.findOne({ _id: id });
@@ -141,11 +142,16 @@ export class GetActivityDetailsUsecase implements IGetActivityDetailsUsecase {
               date: dateStr,
               totalSeats: activity.maxCapacity,
               availableSeats: activity.maxCapacity,
+              price: activity.pricePerHead,
             },
           },
         );
 
-        return { date: dateStr, availableSeats: availability.availableSeats };
+        return {
+          date: dateStr,
+          availableSeats: availability.availableSeats,
+          price: availability.price,
+        };
       }),
     );
 

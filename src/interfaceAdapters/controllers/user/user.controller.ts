@@ -56,12 +56,14 @@ export class UserController implements IUserController {
   ): Promise<void> {
     try {
       const userId = req.params.id;
+      const token = req.cookies.userAccessToken;
       const parsedData = userEditSchema.parse(req.body);
 
       const updatedUser = await this._updateStatusUsecase.execute(
         userId,
         parsedData,
         ROLE.USER,
+        token,
       );
 
       res.status(HttpStatusCode.OK).json({ user: updatedUser });

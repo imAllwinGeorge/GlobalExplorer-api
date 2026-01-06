@@ -5,4 +5,5 @@ export interface IAvailabilityEntity extends IBaseEntitiy {
   availableSeats: number;
   totalSeats: number;
   date: string;
+  price: number;
 }

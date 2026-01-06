@@ -359,7 +359,7 @@ export class AuthController implements IAuthController {
       } else if (role === ROLE.ADMIN) {
         token = req.cookies.adminRefreshToken;
       }
-
+      console.log(`${role}refreshtoken:`, token, req.cookies.userRefreshToken);
       const payload = await this._refreshTokenUsecase.execute(token);
       const tokens = await this._generateTokenUsecase.execute(
         payload.userId,

@@ -60,3 +60,5 @@ export interface SalesReportQuery {
   hostId?: string;
   activityId?: string;
 }
+
+export type Factor = 0 | 0.3 | 0.6 | 1;

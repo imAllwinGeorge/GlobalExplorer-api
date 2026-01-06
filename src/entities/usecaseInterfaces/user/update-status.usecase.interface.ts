@@ -8,5 +8,6 @@ export interface IUpdateStatusUsecase {
     id: string,
     value: object,
     role: string,
+    token?: string,
   ): Promise<UserResponseDTO | HostResponseDTO>;
 }
