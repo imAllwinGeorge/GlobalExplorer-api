@@ -14,10 +14,14 @@ import { IHostModel } from "../../frameworks/database/mongo/models/host.model";
 import { AppError } from "../../shared/errors/appError";
 import { IUserMapper } from "../../entities/mapperInterfaces/user-mapper.interface";
 import { IHostMapper } from "../../entities/mapperInterfaces/host-mapper.interface";
+import { IJwtservice } from "../../entities/serviceInterfaces/jwt-services.interface";
 
 @injectable()
 export class UpdateStatusUsecase implements IUpdateStatusUsecase {
   constructor(
+    @inject("IJwtService")
+    private _jwtServices: IJwtservice,
+
     @inject("IUserRepository")
     private _userRepository: IUserRepository,
 
@@ -41,7 +45,15 @@ export class UpdateStatusUsecase implements IUpdateStatusUsecase {
     _id: string,
     value: object,
     role: string,
+    token?: string,
   ): Promise<UserResponseDTO | HostResponseDTO> {
+    if (token) {
+      const payload = this._jwtServices.verifyToken(token);
+
+      if (payload.userId !== _id) {
+        throw new AppError("Unauthorized", HttpStatusCode.UNAUTHORIZED);
+      }
+    }
     let repository;
 
     if (role === ROLE.USER) {

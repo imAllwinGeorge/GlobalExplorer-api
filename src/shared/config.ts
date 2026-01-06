@@ -35,4 +35,7 @@ export const config = {
     RESET_TOKEN_SECRET: process.env.RESET_TOKEN_SECRET,
     QR_SECRET: process.env.QR_SECRET,
   },
+  mongoDB: {
+    MONGODB_URI: process.env.MONGODB_URI,
+  },
 };

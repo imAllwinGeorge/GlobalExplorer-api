@@ -7,6 +7,7 @@ export interface IGetActivityDetailsUsecase {
     availability: {
       date: string;
       availableSeats: number;
+      price: number;
     }[];
   }>;
 }

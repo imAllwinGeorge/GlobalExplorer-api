@@ -7,9 +7,11 @@ import { container } from "tsyringe";
 import { connectRedisClient } from "./frameworks/cache/redis.connect";
 import { SocketServer } from "./frameworks/socket/socketServer";
 import logger from "./infrastructures/logger";
+import { schedulePricingCron } from "./infrastructures/cron/pricingCron";
 
 connectDB();
 connectRedisClient();
+schedulePricingCron();
 
 const httpServer = createServer(app);
 

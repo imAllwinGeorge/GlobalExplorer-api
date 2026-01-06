@@ -17,13 +17,6 @@ export class RefreshTokenUsecase implements IRefreshTokenUsecase {
   ) {}
 
   async execute(refreshToken: string): Promise<JwtPayload> {
-    const storedToken = await this._refreshTokenRepository.findOne({
-      refreshToken,
-    });
-
-    if (!storedToken)
-      throw new AppError("Invalid Token", HttpStatusCode.UNAUTHORIZED);
-
     const payload = this._jwtService.verifyRefreshToken(refreshToken);
     if (!payload)
       throw new AppError("Invalid Token", HttpStatusCode.UNAUTHORIZED);

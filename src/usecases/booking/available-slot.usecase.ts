@@ -49,6 +49,7 @@ export class AvailableSlotUsecase implements IAvailableSlotUsecase {
                     date: dateStr,
                     totalSeats: activity.maxCapacity,
                     availableSeats: activity.maxCapacity,
+                    price: activity.pricePerHead,
                   },
                 },
               );
