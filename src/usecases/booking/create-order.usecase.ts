@@ -92,7 +92,7 @@ export class CreateOrderUsecase implements ICreateOrderUsecase {
           HttpStatusCode.BAD_REQUEST,
         );
       }
-
+      // To solve the rollback issue in seats count
       await this._availabilityRepository.findOneAndUpdate(
         { _id: availability._id },
         { availableSeats: availability.availableSeats - data.participantCount },

@@ -134,6 +134,7 @@ export class AuthController implements IAuthController {
       req.session.userData = {
         ...userData,
         otp,
+        otpGeneratedAt: Date.now(),
       };
       res.status(HttpStatusCode.OK).json({ message: "otp sented successful" });
       return;
@@ -162,6 +163,7 @@ export class AuthController implements IAuthController {
       req.session.userData = {
         ...userData,
         otp,
+        otpGeneratedAt: Date.now(),
       };
       res.status(HttpStatusCode.OK).json({ message: "otp sented successful" });
       return;
@@ -178,12 +180,24 @@ export class AuthController implements IAuthController {
     try {
       const { otp } = req.body;
       const { userData } = req.session;
+      const OTP_EXPIRY_TIME = 2 * 60 * 1000;
+
       if (!userData) {
         res
           .status(HttpStatusCode.UNAUTHORIZED)
           .json({ message: "session expired, please try again" });
         return;
       }
+
+      const isExpired = Date.now() - userData.otpGeneratedAt > OTP_EXPIRY_TIME;
+
+      if (isExpired) {
+        res
+          .status(HttpStatusCode.BAD_REQUEST)
+          .json({ message: "OTP expired. Please resend OTP" });
+        return;
+      }
+
       if (otp.toString() !== userData.otp) {
         res.status(HttpStatusCode.BAD_REQUEST).json({ message: "invalid otp" });
         return;
