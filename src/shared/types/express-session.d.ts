@@ -11,6 +11,7 @@ declare module "express-session" {
       phoneNumber: string;
       role: "host" | "user" | "admin";
       otp: string;
+      otpGeneratedAt: number;
       kyc_idProof?: string;
       kyc_addressProof?: string;
       kyc_panCard?: string;

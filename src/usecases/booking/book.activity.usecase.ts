@@ -103,6 +103,11 @@ export class BookActivityUsecase implements IBookActivityUsecase {
         session,
       );
 
+      await this._reservationRepository.delete(
+        { _id: reservation._id },
+        session,
+      );
+
       const [userNotification, hostNotification] = await Promise.all([
         this._notificationRepository.save(
           {
@@ -154,13 +159,6 @@ export class BookActivityUsecase implements IBookActivityUsecase {
 
       await session.abortTransaction();
       session.endSession();
-
-      if (data.activityId && data.date && data.participantCount) {
-        await this._availabilityRepository.findOneAndUpdate(
-          { activityId: data.activityId, date: data.date },
-          { $inc: { availableSeats: data.participantCount } },
-        );
-      }
 
       throw new AppError(
         "Booking confirmation failed. Please try again.",
