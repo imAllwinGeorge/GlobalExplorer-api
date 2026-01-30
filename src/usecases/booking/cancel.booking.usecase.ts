@@ -101,7 +101,7 @@ export class CancelBookingUsecase implements ICancelBookingUsecase {
         );
       }
 
-      await this._availabilityRepository.findOneAndUpdate(
+      const result = await this._availabilityRepository.updateOne(
         {
           activityId: cancelledBooking?.activityId,
           date: cancelledBooking?.date,
@@ -109,7 +109,12 @@ export class CancelBookingUsecase implements ICancelBookingUsecase {
         { $inc: { availableSeats: cancelledBooking?.participantCount } },
         session,
       );
-
+      console.log(
+        "availability document updated: ",
+        result,
+        "With count",
+        cancelledBooking.participantCount,
+      );
       const notification = await this._notificationRepository.save(
         {
           userId: booking.userId,
